@@ -154,23 +154,19 @@ function TreeNode({
         className={`${s.node} ${selectedId === person.id ? s.nodeActive : ''}`}
         onClick={() => onSelect(person)}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className={s.nodeInner}>
           <Avatar person={person} />
-          <div style={{ minWidth: 0, flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {person.name}
-            </div>
-            <div style={{ fontSize: 11, opacity: 0.55, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {person.title}
-            </div>
+          <div className={s.nodeContent}>
+            <div className={s.nodeName}>{person.name}</div>
+            <div className={s.nodeTitle}>{person.title}</div>
           </div>
           {hasChildren && (
             <button
               aria-label={expanded ? 'Tutup senarai' : 'Buka senarai'}
               onClick={(e) => { e.stopPropagation(); setExpanded(!expanded) }}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: 0.5, transition: 'transform 0.2s', transform: expanded ? 'rotate(180deg)' : 'rotate(0)' }}
+              className={`${s.expandBtn} ${expanded ? s.expandBtnOpen : ''}`}
             >
-              <ChevronDown style={{ width: 14, height: 14 }} />
+              <ChevronDown size={14} />
             </button>
           )}
         </div>
@@ -208,14 +204,14 @@ function GridCard({ person, onClick, index }: { person: Person; onClick: () => v
       className={s.gridCard}
       onClick={onClick}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div className={s.gridCardInner}>
         <Avatar person={person} size={48} />
-        <div style={{ minWidth: 0, flex: 1 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.3 }}>{person.name}</div>
-          <div style={{ fontSize: 12, opacity: 0.5, marginTop: 3 }}>{person.title}</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6 }}>
+        <div className={s.gridCardContent}>
+          <div className={s.gridCardName}>{person.name}</div>
+          <div className={s.gridCardTitle}>{person.title}</div>
+          <div className={s.gridCardMeta}>
             <Icon size={12} opacity={0.4} />
-            <span style={{ fontSize: 11, opacity: 0.4, fontWeight: 500 }}>{TIER_LABELS[person.tier]}</span>
+            <span className={s.gridCardTier}>{TIER_LABELS[person.tier]}</span>
           </div>
         </div>
       </div>
@@ -243,27 +239,27 @@ function DetailPanel({ person, onClose }: { person: Person; onClose: () => void 
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className={`${s.detailPanel} ${s.detailPanelPos}`}
       >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 20 }}>
+      <div className={s.detailHeader}>
         <Avatar person={person} size={56} />
-        <button aria-label="Tutup panel" onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.4, padding: 4 }}>
-          <X style={{ width: 18, height: 18 }} />
+        <button aria-label="Tutup panel" onClick={onClose} className={s.closeBtn}>
+          <X size={18} />
         </button>
       </div>
 
-      <h3 style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.3 }}>{person.name}</h3>
-      <p style={{ fontSize: 13, opacity: 0.5, marginTop: 4 }}>{person.title}</p>
+      <h3 className={s.detailName}>{person.name}</h3>
+      <p className={s.detailTitle}>{person.title}</p>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
-        <Badge style={{ background: ROLE_COLORS[person.tier], color: 'white', border: 'none', fontSize: 11 }}>
+      <div className={s.badgeRow}>
+        <Badge className={s.badgeFontSm} style={{ background: ROLE_COLORS[person.tier], color: 'white', border: 'none' }}>
           <Icon size={12} className="mr-1" />
           {TIER_LABELS[person.tier]}
         </Badge>
-        <Badge variant="outline" style={{ fontSize: 11 }}>Aktif</Badge>
+        <Badge variant="outline" className={s.badgeFontSm}>Aktif</Badge>
       </div>
 
-      <Separator style={{ margin: '20px 0' }} />
+      <Separator className={s.separatorMy} />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div className={s.detailRows}>
         <DetailRow icon={Award} label="Jawatan" value={person.title} />
         <DetailRow icon={Building2} label="Organisasi" value="PUSPA" />
         <DetailRow icon={MapPin} label="Lokasi" value="Gombak, Selangor" />
@@ -273,17 +269,17 @@ function DetailPanel({ person, onClose }: { person: Person; onClose: () => void 
 
       {person.children && person.children.length > 0 && (
         <>
-          <Separator style={{ margin: '20px 0' }} />
-          <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 10, opacity: 0.6 }}>
+          <Separator className={s.separatorMy} />
+          <div className={s.directReportsLabel}>
             DIRECT REPORTS ({person.children.length})
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className={s.directReportsList}>
             {person.children.map(c => (
-              <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0' }}>
+              <div key={c.id} className={s.directReportItem}>
                 <Avatar person={c} size={28} />
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 500 }}>{c.name}</div>
-                  <div style={{ fontSize: 10, opacity: 0.4 }}>{c.title}</div>
+                  <div className={s.directReportName}>{c.name}</div>
+                  <div className={s.directReportTitle}>{c.title}</div>
                 </div>
               </div>
             ))}
@@ -297,13 +293,13 @@ function DetailPanel({ person, onClose }: { person: Person; onClose: () => void 
 
 function DetailRow({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <div style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'hsl(262 60% 60% / 0.1)', flexShrink: 0 }}>
+    <div className={s.detailRowWrap}>
+      <div className={s.detailRowIcon}>
         <Icon size={14} opacity={0.5} />
       </div>
       <div>
-        <div style={{ fontSize: 10, opacity: 0.4, fontWeight: 500, textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</div>
-        <div style={{ fontSize: 13, fontWeight: 500 }}>{value}</div>
+        <div className={s.detailRowLabel}>{label}</div>
+        <div className={s.detailRowValue}>{value}</div>
       </div>
     </div>
   )
@@ -347,30 +343,30 @@ export default function CartaOrganisasiPage() {
 
         {/* Hero */}
         <div className={`${s.heroCard} ${s.heroResponsive}`}>
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <div className={s.heroInnerZ}>
+            <div className={s.heroFlex}>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #7c3aed, #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Building2 style={{ width: 20, height: 20, color: 'white' }} />
+                <div className={s.heroIconWrap}>
+                  <div className={s.heroIconBox}>
+                    <Building2 size={20} color="white" />
                   </div>
                   <div>
                     <h1 className={s.heroTitle}>Carta Organisasi</h1>
-                    <p style={{ fontSize: 12, opacity: 0.5 }}>Pertubuhan Urus Peduli Asnaf • 2025</p>
+                    <p className={s.heroSubtitle}>Pertubuhan Urus Peduli Asnaf • 2025</p>
                   </div>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <div className={s.heroStats}>
                 {[
                   { label: 'Ahli', value: totalCount, icon: Users },
                   { label: 'Biro', value: 8, icon: Briefcase },
                   { label: 'Penasihat', value: 2, icon: Star },
                 ].map(st => (
                   <div key={st.label} className={s.statPill}>
-                    <st.icon style={{ width: 14, height: 14, opacity: 0.4 }} />
+                    <st.icon size={14} opacity={0.4} />
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: 700, lineHeight: 1 }}>{st.value}</div>
-                      <div style={{ fontSize: 10, opacity: 0.4 }}>{st.label}</div>
+                      <div className={s.statValue}>{st.value}</div>
+                      <div className={s.statLabel}>{st.label}</div>
                     </div>
                   </div>
                 ))}
@@ -382,21 +378,21 @@ export default function CartaOrganisasiPage() {
         {/* Toolbar */}
         <div className={s.toolbar}>
           <div className={s.searchWrap}>
-            <Search style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 14, height: 14, opacity: 0.3 }} />
+            <Search className={s.searchIcon} />
             <Input
               placeholder="Cari ahli organisasi..."
               value={searchQ}
               onChange={(e) => setSearchQ(e.target.value)}
-              style={{ paddingLeft: 36, height: 38, fontSize: 13 }}
+              className={s.searchInput}
             />
           </div>
-          <div style={{ display: 'flex', gap: 4 }}>
+          <div className={s.viewBtnGroup}>
             <button className={`${s.viewBtn} ${viewMode === 'tree' ? s.viewBtnActive : ''}`} onClick={() => setViewMode('tree')}>
-              <Network style={{ width: 14, height: 14, marginRight: 6, verticalAlign: -2 }} />
+              <Network size={14} className="mr-1.5 inline-block align-[-2px]" />
               Hierarki
             </button>
             <button className={`${s.viewBtn} ${viewMode === 'grid' ? s.viewBtnActive : ''}`} onClick={() => setViewMode('grid')}>
-              <LayoutGrid style={{ width: 14, height: 14, marginRight: 6, verticalAlign: -2 }} />
+              <LayoutGrid size={14} className="mr-1.5 inline-block align-[-2px]" />
               Grid
             </button>
           </div>
@@ -405,21 +401,21 @@ export default function CartaOrganisasiPage() {
         {/* Content */}
         {viewMode === 'tree' && !searchQ.trim() ? (
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList style={{ marginBottom: 8 }}>
+            <TabsList className="mb-2">
               <TabsTrigger value="admin" className="gap-1.5 text-xs">
-                <Building2 style={{ width: 14, height: 14 }} /> Carta Administrasi
+                <Building2 size={14} /> Carta Administrasi
               </TabsTrigger>
               <TabsTrigger value="ops" className="gap-1.5 text-xs">
-                <Users style={{ width: 14, height: 14 }} /> Carta Operasi
+                <Users size={14} /> Carta Operasi
               </TabsTrigger>
               <TabsTrigger value="honorary" className="gap-1.5 text-xs">
-                <Landmark style={{ width: 14, height: 14 }} /> Ahli Kehormat
+                <Landmark size={14} /> Ahli Kehormat
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="admin">
               <div className={s.chartScroll}>
-                <div style={{ display: 'inline-flex', minWidth: '100%', justifyContent: 'center' }}>
+                <div className={s.chartCenter}>
                   <TreeNode person={ADMIN_TREE} selectedId={selected?.id || null} onSelect={handleSelect} />
                 </div>
               </div>
@@ -427,14 +423,14 @@ export default function CartaOrganisasiPage() {
 
             <TabsContent value="ops">
               <div className={s.chartScroll}>
-                <div style={{ display: 'inline-flex', minWidth: '100%', justifyContent: 'center' }}>
+                <div className={s.chartCenter}>
                   <TreeNode person={OPS_TREE} selectedId={selected?.id || null} onSelect={handleSelect} />
                 </div>
               </div>
             </TabsContent>
 
             <TabsContent value="honorary">
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
+              <div className={s.gridAutoFill}>
                 {HONORARY.map((p, i) => (
                   <GridCard key={p.id} person={p} index={i} onClick={() => handleSelect(p)} />
                 ))}
@@ -444,18 +440,18 @@ export default function CartaOrganisasiPage() {
         ) : (
           /* Grid / Search Results */
           <div>
-            <p style={{ fontSize: 12, opacity: 0.4, marginBottom: 12 }}>
+            <p className={s.searchResultsMeta}>
               {searchQ.trim() ? `${filteredGrid.length} hasil carian` : `${allPeople.length} ahli organisasi`}
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
+            <div className={s.gridAutoFill}>
               {filteredGrid.map((p, i) => (
                 <GridCard key={p.id} person={p} index={i} onClick={() => handleSelect(p)} />
               ))}
             </div>
             {filteredGrid.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '60px 20px', opacity: 0.3 }}>
-                <Search style={{ width: 40, height: 40, margin: '0 auto 12px' }} />
-                <p style={{ fontSize: 14 }}>Tiada ahli dijumpai untuk &ldquo;{searchQ}&rdquo;</p>
+              <div className={s.emptyState}>
+                <Search size={40} className="mx-auto mb-3" />
+                <p className={s.emptyStateText}>Tiada ahli dijumpai untuk &ldquo;{searchQ}&rdquo;</p>
               </div>
             )}
           </div>
