@@ -86,3 +86,7 @@ server.log
 # Temp files
 *.tmp
 file.tmp
+structure.txt
+
+# Use bun.lock as primary lockfile
+package-lock.json

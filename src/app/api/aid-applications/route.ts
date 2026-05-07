@@ -1,6 +1,7 @@
 import { db } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { requireAuth } from '@/lib/auth';
 
 const aidAppSchema = z.object({
   applicantName: z.string().min(1),
@@ -25,6 +26,7 @@ const aidAppSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    await requireAuth()
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || undefined;
     const page = parseInt(searchParams.get('page') || '1');

@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { requireAuth } from '@/lib/auth'
 
 export async function GET() {
   try {
+    // Auth check: any logged-in user can view dashboard
+    await requireAuth()
     // 1. Tentukan julat masa (6 bulan terakhir)
     const sixMonthsAgo = new Date()
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5)

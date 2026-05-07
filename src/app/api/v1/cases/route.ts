@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { requireAuth, requireRole } from '@/lib/auth'
 
 // GET /api/v1/cases — List cases with pagination, search, and filters
 export async function GET(request: NextRequest) {
   try {
+    await requireAuth()
     const { searchParams } = new URL(request.url)
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '10')))
@@ -92,6 +94,7 @@ export async function GET(request: NextRequest) {
 // POST /api/v1/cases — Create a new case
 export async function POST(request: NextRequest) {
   try {
+    await requireRole('staff')
     const body = await request.json()
 
     // Validation
