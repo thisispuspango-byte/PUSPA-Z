@@ -88,6 +88,7 @@ server.log
 *.tmp
 file.tmp
 structure.txt
+/temp/
 
 # Use bun.lock as primary lockfile
 package-lock.json
