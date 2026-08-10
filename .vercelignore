@@ -1,0 +1,14 @@
+# Heavy / non-app directories — never upload to Vercel
+node_modules
+.next
+.venv-hermes
+.kilocode
+hermes
+vendor
+mini-services
+skills
+.git
+.vercel
+*.wav
+results_*
+poster-*.png
