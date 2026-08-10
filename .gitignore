@@ -91,3 +91,14 @@ structure.txt
 
 # Use bun.lock as primary lockfile
 package-lock.json
+
+# Hermes runtime data (auth, sessions, DB)
+/hermes/
+
+# Telegram bot generated artifacts (SadTalker engine + temp outputs)
+mini-services/telegram-bot/SadTalker/
+mini-services/telegram-bot/temp_*.wav
+mini-services/telegram-bot/results_*/
+
+# Generated poster artifacts
+/poster-*.png

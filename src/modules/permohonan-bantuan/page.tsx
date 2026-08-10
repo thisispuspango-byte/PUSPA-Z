@@ -162,6 +162,7 @@ export default function PermohonanBantuanPage() {
     name: 'dependents',
   })
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchOtherAgency = watch('otherAgencyHelp')
 
   const onSubmit = useCallback((data: AidFormData) => {

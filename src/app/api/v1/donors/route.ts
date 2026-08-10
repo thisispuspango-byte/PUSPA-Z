@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       db.donor.count({ where }),
     ])
 
-    // Enrich with computed fields
+    // Enrich with computed fields and mask PII
     const enrichedDonors = donors.map((donor) => {
       const totalDonated = donor.donations.reduce((sum, d) => sum + d.amount, 0)
       const donationCount = donor.donations.length
@@ -51,6 +51,9 @@ export async function GET(request: NextRequest) {
         ...donor,
         totalDonated,
         donationCount,
+        email: donor.email ? (() => { const [local, domain] = donor.email.split('@'); return local.slice(0, 2) + '***@' + domain; })() : null,
+        phone: donor.phone ? '****' + donor.phone.slice(-4) : null,
+        address: donor.address ? (() => { const parts = donor.address.split(','); return parts.length > 1 ? parts[parts.length - 1].trim() : null; })() : null,
       }
     })
 
@@ -71,6 +74,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth()
     await requireRole('staff')
     const body = await request.json()
     const { name, email, phone, address, type, category, notes } = body

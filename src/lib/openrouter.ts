@@ -25,25 +25,78 @@ if (API_KEYS.length === 0) {
   console.log(`[OpenRouter] ${API_KEYS.length} API key(s) loaded`)
 }
 
-// Advanced: Model fallback chain for reliability
-const MODEL_FALLBACK_CHAIN = [
+// ─── Free Model Fallback Chain ─────────────────────────────────
+// All 28 free models from OpenRouter, organized by tier.
+// Priority: Tier 1 (general) → Tier 2 (coding) → Tier 3 (vision) → Tier 4 (fallback)
+// Selection per task type:
+//   General/chat    → Tier 1 (tencent/hy3-preview:free default)
+//   Coding          → Tier 2 (qwen/qwen3-coder:free)
+//   Vision/image    → Tier 3 (google/gemma-4-26b-a4b-it:free)
+//   Debugging       → Tier 4 (meta-llama/llama-3.3-70b-instruct:free)
+//   Docs/marketing  → Tier 1 (minimax/minimax-m2.5:free)
+
+const FREE_MODELS = [
+  // ── TIER 1: General Purpose (proven working) ──
   process.env.OPENROUTER_MODEL || 'tencent/hy3-preview:free',
-  'openai/gpt-4o-mini',
-  'openai/gpt-3.5-turbo',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'minimax/minimax-m2.5:free',
+  'openrouter/free',
+
+  // ── TIER 2: Coding Specialized ──
+  'qwen/qwen3-coder:free',
+  'openai/gpt-oss-120b:free',
+  'baidu/cobuddy:free',
+
+  // ── TIER 3: Vision/Multimodal (image input capable) ──
+  'google/gemma-4-26b-a4b-it:free',
+  'google/gemma-4-31b-it:free',
+  'google/lyria-3-pro-preview',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+  'nvidia/nemotron-nano-12b-v2-vl:free',
+  'openrouter/free',
+  'baidu/qianfan-ocr-fast:free',
+
+  // ── TIER 4: Additional Free Models ──
+  'openai/gpt-oss-20b:free',
+  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'z-ai/glm-4.5-air:free',
+  'meta-llama/llama-3.2-3b-instruct:free',
+  'qwen/qwen3-next-80b-a3b-instruct:free',
+  'nvidia/nemotron-3-nano-30b-a3b:free',
+  'nvidia/nemotron-nano-9b-v2:free',
+  'poolside/laguna-xs.2:free',
+  'poolside/laguna-m.1:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'liquid/lfm-2.5-1.2b-thinking:free',
+  'liquid/lfm-2.5-1.2b-instruct:free',
+  'cognitivecomputations/dolphin-mistral-24b-venice-edition:free',
 ]
+
+// Legacy alias for backward compatibility
+const MODEL_FALLBACK_CHAIN = FREE_MODELS
 
 let currentModelIndex = 0
 
 function getNextModel(): string {
-  const model = MODEL_FALLBACK_CHAIN[currentModelIndex % MODEL_FALLBACK_CHAIN.length]
+  const model = FREE_MODELS[currentModelIndex % FREE_MODELS.length]
   return model
 }
 
 function rotateModel(): void {
-  if (MODEL_FALLBACK_CHAIN.length > 1) {
-    currentModelIndex = (currentModelIndex + 1) % MODEL_FALLBACK_CHAIN.length
-    console.log(`[OpenRouter] Rotated to model: ${MODEL_FALLBACK_CHAIN[currentModelIndex]}`)
+  if (FREE_MODELS.length > 1) {
+    currentModelIndex = (currentModelIndex + 1) % FREE_MODELS.length
+    console.log(`[OpenRouter] Rotated to model: ${FREE_MODELS[currentModelIndex]}`)
   }
+}
+
+// ─── Vision Model ──────────────────────────────────────────────
+// Default vision model (Tier 3). Override via OPENROUTER_VISION_MODEL env var.
+// Falls back to OpenRouter vision models when Google Generative Language API is unavailable.
+
+const VISION_MODEL = process.env.OPENROUTER_VISION_MODEL || 'google/gemma-4-26b-a4b-it:free'
+
+export function getVisionModel(): string {
+  return VISION_MODEL
 }
 
 let currentKeyIndex = 0

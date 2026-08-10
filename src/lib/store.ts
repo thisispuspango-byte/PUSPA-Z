@@ -44,12 +44,7 @@ export const useAppStore = create<AppState>()(
       setAiChatOpen: (open) => set({ aiChatOpen: open }),
       toggleAiChat: () => set((state) => ({ aiChatOpen: !state.aiChatOpen })),
       
-      currentUser: {
-        id: 'usr_admin_001',
-        name: 'Admin PUSPA',
-        email: 'admin@puspa.org',
-        role: 'admin',
-      },
+      currentUser: null,
       setCurrentUser: (user) => set({ currentUser: user }),
       
       searchQuery: '',

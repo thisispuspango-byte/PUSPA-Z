@@ -20,6 +20,7 @@ import {
   Building2,
   Code,
   Menu,
+  Map,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -128,7 +129,7 @@ function Callout({
   type = 'info',
   children,
 }: {
-  type?: 'info' | 'tip' | 'warning';
+  type?: 'info' | 'tip' | 'warning' | 'important';
   children: React.ReactNode;
 }) {
   const config = {
@@ -149,6 +150,12 @@ function Callout({
       bg: 'bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-800/40',
       iconColor: 'text-red-600 dark:text-red-400',
       title: 'Amaran',
+    },
+    important: {
+      icon: <Info className="h-4 w-4" />,
+      bg: 'bg-purple-50 border-purple-200 dark:bg-purple-950/20 dark:border-purple-800/40',
+      iconColor: 'text-purple-600 dark:text-purple-400',
+      title: 'Penting',
     },
   };
   const c = config[type];
@@ -252,15 +259,17 @@ const DOC_CATEGORIES: DocCategory[] = [
               PUSPA V5 adalah projek sumber terbuka di bawah lesen MIT. Kod sumber boleh diakses oleh ahli pertubuhan untuk tujuan pengauditan dan penambahbaikan. Sila hubungi pasukan teknikal untuk mendapatkan akses repositori.
             </Callout>
             <H2>Peranan Pengguna</H2>
-            <P>Platform ini menyokong empat peranan pengguna utama:</P>
-            <UL>
-              <LI><strong className="text-foreground">Pentadbir (Admin)</strong> — Akses penuh kepada semua modul, pengurusan pengguna, dan konfigurasi sistem.</LI>
-              <LI><strong className="text-foreground">Operasi (Ops)</strong> — Menguruskan ahli asnaf, kes, dan program harian.</LI>
-              <LI><strong className="text-foreground">Kewangan (Finance)</strong> — Menguruskan donasi, pembayaran, dan laporan kewangan.</LI>
-              <LI><strong className="text-foreground">Sukarelawan (Volunteer)</strong> — Melihat tugasan, log jam khidmat, dan muat naik sijil.</LI>
-            </UL>
+            <P>Platform ini menyokong tiga tahap peranan utama dengan akses modul yang berbeza:</P>
+            <DocTable
+              headers={['Tahap', 'Peranan', 'Fungsi Utama']}
+              rows={[
+                ['Tahap 1', 'Operasi (Staff)', 'Daftar ahli, buka kes bantuan, log derma, pengurusan aktiviti harian.'],
+                ['Tahap 2', 'Pengurusan (Admin)', 'Kelulusan agihan, verifikasi eKYC, pengurusan kepatuhan, laporan kewangan.'],
+                ['Tahap 3', 'Teknikal (Developer)', 'Konfigurasi AI (Maria Puspa), kesihatan sistem, automasi, pentadbiran penuh.'],
+              ]}
+            />
             <Callout type="tip">
-              Jika anda baru mula menggunakan PUSPA V5, kami mengesyorkan agar anda membaca panduan <strong>Daftar &amp; Log Masuk</strong> terlebih dahulu untuk memahami cara mengakses sistem.
+              Akses anda ditentukan oleh pentadbir. Jika anda tidak dapat melihat modul tertentu, sila hubungi Pasukan Teknikal untuk semakan peranan.
             </Callout>
           </>
         ),
@@ -350,6 +359,61 @@ const DOC_CATEGORIES: DocCategory[] = [
             </P>
             <Callout type="info">
               PUSPA V5 direka menggunakan prinsip reka bentuk responsif. Semua modul boleh diakses dari komputer riba, tablet, dan telefon pintar. Pada peranti mudah alih, bar sisi akan ditukar kepada menu helaian yang boleh dibuka melalui butang menu di pengepala.
+            </Callout>
+          </>
+        ),
+      },
+    ],
+  },
+
+  // ── Peta Fungsi ──
+  {
+    id: 'peta-fungsi',
+    icon: <Map className="h-4 w-4" />,
+    title: 'Peta Fungsi',
+    pages: [
+      {
+        id: 'direktori-fungsi',
+        title: 'Direktori Fungsi PUSPA',
+        content: (
+          <>
+            <H1>Direktori Fungsi PUSPA V5</H1>
+            <P>Senarai lengkap keupayaan sistem mengikut kategori operasi, pengurusan, dan teknikal.</P>
+            
+            <H2>1. Modul Operasi (Staff & Admin)</H2>
+            <DocTable
+              headers={['Modul', 'Fungsi Utama']}
+              rows={[
+                ['Dashboard', 'Analisa visual, metrik prestasi, dan aktiviti terkini.'],
+                ['Ahli (Members)', 'Pendaftaran asnaf, household mgmt, skor kebajikan, PDPA masking.'],
+                ['Kes (Cases)', 'Pipeline 9-tahap, log nota, pautan dokumen, penilaian risiko.'],
+                ['Program', 'Bajet vs perbelanjaan, pendaftaran penerima, laporan impak.'],
+                ['Donasi', 'Log dana ISF (Zakat/Sedekah), jana resit PDF otomatis.'],
+                ['Penderma', 'CRM penderma, sejarah sumbangan, segmentasi profil.'],
+                ['Agihan', 'Pipeline kelulusan 5-tahap, verifikasi biometrik, jejak bayaran.'],
+              ]}
+            />
+
+            <H2>2. Pengurusan & Keselamatan (Admin Sahaja)</H2>
+            <DocTable
+              headers={['Modul', 'Fungsi Utama']}
+              rows={[
+                ['Compliance', 'Jejak pematuhan ROSM/LHDN/PDPA, audit log penuh.'],
+                ['eKYC', 'OCR kad pengenalan, liveness detection, face matching AI.'],
+                ['TapSecure', 'Device binding, biometrik peranti, kawalan sesi.'],
+                ['Reports', 'Eksport BI (Excel/PDF), laporan Shariah, analisa demografi.'],
+              ]}
+            />
+
+            <H2>3. Keupayaan AI Maria Puspa</H2>
+            <P>Maria Puspa dilengkapi dengan 18 alat cerdas untuk membantu tugasan anda:</P>
+            <UL>
+              <LI><strong className="text-foreground">Analisa Data</strong> — Carian ahli, ringkasan kes, dan statistik donasi secara automatik.</LI>
+              <LI><strong className="text-foreground">RAG (Research)</strong> — Carian web untuk harga barang semasa atau berita NGO.</LI>
+              <LI><strong className="text-foreground">Automasi</strong> — Kelulusan agihan (admin) dan delegasi tugas kepada ejen lain.</LI>
+            </UL>
+            <Callout type="info">
+              Fungsi AI Maria diaktifkan melalui panel sembang di sebelah kanan skrin. Cuba tanya: "Maria, bagi ringkasan kes aktif hari ni."
             </Callout>
           </>
         ),
@@ -681,6 +745,132 @@ const DOC_CATEGORIES: DocCategory[] = [
           </>
         ),
       },
+      {
+        id: 'modul-asnafpreneur',
+        title: 'Asnafpreneur',
+        badge: 'Ekonomi',
+        badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+        content: (
+          <>
+            <H1>Asnafpreneur — Pembangunan Ekonomi</H1>
+            <P>
+              Modul Asnafpreneur direka untuk memantau dan membantu asnaf yang sedang atau ingin menjalankan perniagaan kecil-kecilan. Fokus utama adalah untuk mentransformasikan penerima bantuan menjadi pemberi bantuan (zakat) di masa hadapan.
+            </P>
+            <H2>Ciri Utama</H2>
+            <UL>
+              <LI><strong className="text-foreground">Profil Perniagaan</strong> — Rekod jenis perniagaan, lokasi, dan status lesen.</LI>
+              <LI><strong className="text-foreground">Jejak Jualan</strong> — Pantau perkembangan pendapatan bulanan perniagaan asnaf.</LI>
+              <LI><strong className="text-foreground">Bantuan Peralatan</strong> — Urus agihan peralatan perniagaan (mesin jahit, peralatan katering, dll).</LI>
+              <LI><strong className="text-foreground">Latihan & Mentorship</strong> — Hubungkan asnafpreneur dengan mentor atau kursus bimbingan.</LI>
+            </UL>
+            <Callout type="info">
+              Kejayaan modul ini diukur melalui peningkatan pendapatan asnaf sehingga mereka melepasi had kifayah (garis kemiskinan).
+            </Callout>
+          </>
+        ),
+      },
+      {
+        id: 'modul-sedekah-jumaat',
+        title: 'Sedekah Jumaat',
+        badge: 'Khas',
+        content: (
+          <>
+            <H1>Modul Sedekah Jumaat</H1>
+            <P>
+              Paparan khusus untuk kempen mingguan "Sedekah Jumaat". Modul ini memudahkan pemantauan kutipan dana yang biasanya memuncak pada setiap hari Jumaat.
+            </P>
+            <DocTable
+              headers={['Fungsi', 'Penerangan']}
+              rows={[
+                ['Live Counter', 'Paparan jumlah kutipan terkini secara masa-nyata'],
+                ['Quick Entry', 'Log derma pantas untuk sumbangan tunai selepas solat Jumaat'],
+                ['Laporan Khas', 'Analisa trend kutipan mingguan berbanding bulan-bulan sebelumnya'],
+              ]}
+            />
+          </>
+        ),
+      },
+      {
+        id: 'modul-permohonan-bantuan',
+        title: 'Permohonan Bantuan',
+        content: (
+          <>
+            <H1>Portal Permohonan Bantuan</H1>
+            <P>
+              Modul ini menguruskan permohonan yang masuk melalui portal awam atau pendaftaran kendiri. Ia bertindak sebagai "Inbox" utama sebelum kes ditukarkan menjadi kes operasi penuh.
+            </P>
+            <StepBox step={1} title="Triage">
+              Semak permohonan masuk dan tentukan jika ia memerlukan tindakan segera.
+            </StepBox>
+            <StepBox step={2} title="Saringan Awal">
+              Gunakan data eKYC atau rekod sedia ada untuk menyaring kelayakan asas.
+            </StepBox>
+            <StepBox step={3} title="Tukar ke Kes">
+              Setelah disahkan, permohonan ditukarkan menjadi rekod "Kes" secara automatik untuk diproses oleh pegawai.
+            </StepBox>
+          </>
+        ),
+      },
+      {
+        id: 'modul-institusi',
+        title: 'Pengurusan Institusi',
+        content: (
+          <>
+            <H1>Pengurusan Institusi</H1>
+            <P>
+              Puspa bekerjasama dengan pelbagai institusi seperti Masjid, Surau, dan Pusat Komuniti. Modul ini merekodkan hubungan strategik ini.
+            </P>
+            <UL>
+              <LI><strong className="text-foreground">Masjid & Surau</strong> — Jejak program kerjasama (contoh: Agihan Dapur Rakyat).</LI>
+              <LI><strong className="text-foreground">Rakan Strategik</strong> — Rekod rakan korporat dan NGO gabungan.</LI>
+              <LI><strong className="text-foreground">Lokasi Agihan</strong> — Peta lokasi institusi untuk memudahkan logistik bantuan.</LI>
+            </UL>
+          </>
+        ),
+      },
+      {
+        id: 'modul-carta-organisasi',
+        title: 'Carta Organisasi',
+        content: (
+          <>
+            <H1>Carta Organisasi</H1>
+            <P>
+              Modul ini memaparkan struktur kepimpinan PUSPA untuk memastikan ketelusan dalam tadbir urus.
+            </P>
+            <UL>
+              <LI><strong className="text-foreground">Pengerusi & Timbalan</strong> — Kepimpinan tertinggi.</LI>
+              <LI><strong className="text-foreground">Setiausaha & Bendahari</strong> — Pengurusan pentadbiran dan kewangan.</LI>
+              <LI><strong className="text-foreground">Ketua Biro</strong> — Mengetuai biro-biro khusus seperti Kebajikan, Pendidikan, dan Dakwah.</LI>
+            </UL>
+          </>
+        ),
+      },
+      {
+        id: 'panduan-sukarelawan-penderma',
+        title: 'Sukarelawan & Penderma',
+        badge: 'Awam',
+        content: (
+          <>
+            <H1>Panduan untuk Sukarelawan & Penderma</H1>
+            <P>
+              Walaupun sistem ini tertumpu kepada operasi dalaman, terdapat bahagian yang dikhaskan untuk interaksi dengan komuniti luaran.
+            </P>
+            <H2>Bagi Sukarelawan</H2>
+            <P>Sukarelawan boleh menggunakan modul Sukarelawan untuk:</P>
+            <UL>
+              <LI>Mendaftar minat untuk menyertai program.</LI>
+              <LI>Merekodkan jam khidmat secara digital.</LI>
+              <LI>Menerima sijil penghargaan setelah mencapai kriteria tertentu.</LI>
+            </UL>
+            <H2>Bagi Penderma</H2>
+            <P>Penderma boleh mengakses maklumat melalui portal awam untuk:</P>
+            <UL>
+              <LI>Memuat turun resit sumbangan bagi tujuan pelepasan cukai (jika layak).</LI>
+              <LI>Melihat laporan impak ringkas bagi program yang mereka taja.</LI>
+            </UL>
+          </>
+        ),
+      },
     ],
   },
 
@@ -852,6 +1042,40 @@ const DOC_CATEGORIES: DocCategory[] = [
             <Callout type="warning">
               Integrasi AI Ops dalaman memerlukan konfigurasi teknikal yang lanjutan. Hanya pentadbir sistem yang boleh menguruskan pelayan MCP, plugin, dan integrasi. Sila rujuk dokumentasi teknikal untuk panduan konfigurasi terperinci.
             </Callout>
+          </>
+        ),
+      },
+      {
+        id: 'maria-puspa-tips',
+        title: 'Berinteraksi dengan Maria Puspa',
+        badge: 'Persona',
+        badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+        content: (
+          <>
+            <H1>Berinteraksi dengan Maria Puspa</H1>
+            <P>
+              <strong className="text-foreground">Maria Puspa</strong> ialah pembantu AI rasmi PUSPA yang direka untuk menjadi "Cerdas, Mesra, dan Sentiasa di sisi anda". Dia bukan chatbot biasa; dia mempunyai akses terus kepada data sistem melalui peranti cerdas (AI Tools).
+            </P>
+            <H2>Etika & Cara Bertanya</H2>
+            <P>Maria paling berkesan apabila anda memberikan konteks yang spesifik. Berikut adalah beberapa tips:</P>
+            <UL>
+              <LI><strong className="text-foreground">Gunakan Bahasa Melayu atau Inggeris</strong> — Maria faham kedua-duanya, tetapi lebih mesra dalam Bahasa Melayu.</LI>
+              <LI><strong className="text-foreground">Minta Data Spesifik</strong> — Daripada bertanya "Berapa banyak derma?", cuba "Maria, senaraikan 5 derma zakat terbesar bulan ini."</LI>
+              <LI><strong className="text-foreground">Tanya Tentang Kes</strong> — "Apakah status kes CS-1024 sekarang?" atau "Adakah Ahmad bin Ali sudah lulus eKYC?"</LI>
+            </UL>
+            <Callout type="important">
+              Maria diwajibkan menggunakan alat (tools) sebelum menjawab soalan operasi. Jika Maria mengatakan "Tiada data ditemui", ini bermakna rekod tersebut memang tiada dalam pangkalan data.
+            </Callout>
+            <H2>Keupayaan Maria</H2>
+            <DocTable
+              headers={['Kategori', 'Keupayaan']}
+              rows={[
+                ['Ringkasan Eksekutif', 'Jana ringkasan prestasi mingguan/bulanan NGO.'],
+                ['Analisa Risiko', 'Mengenalpasti ahli asnaf yang memerlukan perhatian segera.'],
+                ['Carian Web', 'Mencari maklumat luaran (cth: harga pasaran barang dapur atau berita NGO terkini).'],
+                ['Pentadbiran', 'Membantu menyediakan draf surat atau laporan pematuhan.'],
+              ]}
+            />
           </>
         ),
       },

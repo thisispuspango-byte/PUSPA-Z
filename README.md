@@ -1,31 +1,13 @@
-<p align="center">
-  <img src="public/puspa-logo-official.png" alt="PUSPA Logo" width="120" />
-</p>
+# PUSPA-Z
 
-<h1 align="center">PUSPA-Z</h1>
+![PUSPA Logo](public/puspa-logo-official.png)
 
-<p align="center">
-  <strong>Pertubuhan Urus Peduli Asnaf</strong><br/>
-  <em>NGO Management Platform for Asnaf Welfare</em>
-</p>
+**Pertubuhan Urus Peduli Asnaf**
+*NGO Management Platform for Asnaf Welfare*
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript" alt="TypeScript 5" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss" alt="Tailwind CSS 4" />
-  <img src="https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma" alt="Prisma 6" />
-  <img src="https://img.shields.io/badge/Bun-Runtime-000?logo=bun" alt="Bun" />
-  <img src="https://img.shields.io/badge/OpenRouter-AI-6366F1" alt="OpenRouter AI" />
-  <img src="https://img.shields.io/badge/License-Proprietary-red" alt="Proprietary License" />
-</p>
+![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript) ![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss) ![Prisma 6](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma) ![Bun](https://img.shields.io/badge/Bun-Runtime-000?logo=bun) ![OpenRouter AI](https://img.shields.io/badge/OpenRouter-AI-6366F1) ![Proprietary License](https://img.shields.io/badge/License-Proprietary-red)
 
-<p align="center">
-  <a href="#-quick-start">Quick Start</a> &bull;
-  <a href="#-modules">Modules</a> &bull;
-  <a href="#-maria-puspa-ai">Maria Puspa AI</a> &bull;
-  <a href="#-api-reference">API</a> &bull;
-  <a href="#-database-schema">Database</a>
-</p>
+[Quick Start](#-quick-start) &bull; [Modules](#-modules) &bull; [Maria Puspa AI](#-maria-puspa-ai) &bull; [API](#-api-reference) &bull; [Database](#-database-schema)
 
 ---
 
@@ -37,15 +19,17 @@ PUSPA V5 ialah platform pengurusan NGO sepenuhnya yang dibina untuk Pertubuhan U
 
 ### Key Highlights
 
-- **17 integrated modules** covering the full NGO operational workflow
-- **Maria Puspa AI** — an AI assistant with 18 tools, RAG-powered responses, and SSE streaming
-- **Live Maria Character Layer** — global floating widget, dynamic emotion state, TTS + lip-sync
+- **23 integrated modules** covering the full NGO operational workflow
+- **Maria Puspa AI** — an AI assistant with 22 tools, RAG-powered responses, and SSE streaming
+- **Live Maria Character Layer** — global floating widget, dynamic emotion state, TTS + lip-sync, 3D VRM model
 - **Telegram Bot** (@MariaPuspaBot) for mobile access to Maria Puspa
 - **Role-Based Access Control** (Staff, Admin, Developer) across all modules and AI tools
 - **eKYC Verification** pipeline with risk assessment
 - **Compliance Tracking** for ROSM, LHDN, PDPA, and internal audits
-- **22 Prisma models** with full relational data integrity
-- **Key rotation** for OpenRouter API with automatic failover
+- **26 Prisma models** with full relational data integrity
+- **Key rotation** for OpenRouter API with automatic failover (up to 4 keys)
+- **Supabase Auth** for authentication (SSR + browser client)
+- **PWA support** with service worker and web manifest
 
 ---
 
@@ -65,19 +49,29 @@ PUSPA V5 ialah platform pengurusan NGO sepenuhnya yang dibina untuk Pertubuhan U
 
 ## Tech Stack / Teknologi
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| Framework | [Next.js](https://nextjs.org/) (App Router + Turbopack) | 16 |
-| Language | [TypeScript](https://www.typescriptlang.org/) | 5 |
-| Styling | [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) (New York) | 4 |
-| Database | [Prisma ORM](https://www.prisma.io/) with managed Postgres (production) | 6 |
-| State | [Zustand](https://zustand.docs.pmnd.rs/) with persist middleware | 5 |
-| AI | [OpenRouter](https://openrouter.ai/) (OpenAI-compatible) | — |
-| Data Grid | [TanStack Table](https://tanstack.com/table) + [React Query](https://tanstack.com/query) | 8 / 5 |
-| Charts | [Recharts](https://recharts.org/) | 2 |
-| Runtime | [Bun](https://bun.sh/) | latest |
-| Deployment | [Vercel](https://vercel.com/) (serverless) | — |
-| Telegram | Long-polling bot | — |
+| Layer      | Technology                                                                                | Version |
+| ---------- | ----------------------------------------------------------------------------------------- | ------- |
+| Framework  | [Next.js](https://nextjs.org/) (App Router + Turbopack)                                   | 16.1.1  |
+| Language   | [TypeScript](https://www.typescriptlang.org/)                                             | 5       |
+| UI         | [React](https://react.dev/)                                                               | 19.0.0  |
+| Styling    | [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) (New York) | 4       |
+| Database   | [Prisma ORM](https://www.prisma.io/) with PostgreSQL (managed)                            | 6.11.1  |
+| Auth       | [Supabase Auth](https://supabase.com/) (SSR + browser client)                             | 2.105.3 |
+| State      | [Zustand](https://zustand.docs.pmnd.rs/) with persist middleware                          | 5       |
+| Server     | [TanStack Query](https://tanstack.com/query)                                              | 5.82.0  |
+| Data Grid  | [TanStack Table](https://tanstack.com/table)                                              | 8.21.3  |
+| Forms      | [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)                 | 7.60.0 / 4.0.2 |
+| Charts     | [Recharts](https://recharts.org/)                                                         | 2.15.4  |
+| Maps       | [Leaflet](https://leafletjs.com/) + [react-leaflet](https://react-leaflet.js.org/)        | 1.9.4 / 5.0.0 |
+| 3D         | [Three.js](https://threejs.org/) + [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber) + [@react-three/drei](https://drei.pmnd.rs/) | 0.184.0 / 9.6.1 / 10.7.7 |
+| Animation  | [Framer Motion](https://www.framer.com/motion/)                                           | 12.38.0 |
+| AI         | [OpenRouter](https://openrouter.ai/) (OpenAI-compatible)                                  | —       |
+| Toasts     | [Sonner](https://sonner.emilkowal.ski/)                                                   | 2.0.6   |
+| Themes     | [next-themes](https://github.com/pacocoursey/next-themes)                                  | 0.4.6   |
+| Runtime    | [Bun](https://bun.sh/)                                                                    | latest  |
+| Deployment | [Vercel](https://vercel.com/) (serverless)                                                | —       |
+| Telegram   | Long-polling bot                                                                          | —       |
+| PWA        | Service worker + web manifest                                                             | —       |
 
 ---
 
@@ -102,14 +96,14 @@ bun install
 cp .env.example .env.local
 # Edit .env.local with your API keys (see Environment Variables below)
 
-# Initialize the database
+# Initialize the database (PostgreSQL)
 bun run db:push
 
 # Start the development server
 bun run dev
 ```
 
-The app will be running at **http://localhost:3000**.
+The app will be running at **<http://localhost:3000>**.
 
 ### Telegram Bot (Separate Terminal)
 
@@ -129,6 +123,7 @@ Create a `.env.local` file in the project root (recommended for Next.js local de
 ```env
 # ─── Database ───────────────────────────────────────
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME?sslmode=require"
+DIRECT_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME?sslmode=require"
 
 # ─── OpenRouter AI ──────────────────────────────────
 # Supports up to 4 API keys for automatic rotation
@@ -137,7 +132,7 @@ OPENROUTER_API_KEY_2=
 OPENROUTER_API_KEY_3=
 OPENROUTER_API_KEY_4=
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
-OPENROUTER_MODEL=openai/gpt-4o-mini
+OPENROUTER_MODEL=tencent/hy3-preview:free
 OPENROUTER_APP_NAME=PUSPA V5
 OPENROUTER_APP_URL=https://puspa-v5.space-z.ai
 
@@ -163,7 +158,7 @@ HERMES_RUNTIME_MODE=cli
 HERMES_CLI_TIMEOUT_MS=45000
 ```
 
-> **Note:** At least one `OPENROUTER_API_KEY` is required for Maria Puspa AI. The Telegram bot requires a valid `TELEGRAM_BOT_TOKEN` from [@BotFather](https://t.me/BotFather).
+> **Note:** At least one `OPENROUTER_API_KEY_1` is required for Maria Puspa AI. The Telegram bot requires a valid `TELEGRAM_BOT_TOKEN` from [@BotFather](https://t.me/BotFather). `DIRECT_URL` is used by Prisma for migrations (bypasses connection pooling).
 
 Run a quick Maria character smoke check:
 
@@ -175,27 +170,33 @@ npm run smoke:maria
 
 ## Modules / Modul
 
-PUSPA V5 consists of **17 lazy-loaded modules**, each with its own view page and API routes:
+PUSPA V5 consists of **23 lazy-loaded modules**, each with its own view page and API routes:
 
-| # | Module | Malay | Access | Description |
-|---|--------|-------|--------|-------------|
-| 1 | **Dashboard** | Papan Pemuka | Staff | Operational metrics and KPIs |
-| 2 | **Members** | Ahli Asnaf | Staff | Asnaf member registration and profiles |
-| 3 | **Cases** | Kes | Staff | Case management with 9-stage workflow |
-| 4 | **Donations** | Derma | Staff | Donation tracking (zakat, sadaqah, waqf, infaq) |
-| 5 | **Donors** | Penderma | Staff | Donor relationship management |
-| 6 | **Disbursements** | Agihan | Staff | Fund disbursement with approval pipeline |
-| 7 | **Programmes** | Program | Staff | Programme planning and beneficiary tracking |
-| 8 | **Volunteers** | Sukarelawan | Staff | Volunteer coordination and hours tracking |
-| 9 | **Compliance** | Pematuhan | Admin | ROSM, LHDN, PDPA compliance monitoring |
-| 10 | **eKYC** | Pengesahan eKYC | Admin | Identity verification with risk assessment |
-| 11 | **Documents** | Dokumen | Staff | Document management with versioning |
-| 12 | **Activities** | Aktiviti | Staff | Activity log and audit trail |
-| 13 | **Reports** | Laporan | Admin | Report generation and analytics |
-| 14 | **AI** | Maria Puspa | Developer | AI assistant with tool-calling |
-| 15 | **Admin** | Pentadbiran | Admin | System administration panel |
-| 16 | **Settings** | Tetapan | Staff | Platform configuration |
-| 17 | **TapSecure** | TapSecure | Admin | Secure access control management |
+| #   | Module                 | Malay              | Access    | Description                                             |
+| --- | ---------------------- | ------------------ | --------- | ------------------------------------------------------- |
+| 1   | **Dashboard**          | Papan Pemuka       | Staff     | Operational metrics and KPIs                            |
+| 2   | **Members**            | Ahli Asnaf         | Staff     | Asnaf member registration and profiles                  |
+| 3   | **Cases**              | Kes                | Staff     | Case management with 9-stage workflow                   |
+| 4   | **Programmes**         | Program            | Staff     | Programme planning and beneficiary tracking             |
+| 5   | **Donations**          | Derma              | Staff     | Donation tracking (zakat, sadaqah, waqf, infaq)         |
+| 6   | **Donors**             | Penderma           | Staff     | Donor relationship management                           |
+| 7   | **Disbursements**      | Agihan             | Staff     | Fund disbursement with approval pipeline                |
+| 8   | **Volunteers**         | Sukarelawan        | Staff     | Volunteer coordination and hours tracking               |
+| 9   | **Compliance**         | Pematuhan          | Admin     | ROSM, LHDN, PDPA compliance monitoring                  |
+| 10  | **Reports**            | Laporan            | Admin     | Report generation and analytics                         |
+| 11  | **eKYC**               | Pengesahan eKYC    | Admin     | Identity verification with risk assessment              |
+| 12  | **Documents**          | Dokumen            | Staff     | Document management with versioning                     |
+| 13  | **Activities**         | Aktiviti           | Staff     | Activity log and audit trail                            |
+| 14  | **Asnafpreneur**       | Asnafpreneur       | Staff     | Entrepreneur development programme tracking             |
+| 15  | **Sedekah Jumaat**     | Sedekah Jumaat     | Staff     | Weekly Friday charity collection with CRUD              |
+| 16  | **Docs**               | Panduan            | Staff     | Comprehensive platform user documentation               |
+| 17  | **AI**                 | Maria Puspa        | Developer | AI assistant with tool-calling                          |
+| 18  | **Settings**           | Tetapan            | Staff     | Platform configuration                                  |
+| 19  | **TapSecure**          | TapSecure          | Admin     | Secure access control management                        |
+| 20  | **Admin**              | Pentadbiran        | Admin     | System administration panel                             |
+| 21  | **Carta Organisasi**   | Carta Organisasi   | Staff     | Organization chart management                           |
+| 22  | **Institusi**          | Institusi          | Staff     | Institution management (Rumah Kebajikan, Maahad Tahfiz) |
+| 23  | **Permohonan Bantuan** | Permohonan Bantuan | Staff     | Aid application form with PDPA compliance               |
 
 ---
 
@@ -229,13 +230,15 @@ HERMES_CLI_TIMEOUT_MS=45000
 
 - **Global Widget**: floating Maria assistant is available across the app shell
 - **Official Avatar**: Maria surfaces use `public/maria-puspa-reference.png`
+- **3D VRM Model**: Three.js-powered VRM character with blendshapes
 - **Voice**: browser TTS with female-voice prioritization (BM/EN fallback)
 - **Lip-sync**: amplitude-driven mouth animation connected to speech playback
+- **Emotion Map**: dynamic emotion state system for character expressions
 - **Feature Flags**: `NEXT_PUBLIC_MARIA_WIDGET_ENABLED`, `NEXT_PUBLIC_MARIA_TTS_ENABLED`, `NEXT_PUBLIC_MARIA_LIPSYNC_ENABLED`
 
 ### Personality / Personaliti
 
-> *Cerdas, Mesra, Profesional, Empati, Boleh Dipercayai*
+> _Cerdas, Mesra, Profesional, Empati, Boleh Dipercayai_
 > (Intelligent, Friendly, Professional, Empathetic, Trustworthy)
 
 ### Architecture
@@ -254,7 +257,7 @@ User Prompt
 │           │                  │
 │           ▼                  │
 │  ┌───────────────────────┐  │
-│  │ Tool Registry (RBAC)  │  │  18 tools filtered by role
+│  │ Tool Registry (RBAC)  │  │  22 tools filtered by role
 │  └───────────────────────┘  │
 │           │                  │
 │           ▼                  │
@@ -272,36 +275,36 @@ User Prompt
 
 #### Core / Teras (Staff+)
 
-| Tool | Description |
-|------|-------------|
-| `ping_system` | Check system online status and database connectivity |
-| `get_recent_donations` | Fetch latest donations with amounts and categories |
-| `get_donation_stats` | Monthly donation statistics by category (zakat/sadaqah/waqf/infaq) |
-| `get_active_cases` | List active cases with optional status filter |
-| `get_case_summary` | Detailed case info with masked IC and notes |
-| `get_member_list` | Asnaf member directory with category filter |
-| `get_member_stats` | Member statistics by asnaf category and eKYC status |
-| `get_active_programmes` | Currently running programmes with dates |
-| `get_volunteer_stats` | Volunteer count, active/inactive breakdown |
-| `get_compliance_status` | Compliance overview (ROSM, LHDN, PDPA) with overdue tracking |
-| `get_disbursement_summary` | Disbursement totals by status |
-| `get_dashboard_overview` | Cross-module operational summary |
+| Tool                       | Description                                                        |
+| -------------------------- | ------------------------------------------------------------------ |
+| `ping_system`              | Check system online status and database connectivity               |
+| `get_recent_donations`     | Fetch latest donations with amounts and categories                 |
+| `get_donation_stats`       | Monthly donation statistics by category (zakat/sadaqah/waqf/infaq) |
+| `get_active_cases`         | List active cases with optional status filter                      |
+| `get_case_summary`         | Detailed case info with masked IC and notes                        |
+| `get_member_list`          | Asnaf member directory with category filter                        |
+| `get_member_stats`         | Member statistics by asnaf category and eKYC status                |
+| `get_active_programmes`    | Currently running programmes with dates                            |
+| `get_volunteer_stats`      | Volunteer count, active/inactive breakdown                         |
+| `get_compliance_status`    | Compliance overview (ROSM, LHDN, PDPA) with overdue tracking       |
+| `get_disbursement_summary` | Disbursement totals by status                                      |
+| `get_dashboard_overview`   | Cross-module operational summary                                   |
 
 #### Web / Capability (Staff+)
 
-| Tool | Description |
-|------|-------------|
-| `web_search` | Search the web for real-time information (via z-ai-web-dev-sdk) |
-| `web_read` | Extract content from web pages for RAG |
-| `delegate_task` | Delegate complex tasks to sub-agents |
-| `system_health` | Comprehensive system health check |
+| Tool            | Description                                                     |
+| --------------- | --------------------------------------------------------------- |
+| `web_search`    | Search the web for real-time information (via z-ai-web-dev-sdk) |
+| `web_read`      | Extract content from web pages for RAG                          |
+| `delegate_task` | Delegate complex tasks to sub-agents                            |
+| `system_health` | Comprehensive system health check                               |
 
 #### Admin / Pentadbiran (Admin+)
 
-| Tool | Description |
-|------|-------------|
-| `approve_disbursement` | Approve a pending disbursement |
-| `delete_case` | Delete a case with audit reason |
+| Tool                   | Description                     |
+| ---------------------- | ------------------------------- |
+| `approve_disbursement` | Approve a pending disbursement  |
+| `delete_case`          | Delete a case with audit reason |
 
 ### Mandatory RAG Rules
 
@@ -326,35 +329,35 @@ GET /api → { status: "ok", version: "5.0" }
 
 ### AI Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/v1/ai` | Maria Puspa AI streaming (SSE) |
-| `POST` | `/api/v1/ai/telegram` | Maria Puspa for Telegram bot |
+| Method | Endpoint              | Description                    |
+| ------ | --------------------- | ------------------------------ |
+| `POST` | `/api/v1/ai`          | Maria Puspa AI streaming (SSE) |
+| `POST` | `/api/v1/ai/telegram` | Maria Puspa for Telegram bot   |
 
 ### Module Endpoints
 
 All module endpoints support `GET` (list/detail) and `POST` (create) operations:
 
-| Endpoint | Module |
-|----------|--------|
-| `/api/v1/members` | Asnaf member management |
-| `/api/v1/cases` | Case management |
-| `/api/v1/donations` | Donation tracking |
-| `/api/v1/donors` | Donor management |
-| `/api/v1/disbursements` | Fund disbursements |
-| `/api/v1/programmes` | Programme management |
-| `/api/v1/volunteers` | Volunteer management |
-| `/api/v1/compliance` | Compliance records |
-| `/api/v1/ekyc` | eKYC verification |
-| `/api/v1/documents` | Document management |
-| `/api/v1/activities` | Activity audit log |
+| Endpoint                | Module                  |
+| ----------------------- | ----------------------- |
+| `/api/v1/members`       | Asnaf member management |
+| `/api/v1/cases`         | Case management         |
+| `/api/v1/donations`     | Donation tracking       |
+| `/api/v1/donors`        | Donor management        |
+| `/api/v1/disbursements` | Fund disbursements      |
+| `/api/v1/programmes`    | Programme management    |
+| `/api/v1/volunteers`    | Volunteer management    |
+| `/api/v1/compliance`    | Compliance records      |
+| `/api/v1/ekyc`          | eKYC verification       |
+| `/api/v1/documents`     | Document management     |
+| `/api/v1/activities`    | Activity audit log      |
 
 ### Analytics Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/v1/dashboard` | Dashboard metrics and KPIs |
-| `GET` | `/api/v1/reports` | Report generation |
+| Method | Endpoint            | Description                |
+| ------ | ------------------- | -------------------------- |
+| `GET`  | `/api/v1/dashboard` | Dashboard metrics and KPIs |
+| `GET`  | `/api/v1/reports`   | Report generation          |
 
 ---
 
@@ -380,10 +383,12 @@ PUSPA V5 implements a three-tier role hierarchy:
 │  • Admin panel                                   │
 ├──────────────────────────────────────────────────┤
 │  Level 1 — Staff                                 │
-│  • Dashboard, Members, Cases, Donations,         │
-│    Donors, Disbursements, Programmes,            │
-│    Volunteers, Documents, Activities,             │
-│    Settings                                      │
+│  • Dashboard, Members, Cases, Programmes,        │
+│    Donations, Donors, Disbursements,             │
+│    Volunteers, Documents, Activities,            │
+│    Asnafpreneur, Sedekah Jumaat, Docs,           │
+│    Settings, Carta Organisasi, Institusi,        │
+│    Permohonan Bantuan                            │
 │  • Core AI tools (read-only queries)             │
 └──────────────────────────────────────────────────┘
 ```
@@ -394,7 +399,7 @@ Higher roles inherit all permissions of lower roles. AI tools are also filtered 
 
 ## Database Schema / Skema Pangkalan Data
 
-PUSPA V5 uses **22 Prisma models** with full relational integrity:
+PUSPA V5 uses **26 Prisma models** with full relational integrity:
 
 ### Entity Overview
 
@@ -439,21 +444,28 @@ PUSPA V5 uses **22 Prisma models** with full relational integrity:
 ├──────────────────────────────────────────────────────────────┤
 │  Asnafpreneur                                                │
 │  Entrepreneur (name, category, initialCapital, status)        │
+├──────────────────────────────────────────────────────────────┤
+│  Organization & Institutions                                 │
+│  OrganizationMember (name, role, category, position, order)   │
+│  Institution (name, type, address, contact, isActive)         │
+├──────────────────────────────────────────────────────────────┤
+│  Aid Application                                             │
+│  AidApplication (full form with PDPA consent, dependents)     │
 └──────────────────────────────────────────────────────────────┘
 ```
 
 ### Key Enums / Status Values
 
-| Entity | Status Fields |
-|--------|--------------|
-| **Member** | `asnafCategory`: fakir, miskin, amil, muallaf, gharimin, riqab, ibnu_sabil, fisabilillah |
-| **Member** | `ekycStatus`: pending, verified, rejected |
-| **Case** | `status`: draft → intake → verification → assessment → approval → disbursement → follow_up → closed/rejected |
-| **Case** | `priority`: low, medium, high, urgent |
-| **Donation** | `category`: zakat, sadaqah, waqf, infaq, general |
-| **Disbursement** | `status`: pending → approved → disbursed → verified → cancelled |
-| **Compliance** | `category`: rosm, lhdn, pdpa, internal, audit |
-| **EKYC** | `status`: pending → submitted → under_review → verified → rejected |
+| Entity           | Status Fields                                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Member**       | `asnafCategory`: fakir, miskin, amil, muallaf, gharimin, riqab, ibnu_sabil, fisabilillah                     |
+| **Member**       | `ekycStatus`: pending, verified, rejected                                                                    |
+| **Case**         | `status`: draft -> intake -> verification -> assessment -> approval -> disbursement -> follow_up -> closed/rejected |
+| **Case**         | `priority`: low, medium, high, urgent                                                                        |
+| **Donation**     | `category`: zakat, sadaqah, waqf, infaq, general                                                             |
+| **Disbursement** | `status`: pending -> approved -> disbursed -> verified -> cancelled                                          |
+| **Compliance**   | `category`: rosm, lhdn, pdpa, internal, audit                                                                |
+| **EKYC**         | `status`: pending -> submitted -> under_review -> verified -> rejected                                       |
 
 ---
 
@@ -461,8 +473,14 @@ PUSPA V5 uses **22 Prisma models** with full relational integrity:
 
 ```
 PUSPA-Z/
+├── hermes/                     # Hermes agent skills directory
+│   └── skills/                 # Agent skills (apple, creative, etc.)
 ├── prisma/
-│   └── schema.prisma           # Database schema (22 models)
+│   └── schema.prisma           # Database schema (26 models)
+├── public/
+│   ├── manifest.json           # PWA web manifest
+│   ├── sw.js                   # Service worker (PWA)
+│   └── puspa-logo-official.png # Logo assets
 ├── src/
 │   ├── agents/
 │   │   └── runtime/
@@ -493,46 +511,82 @@ PUSPA-Z/
 │   │   └── page.tsx
 │   ├── components/
 │   │   ├── ui/                 # shadcn/ui components (New York style)
+│   │   ├── maria/              # Maria Puspa character components
+│   │   │   ├── MariaAvatarUnified.tsx
+│   │   │   ├── MariaVRMModel.tsx
+│   │   │   ├── MariaVRMModel.module.css
+│   │   │   ├── maria-character-renderer.tsx
+│   │   │   ├── maria-floating-widget.tsx
+│   │   │   ├── maria-vrm-blendshapes.tsx
+│   │   │   └── ...
 │   │   ├── app-sidebar.tsx     # Main navigation sidebar
 │   │   ├── app-header.tsx      # Top header bar
 │   │   ├── ai-chat-panel.tsx   # Maria Puspa chat interface
+│   │   ├── auth-provider.tsx   # Supabase Auth provider
+│   │   ├── query-provider.tsx  # TanStack Query provider
 │   │   ├── puspa-logo.tsx      # Logo component
 │   │   ├── puspa-loading-spinner.tsx
-│   │   ├── view-renderer.tsx   # Lazy module renderer
+│   │   ├── view-renderer.tsx   # Lazy module renderer (23 modules)
 │   │   └── theme-provider.tsx
 │   ├── hooks/
 │   │   ├── use-toast.ts
-│   │   └── use-mobile.ts
+│   │   ├── use-mobile.ts
+│   │   └── use-realtime.ts
 │   ├── lib/
-│   │   ├── openrouter.ts       # OpenRouter client with key rotation
 │   │   ├── access-control.ts   # RBAC view-level permissions
+│   │   ├── ai-cache.ts         # AI response caching
+│   │   ├── ai-rate-limit.ts    # AI rate limiting
+│   │   ├── api-utils.ts        # API utility functions
+│   │   ├── audit.ts            # Audit logging
+│   │   ├── auth.ts             # Auth utilities
+│   │   ├── case-intelligence.ts # Case AI intelligence
+│   │   ├── client.ts           # Supabase browser client
 │   │   ├── db.ts               # Prisma client singleton
-│   │   ├── memory.ts           # AI conversation memory
+│   │   ├── domain.ts           # Domain utilities
+│   │   ├── donor-sync.ts       # Donor synchronization
 │   │   ├── maria-avatar.ts     # Avatar asset helpers
+│   │   ├── maria-emotion-map.ts # Maria emotion state map
+│   │   ├── maria-lipsync.ts    # Lip-sync engine
+│   │   ├── maria-quick-prompts.ts # Quick prompt templates
+│   │   ├── maria-tts.ts        # Text-to-speech engine
+│   │   ├── memory.ts           # AI conversation memory
+│   │   ├── openrouter.ts       # OpenRouter client with key rotation
 │   │   ├── puspa-brand-assets.ts
 │   │   ├── puspa-knowledge.ts  # PUSPA knowledge base for RAG
+│   │   ├── rate-limit.ts       # General rate limiting
+│   │   ├── sentry.ts           # Sentry error tracking
+│   │   ├── sequence.ts         # Sequence utilities
+│   │   ├── server.ts           # Supabase server client
 │   │   ├── store.ts            # App state (current view, role)
-│   │   └── utils.ts            # Utility functions
-│   ├── modules/                # 17 lazy-loaded view pages
+│   │   ├── utils.ts            # Utility functions
+│   │   └── validation.ts       # Input validation
+│   ├── modules/                # 23 lazy-loaded view pages
 │   │   ├── dashboard/page.tsx
 │   │   ├── members/page.tsx
 │   │   ├── cases/page.tsx
+│   │   ├── programmes/page.tsx
 │   │   ├── donations/page.tsx
 │   │   ├── donors/page.tsx
 │   │   ├── disbursements/page.tsx
-│   │   ├── programmes/page.tsx
 │   │   ├── volunteers/page.tsx
 │   │   ├── compliance/page.tsx
+│   │   ├── reports/page.tsx
 │   │   ├── ekyc/page.tsx
 │   │   ├── documents/page.tsx
 │   │   ├── activities/page.tsx
-│   │   ├── reports/page.tsx
+│   │   ├── asnafpreneur/page.tsx
+│   │   ├── sedekah-jumaat/page.tsx
+│   │   ├── docs/page.tsx
 │   │   ├── ai/page.tsx
-│   │   ├── admin/page.tsx
 │   │   ├── settings/page.tsx
-│   │   └── tapsecure/page.tsx
+│   │   ├── tapsecure/page.tsx
+│   │   ├── admin/page.tsx
+│   │   ├── carta-organisasi/page.tsx
+│   │   ├── institusi/page.tsx
+│   │   └── permohonan-bantuan/page.tsx
 │   ├── stores/
-│   │   └── hermes-store.ts     # Zustand AI chat state
+│   │   ├── hermes-store.ts     # Zustand AI chat state
+│   │   └── maria-character-store.ts # Maria character state
 │   ├── tools/
 │   │   ├── index.ts            # Central tool registry with RBAC
 │   │   ├── donations.ts        # Donation-specific tools
@@ -544,8 +598,11 @@ PUSPA-Z/
 │   └── telegram-bot/
 │       ├── index.ts            # Long-polling Telegram bot
 │       ├── package.json
-│       └── maria-puspa-*.png   # Bot profile images
-├── public/                     # Static assets (logos, avatars)
+│       ├── server.py           # Python server for SadTalker
+│       ├── SadTalker/          # SadTalker animated avatar engine
+│       ├── maria.jpg           # Bot reference image
+│       ├── maria-puspa-*.png   # Bot profile images
+│       └── RUN_ME.bat          # Windows launcher
 ├── components.json             # shadcn/ui configuration
 ├── tailwind.config.ts
 ├── next.config.ts
@@ -559,19 +616,19 @@ PUSPA-Z/
 
 ## Scripts / Skrip
 
-| Command | Description |
-|---------|-------------|
-| `bun run dev` | Start Next.js dev server on port 3000 |
-| `bun run build` | Production build with standalone output |
-| `bun run start` | Start production server |
-| `bun run lint` | Run ESLint |
-| `bun run typecheck` | Run TypeScript type checks |
+| Command                  | Description                                         |
+| ------------------------ | --------------------------------------------------- |
+| `bun run dev`            | Start Next.js dev server on port 3000               |
+| `bun run build`          | Production build with standalone output             |
+| `bun run start`          | Start production server                             |
+| `bun run lint`           | Run ESLint                                          |
+| `bun run typecheck`      | Run TypeScript type checks                          |
 | `bun run verify:release` | Run release quality gate (lint + typecheck + build) |
-| `npm run smoke:maria` | Smoke-check Maria widget, TTS, and lip-sync wiring |
-| `bun run db:push` | Push Prisma schema to database |
-| `bun run db:generate` | Generate Prisma client |
-| `bun run db:migrate` | Run Prisma migrations |
-| `bun run db:reset` | Reset database (development only) |
+| `npm run smoke:maria`    | Smoke-check Maria widget, TTS, and lip-sync wiring  |
+| `bun run db:push`        | Push Prisma schema to database                      |
+| `bun run db:generate`    | Generate Prisma client                              |
+| `bun run db:migrate`     | Run Prisma migrations                               |
+| `bun run db:reset`       | Reset database (development only)                   |
 
 ---
 
@@ -581,13 +638,13 @@ The PUSPA Telegram bot (@MariaPuspaBot) provides mobile access to Maria Puspa AI
 
 ### Bot Commands
 
-| Command | Description |
-|---------|-------------|
-| `/start` | Welcome message and capabilities overview |
-| `/help` | List of available commands |
-| `/reset` | Reset conversation history |
-| `/role [staff\|admin\|developer]` | Switch access role (admin list required for elevated roles) |
-| `/status` | Show session status and system info |
+| Command                           | Description                                                 |
+| --------------------------------- | ----------------------------------------------------------- |
+| `/start`                          | Welcome message and capabilities overview                   |
+| `/help`                           | List of available commands                                  |
+| `/reset`                          | Reset conversation history                                  |
+| `/role [staff|admin|developer]`   | Switch access role (admin list required for elevated roles) |
+| `/status`                         | Show session status and system info                         |
 
 ### Bot Architecture
 
@@ -600,6 +657,7 @@ The PUSPA Telegram bot (@MariaPuspaBot) provides mobile access to Maria Puspa AI
 - **Auto-split** long messages for Telegram's 4096 char limit
 - **Typing indicators** while waiting for AI response
 - **Health monitoring** with 5-minute interval logging
+- **SadTalker integration** for animated avatar video generation
 
 ---
 
@@ -610,8 +668,8 @@ The PUSPA Telegram bot (@MariaPuspaBot) provides mobile access to Maria Puspa AI
 PUSPA V5 is production-ready with a **no-VPS architecture**:
 
 - **Web + API**: [Vercel](https://vercel.com/) (serverless)
-- **Database**: managed Postgres (Neon, Supabase, or equivalent)
-- **Telegram bot worker**: serverless/container worker (Render/Railway/Fly.io) with auto-restart
+- **Database**: managed PostgreSQL (Neon, Supabase, or equivalent)
+- **Telegram bot worker**: hosted worker (Render/Railway/Fly.io) with auto-restart
 
 You do **not** need to provision or maintain your own VPS.
 
@@ -620,7 +678,7 @@ You do **not** need to provision or maintain your own VPS.
 1. Push project to GitHub.
 2. Import repository into Vercel.
 3. Configure env vars in Vercel project settings.
-4. Point `DATABASE_URL` to managed Postgres (recommended for production).
+4. Point `DATABASE_URL` to managed PostgreSQL.
 5. Deploy.
 6. Deploy `mini-services/telegram-bot` on a hosted worker platform.
 7. Set bot env vars:
@@ -633,14 +691,14 @@ You do **not** need to provision or maintain your own VPS.
 ### Notes
 
 - Vercel handles scaling and HTTPS automatically.
-- Telegram endpoint `/api/v1/ai/telegram` now requires `x-puspa-internal-token`.
-- For production reliability, avoid local SQLite and use managed Postgres.
+- Telegram endpoint `/api/v1/ai/telegram` requires `x-puspa-internal-token`.
+- Use managed PostgreSQL for production (not SQLite).
 - DB fallback still protects user experience when transient DB outages happen.
 
 ### Deployment Checklist (No VPS)
 
 - [ ] Vercel project connected to main branch and production domain verified.
-- [ ] Managed Postgres provisioned and `DATABASE_URL` set in Vercel.
+- [ ] Managed PostgreSQL provisioned and `DATABASE_URL` + `DIRECT_URL` set in Vercel.
 - [ ] `OPENROUTER_API_KEY_1` (and optional key rotation vars) set in Vercel.
 - [ ] `PUSPA_INTERNAL_API_TOKEN` set in Vercel with strong random value.
 - [ ] Telegram worker deployed on Render/Railway/Fly.io (no VPS).
@@ -665,11 +723,13 @@ You do **not** need to provision or maintain your own VPS.
 
 - **IC Number Masking**: All AI responses mask IC numbers as `****XXXX`
 - **RBAC**: Three-tier access control across UI views and AI tools
-- **API Key Rotation**: Automatic OpenRouter key rotation on 429/5xx errors
+- **API Key Rotation**: Automatic OpenRouter key rotation on 429/5xx errors (up to 4 keys)
 - **Telegram Allowlist**: Only authorized chat IDs can interact with the bot
 - **Audit Trail**: All privileged operations are logged via the Activity model
 - **eKYC Risk Assessment**: Members are classified with risk levels (low/medium/high)
 - **Database Fallback**: Graceful degradation when database is unavailable
+- **Supabase Auth**: Secure authentication with SSR support
+- **Internal API Token**: `PUSPA_INTERNAL_API_TOKEN` protects Telegram API endpoint
 
 ---
 
@@ -681,18 +741,20 @@ This is a proprietary project for PUSPA organization. Contributions are by invit
 
 ## Organization / Pertubuhan
 
-**Pertubuhan Urus Peduli Asnaf (PUSPA)**
+### Pertubuhan Urus Peduli Asnaf (PUSPA)
 
-| | |
-|---|---|
-| Registration | PPM-024-10-05012022 |
-| Focus | Asnaf welfare in Kuala Lumpur & Selangor |
-| Address | 2253, Jalan Permata 22, Taman Permata, 53300 Gombak, Selangor |
-| Email | salam.puspaKL@gmail.com |
-| Phone | +6012-3183369 |
+|              |                                                               |
+| ------------ | ------------------------------------------------------------- |
+| Registration | PPM-024-10-05012022                                           |
+| Focus        | Asnaf welfare in Kuala Lumpur & Selangor                      |
+| Address      | 2253, Jalan Permata 22, Taman Permata, 53300 Gombak, Selangor |
+| Email        | <salam.puspaKL@gmail.com>                                     |
+| Phone        | +6012-3183369                                                 |
 
-| Donation Account | Maybank 562209677503 |
-| Facebook | Pertubuhan Urus Peduli Asnaf KL & Selangor |
+|                  |                                            |
+| ---------------- | ------------------------------------------ |
+| Donation Account | Maybank 562209677503                       |
+| Facebook         | Pertubuhan Urus Peduli Asnaf KL & Selangor |
 
 ---
 
@@ -702,9 +764,11 @@ This is **proprietary software** developed exclusively for Pertubuhan Urus Pedul
 
 ---
 
-<p align="center">
-  <img src="public/puspa-logo-official.png" alt="PUSPA" width="48" />
-  <br/>
-  <em>Dibina dengan kasih sayang untuk komuniti asnaf.</em><br/>
-  <em>Built with care for the asnaf community.</em>
-</p>
+![PUSPA](public/puspa-logo-official.png)
+
+*Dibina dengan kasih sayang untuk komuniti asnaf.*
+*Built with care for the asnaf community.*
+
+---
+
+*Updated: 2026-05-08*

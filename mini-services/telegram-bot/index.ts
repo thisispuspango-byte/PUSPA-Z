@@ -1,4 +1,5 @@
 // PUSPA V4 — Maria Puspa Telegram Bot
+/// <reference types="bun-types" />
 // Bridges Telegram messages to the Maria Puspa AI backend
 // Uses long polling (no webhook needed)
 // Allowlist-based access control
@@ -12,12 +13,16 @@ const PUSPA_INTERNAL_API_TOKEN = process.env.PUSPA_INTERNAL_API_TOKEN || ''
 // Comma-separated chat IDs that are allowed to interact with the bot
 const ALLOWED_CHAT_IDS = (process.env.ALLOWED_CHAT_IDS || '')
   .split(',')
-  .map(id => Number(id.trim()))
+  .map(id => id.trim())
+  .filter(id => id !== '')
+  .map(id => Number(id))
   .filter(id => !isNaN(id))
 
 const TELEGRAM_ADMIN_CHAT_IDS = (process.env.TELEGRAM_ADMIN_CHAT_IDS || '')
   .split(',')
-  .map(id => Number(id.trim()))
+  .map(id => id.trim())
+  .filter(id => id !== '')
+  .map(id => Number(id))
   .filter(id => !isNaN(id))
 
 // If no allowlist configured, allow all (open mode)
@@ -76,7 +81,8 @@ function canAssignRole(chatId: number, role: string): boolean {
 
 async function sendMessage(chatId: number, text: string, parseMode: string = 'Markdown') {
   const chunks = splitMessage(text, 4000)
-  
+
+
   for (const chunk of chunks) {
     try {
       const res = await fetch(`${TELEGRAM_API}/sendMessage`, {
@@ -89,7 +95,8 @@ async function sendMessage(chatId: number, text: string, parseMode: string = 'Ma
           disable_web_page_preview: true,
         }),
       })
-      
+
+
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}))
         if (errorData.description?.includes('can\'t parse')) {
@@ -107,7 +114,8 @@ async function sendMessage(chatId: number, text: string, parseMode: string = 'Ma
           console.error('[Telegram] Send error:', JSON.stringify(errorData))
         }
       }
-      
+
+
       if (chunks.length > 1) {
         await new Promise(r => setTimeout(r, 500))
       }
@@ -127,21 +135,24 @@ async function sendTypingAction(chatId: number) {
         action: 'typing',
       }),
     })
-  } catch {}
+  } catch (err) { }
 }
 
 function splitMessage(text: string, maxLength: number): string[] {
   if (text.length <= maxLength) return [text]
-  
+
+
   const chunks: string[] = []
   let remaining = text
-  
+
+
   while (remaining.length > 0) {
     if (remaining.length <= maxLength) {
       chunks.push(remaining)
       break
     }
-    
+
+
     let breakPoint = remaining.lastIndexOf('\n', maxLength)
     if (breakPoint < maxLength / 2) {
       breakPoint = remaining.lastIndexOf('. ', maxLength)
@@ -149,12 +160,135 @@ function splitMessage(text: string, maxLength: number): string[] {
     if (breakPoint < maxLength / 2) {
       breakPoint = maxLength
     }
-    
+
+
     chunks.push(remaining.substring(0, breakPoint + 1))
     remaining = remaining.substring(breakPoint + 1)
   }
-  
+
+
   return chunks
+}
+
+async function sendVideo(chatId: number, videoUrl: string, caption: string = '') {
+  try {
+    await fetch(`${TELEGRAM_API}/sendVideo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        video: videoUrl,
+        caption: caption,
+        parse_mode: 'Markdown',
+      }),
+    })
+  } catch (err) {
+    console.error('[Telegram] Failed to send video:', err)
+  }
+}
+
+// ─── Open Source Avatar API (Localhost / Python Server) ──────────────────────────────
+
+const LOCAL_AVATAR_API_URL = process.env.LOCAL_AVATAR_API_URL || 'http://127.0.0.1:8000/generate-avatar'
+
+async function generateAvatarVideo(text: string): Promise<string | null> {
+  try {
+    console.log('[Avatar] Meminta video dari Local Open Source API...')
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 180000)
+    const createRes = await fetch(LOCAL_AVATAR_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text }),
+      signal: controller.signal
+    })
+    clearTimeout(timeoutId)
+    if (!createRes.ok) throw new Error('Ralat dari Local Avatar API')
+    const data = await createRes.json();
+
+    return data.video_url;
+  } catch (error) {
+    console.error('[Avatar] Generation error:', error);
+    return null;
+  }
+}
+
+// ─── Voice Transcription via OpenRouter ─────────────────────
+// Uses nvidia/nemotron-3-nano-omni model for speech-to-text
+// Supports .ogg/.opus audio files from Telegram
+
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || ''
+const OPENROUTER_VISION_MODEL = process.env.OPENROUTER_VISION_MODEL || 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free'
+
+async function transcribeVoiceWithOpenRouter(audioFilePath: string): Promise<string | null> {
+  try {
+    if (!OPENROUTER_API_KEY) {
+      console.error('[Voice] OPENROUTER_API_KEY not set')
+      return null
+    }
+
+    // Read audio file and convert to base64
+    const audioBuffer = await Bun.file(audioFilePath).arrayBuffer()
+    const base64 = Buffer.from(audioBuffer).toString('base64')
+
+    console.log(`[Voice] Sending to OpenRouter for transcription (${audioBuffer.byteLength} bytes)...`)
+
+    // Try omni model first (supports audio input)
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'https://puspa.gangniaga.my',
+        'X-Title': 'PUSPA Voice Bot',
+      },
+      body: JSON.stringify({
+        model: OPENROUTER_VISION_MODEL,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a transcription assistant. Transcribe the audio message accurately in the original language (Bahasa Melayu, English, or mixed). Output ONLY the transcribed text, no explanations.',
+          },
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: 'Transcribe this voice message:',
+              },
+              {
+                type: 'input_audio',
+                input_audio: {
+                  data: base64,
+                  format: 'ogg',
+                },
+              },
+            ],
+          },
+        ],
+        max_tokens: 512,
+      }),
+    })
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '')
+      console.error(`[Voice] OpenRouter error ${res.status}:`, errText.slice(0, 300))
+      return null
+    }
+
+    const data = await res.json()
+    const transcript = data?.choices?.[0]?.message?.content?.trim()
+
+    if (!transcript) {
+      console.error('[Voice] Empty transcription response')
+      return null
+    }
+
+    return transcript
+  } catch (err) {
+    console.error('[Voice] Transcription error:', err)
+    return null
+  }
 }
 
 // ─── Maria Puspa AI API call ──────────────────────────────
@@ -162,7 +296,8 @@ function splitMessage(text: string, maxLength: number): string[] {
 async function callMariaPuspa(text: string, userId: string, userRole: string, currentView: string = 'dashboard'): Promise<string> {
   try {
     console.log(`[Maria Puspa] Calling API for ${userId} (role: ${userRole}): "${text.substring(0, 80)}..."`)
-    
+
+
     const res = await fetch(PUSPA_AI_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -252,6 +387,95 @@ async function parseSSEStream(res: Response): Promise<string> {
 async function handleMessage(msg: any) {
   const chatId = msg.chat.id
   const text = msg.text?.trim()
+  const voice = msg.voice
+
+  // ─── Handle Voice Messages ────────────────────────
+  if (voice && !text) {
+    console.log(`[Telegram] Voice message received from chat ${chatId}, duration: ${voice.duration}s`)
+
+    // ─── Allowlist Check ─────────────────────────
+    if (!isChatAllowed(chatId)) {
+      console.log(`[Telegram] Blocked voice from chat ID: ${chatId}`)
+      return
+    }
+
+    // Get or create session
+    let session = getSession(chatId)
+    if (!session) {
+      session = createSession(msg)
+      console.log(`[Telegram] New session: ${session.userId} (${session.firstName}) chatId=${chatId}`)
+    }
+    session.lastActivity = new Date()
+    session.messageCount++
+
+    await sendTypingAction(chatId)
+
+    try {
+      // 1. Get file path from Telegram API
+      const fileRes = await fetch(`${TELEGRAM_API}/getFile?file_id=${voice.file_id}`)
+      const fileData = await fileRes.json()
+
+      if (!fileData.ok) {
+        console.error('[Telegram] getFile failed:', fileData)
+        await sendMessage(chatId, 'Maaf, tidak dapat memproses voice note. Sila cuba lagi.')
+        return
+      }
+
+      const filePath = fileData.result.file_path
+
+      // 2. Download the voice file (.ogg/.opus)
+      const voiceUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`
+      const voiceRes = await fetch(voiceUrl)
+
+      if (!voiceRes.ok) {
+        console.error('[Telegram] Voice download failed:', voiceRes.status)
+        await sendMessage(chatId, 'Maaf, tidak dapat memuat turun voice note.')
+        return
+      }
+
+      const voiceBytes = Buffer.from(await voiceRes.arrayBuffer())
+
+      // 3. Save to temp file
+      const tmpFile = `/tmp/voice_${chatId}_${Date.now()}.ogg`
+      await Bun.write(tmpFile, voiceBytes)
+      console.log(`[Telegram] Voice saved: ${tmpFile} (${voiceBytes.length} bytes)`)
+
+      // 4. Transcribe with OpenRouter omni model
+      const transcribed = await transcribeVoiceWithOpenRouter(tmpFile)
+
+      // 5. Clean up temp file
+      await Bun.file(tmpFile).delete().catch(() => {})
+
+      if (!transcribed) {
+        await sendMessage(chatId, 'Maaf, tidak dapat memahami voice note. Sila taip je.')
+        return
+      }
+
+      console.log(`[Telegram] Transcribed: "${transcribed.substring(0, 80)}..."`)
+
+      // 6. Send transcription to Maria Puspa AI
+      const typingInterval = setInterval(() => sendTypingAction(chatId), 4000)
+
+      try {
+        const response = await callMariaPuspa(transcribed, session.userId, session.role)
+
+        // Send response with voice indicator
+        await sendMessage(chatId, `🎤 _${transcribed}_\n\n${response}`)
+
+        // Generate avatar video
+        const videoUrl = await generateAvatarVideo(response)
+        if (videoUrl) {
+          await sendVideo(chatId, videoUrl, '🪷 _Maria Puspa Avatar_')
+        }
+      } finally {
+        clearInterval(typingInterval)
+      }
+    } catch (err) {
+      console.error('[Telegram] Voice processing error:', err)
+      await sendMessage(chatId, 'Maaf, ralat semasa memproses voice note. Sila cuba lagi.')
+    }
+    return
+  }
 
   if (!text) return
 
@@ -259,9 +483,9 @@ async function handleMessage(msg: any) {
   if (!isChatAllowed(chatId)) {
     console.log(`[Telegram] Blocked chat ID: ${chatId} (not in allowlist)`)
     // Silently ignore or send a brief message
-    await sendMessage(chatId, 
-      'Maaf, anda tidak mempunyai akses kepada Maria Puspa. Hubungi pentadbir untuk kebenaran.',
-      undefined // no parse mode to avoid errors
+    await sendMessage(
+      chatId,
+      'Maaf, anda tidak mempunyai akses kepada Maria Puspa. Hubungi pentadbir untuk kebenaran.'
     )
     return
   }
@@ -298,6 +522,7 @@ async function handleMessage(msg: any) {
       `/help — Senarai arahan\n` +
       `/reset — Reset perbualan\n` +
       `/role \\[staff\\|admin\\|developer\\] — Tukar peranan akses (admin sahaja untuk role tinggi)\n` +
+      `/avatar — Lihat wajah sebenar Maria\n` +
       `/status — Status sistem\n\n` +
       `Atau taip soalan dalam BM/English\\.`
     )
@@ -343,9 +568,30 @@ async function handleMessage(msg: any) {
     return
   }
 
+  if (text === '/avatar') {
+    await sendTypingAction(chatId)
+    await sendMessage(chatId, 'Menjana avatar, sila tunggu sebentar...')
+    const videoUrl = await generateAvatarVideo("Hai! Saya Maria Puspa, sedia berkhidmat untuk anda.")
+    if (videoUrl) await sendVideo(chatId, videoUrl, '*Hai, saya Maria Puspa\\!* 🪷')
+    return
+  }
+
+  if (text === '/testavatar') {
+    await sendTypingAction(chatId)
+    await sendMessage(chatId, '⚙️ Menguji sambungan ke Local Avatar API (SadTalker)...')
+    const videoUrl = await generateAvatarVideo("Ini adalah mesej ujian. Sistem avatar sumber terbuka berfungsi dengan baik.")
+    if (videoUrl) {
+      await sendVideo(chatId, videoUrl, '✅ *Ujian Avatar Berjaya\\!*')
+    } else {
+      await sendMessage(chatId, '❌ *Ujian Gagal.* Pastikan Python Server sedang berjalan.')
+    }
+    return
+  }
+
   // ─── AI Query ────────────────────────────────────
   console.log(`[Telegram] Processing message from ${session.firstName} (${chatId}): "${text.substring(0, 60)}..."`)
-  
+
+
   // Show typing indicator
   await sendTypingAction(chatId)
 
@@ -357,7 +603,22 @@ async function handleMessage(msg: any) {
     const response = await callMariaPuspa(text, session.userId, session.role)
 
     // Send response
+    // Opsyen: Hantar teks DAN video secara serentak (jika mahu)
+    // atau, biarkan komen ini jika hanya mahu video melalui command `/avatar` buat sementara waktu.
+    // const videoUrl = await generateAvatarVideo(response);
+    // if (videoUrl) {
+    //    await sendVideo(chatId, videoUrl, response);
+    // } else {
     await sendMessage(chatId, response)
+    // }
+    // 1. Hantar teks dahulu (sebab jana video ambil masa sedikit)
+    await sendMessage(chatId, "🗣️ " + response)
+
+    // 2. Jana video Avatar Maria dan hantar untuk setiap mesej!
+    const videoUrl = await generateAvatarVideo(response)
+    if (videoUrl) {
+      await sendVideo(chatId, videoUrl, '🪷 _Maria Puspa Avatar_')
+    }
   } catch (err) {
     console.error('[Telegram] Error processing message:', err)
     await sendMessage(chatId, 'Maaf, ralat berlaku semasa memproses mesej anda. Sila cuba lagi.')
@@ -456,7 +717,8 @@ async function main() {
   try {
     const meRes = await fetch(`${TELEGRAM_API}/getMe`)
     const meData = await meRes.json()
-    
+
+
     if (!meData.ok) {
       console.error('❌ Invalid bot token:', meData.description)
       process.exit(1)
@@ -498,7 +760,7 @@ async function main() {
       lastUpdateId = maxUpdateId
       console.log(`⏭️  Skipped ${pendingData.result.length} pending updates (lastUpdateId: ${lastUpdateId})`)
     }
-  } catch {}
+  } catch (err) { }
 
   console.log('🔄 Starting long poll...')
   console.log('📱 Send /start to @MariaPuspaBot on Telegram to begin!')

@@ -7,6 +7,9 @@ if (!(Test-Path $hermesExe)) {
   Write-Error "Hermes not installed. Run: python -m venv .venv-hermes; .\.venv-hermes\Scripts\python -m pip install -e `"vendor/hermes-agent`""
 }
 
+# Use local project hermes folder for config and state
+$env:HERMES_HOME = Join-Path $root "hermes"
+
 # Load .env.local so Hermes can use the same keys as the app.
 $envFile = Join-Path $root ".env.local"
 if (Test-Path $envFile) {

@@ -37,9 +37,6 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               icNumber: true,
-              phone: true,
-              email: true,
-              asnafCategory: true,
               status: true,
             },
           },
@@ -95,6 +92,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth()
     await requireRole('admin')
     const body = await request.json()
     const { memberId, icFrontUrl, icBackUrl, selfieUrl, ocrExtracted, faceMatchScore, riskLevel, notes } = body

@@ -96,6 +96,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Auth check: staff and above can create disbursements
+    await requireAuth()
     await requireRole('staff')
     const body = await request.json()
     const { memberId, caseId, amount, category, paymentMethod, scheduledDate, notes } = body

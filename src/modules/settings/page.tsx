@@ -104,7 +104,9 @@ export default function SettingsPage() {
   useEffect(() => {
     const fromStore = currentUser?.imageUrl?.trim()
     if (!fromStore) return
-    setSettings((prev) => (prev.profileImageUrl ? prev : { ...prev, profileImageUrl: fromStore }))
+    setTimeout(() => {
+      setSettings((prev) => (prev.profileImageUrl ? prev : { ...prev, profileImageUrl: fromStore }))
+    }, 0)
   }, [currentUser?.imageUrl])
 
   const handleSave = async () => {

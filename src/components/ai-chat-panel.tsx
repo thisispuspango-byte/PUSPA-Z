@@ -55,7 +55,7 @@ export function AiChatPanel() {
         const stored = localStorage.getItem('puspa-settings')
         if (stored) {
           const parsed = JSON.parse(stored)
-          setDebugMode(!!parsed.agent?.debugMode)
+          setTimeout(() => { setDebugMode(!!parsed.agent?.debugMode) }, 0)
         }
       } catch (e) { /* Abaikan jika ralat parse */ }
     }

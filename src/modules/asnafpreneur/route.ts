@@ -1,6 +1,4 @@
 import { db } from '@/lib/db'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- force type resolution
-import type { Entrepreneur } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { canAccessView, Role } from '@/lib/access-control'
@@ -55,13 +53,13 @@ export async function GET(request: NextRequest) {
     if (category && category !== 'semua') where.category = category
 
     const [entrepreneurs, total] = await Promise.all([
-      db.entrepreneur.findMany({
+      (db as any).entrepreneur.findMany({
         where,
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
       }),
-      db.entrepreneur.count({ where }),
+      (db as any).entrepreneur.count({ where }),
     ])
 
     return NextResponse.json({
@@ -92,7 +90,7 @@ export async function POST(request: NextRequest) {
 
     const { name, category, initialCapital, description } = validated.data
 
-    const entrepreneur = await db.entrepreneur.create({
+    const entrepreneur = await (db as any).entrepreneur.create({
       data: {
         name: name.trim(),
         category,

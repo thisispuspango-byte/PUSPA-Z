@@ -87,8 +87,8 @@ export function useRealtime({
       }
     })
     
-    setChannel(ch)
-    
+    setTimeout(() => { setChannel(ch) }, 0)
+
     // Cleanup on unmount
     return () => {
       if (ch) {

@@ -44,6 +44,19 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const { message, userId, userRole, currentView } = body
+
+    // ─── Enforce PUSPA_REQUIRE_AUTH_FOR_AI ──────────────────────
+    // When PUSPA_REQUIRE_AUTH_FOR_AI is true (or not explicitly set to false),
+    // unauthenticated Telegram users are denied access to AI features.
+    const requireAuthForAi = process.env.PUSPA_REQUIRE_AUTH_FOR_AI !== 'false'
+    if (requireAuthForAi && (!userId || userId === 'telegram-anonymous')) {
+      return NextResponse.json({
+        error: 'Unauthorized',
+        content: 'Sila log masuk untuk menggunakan Maria Puspa.',
+        success: false,
+      }, { status: 401 })
+    }
+
     const effectiveRole =
       userRole === 'admin' || userRole === 'developer' ? userRole : 'staff'
 

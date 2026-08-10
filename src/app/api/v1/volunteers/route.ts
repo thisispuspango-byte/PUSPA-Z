@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth'
+import { requireAuth, requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
@@ -50,7 +50,14 @@ export async function GET(request: NextRequest) {
       db.volunteer.count({ where }),
     ])
 
-    return NextResponse.json({ data: volunteers, total, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
+    // Mask PII for PDPA compliance
+    const maskedVolunteers = volunteers.map((v) => ({
+      ...v,
+      email: v.email ? (() => { const [local, domain] = v.email.split('@'); return local.slice(0, 2) + '***@' + domain; })() : null,
+      phone: v.phone ? '****' + v.phone.slice(-4) : null,
+    }))
+
+    return NextResponse.json({ data: maskedVolunteers, total, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
   } catch (error) {
     console.error('Error fetching volunteers:', error)
     return NextResponse.json(
@@ -62,6 +69,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireRole('staff')
     const body = await request.json()
 
     // Validation

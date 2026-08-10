@@ -1,11 +1,13 @@
 import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth'
+import { requireAuth, requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
     await requireAuth()
     const { searchParams } = new URL(request.url)
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20')))
     const status = searchParams.get('status')
     const category = searchParams.get('category')
     const search = searchParams.get('search')
@@ -22,26 +24,33 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    const programmes = await db.programme.findMany({
-      where,
-      include: {
-        beneficiaries: {
-          select: { id: true, status: true, memberId: true },
+    const [programmes, total] = await Promise.all([
+      db.programme.findMany({
+        where,
+        include: {
+          beneficiaries: {
+            select: { id: true, status: true, memberId: true },
+          },
+          _count: {
+            select: { beneficiaries: true, disbursements: true },
+          },
         },
-        _count: {
-          select: { beneficiaries: true, disbursements: true },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-    })
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      db.programme.count({ where }),
+    ])
 
-    // Compute beneficiary count for each programme
     const result = programmes.map((p) => ({
       ...p,
       beneficiaryCount: p._count.beneficiaries,
     }))
 
-    return NextResponse.json({ data: result, total: result.length })
+    return NextResponse.json({
+      data: result,
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    })
   } catch (error) {
     console.error('Error fetching programmes:', error)
     return NextResponse.json(
@@ -53,6 +62,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth()
+    await requireRole('staff')
     const body = await request.json()
 
     // Validation

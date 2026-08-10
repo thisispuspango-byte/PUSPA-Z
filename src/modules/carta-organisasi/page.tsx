@@ -28,15 +28,15 @@ interface Person {
 }
 
 const ROLE_COLORS: Record<Person['tier'], string> = {
-  chairman:  'linear-gradient(135deg, #b8860b, #daa520)',
-  deputy:    'linear-gradient(135deg, #7c3aed, #a855f7)',
+  chairman: 'linear-gradient(135deg, #b8860b, #daa520)',
+  deputy: 'linear-gradient(135deg, #7c3aed, #a855f7)',
   secretary: 'linear-gradient(135deg, #6366f1, #818cf8)',
   treasurer: 'linear-gradient(135deg, #0891b2, #22d3ee)',
-  auditor:   'linear-gradient(135deg, #059669, #34d399)',
-  advisor:   'linear-gradient(135deg, #dc2626, #f87171)',
-  honorary:  'linear-gradient(135deg, #be185d, #f472b6)',
-  ops:       'linear-gradient(135deg, #ea580c, #fb923c)',
-  bureau:    'linear-gradient(135deg, #4f46e5, #818cf8)',
+  auditor: 'linear-gradient(135deg, #059669, #34d399)',
+  advisor: 'linear-gradient(135deg, #dc2626, #f87171)',
+  honorary: 'linear-gradient(135deg, #be185d, #f472b6)',
+  ops: 'linear-gradient(135deg, #ea580c, #fb923c)',
+  bureau: 'linear-gradient(135deg, #4f46e5, #818cf8)',
 }
 
 const TIER_LABELS: Record<Person['tier'], string> = {
@@ -123,7 +123,14 @@ function getInitials(name: string) {
 
 function Avatar({ person, size = 42 }: { person: Person; size?: number }) {
   return (
-    <div className={s.avatar} style={{ width: size, height: size, background: ROLE_COLORS[person.tier], fontSize: size * 0.33 }}>
+    <div 
+      className={`${s.avatar} ${s.avatarDynamic}`} 
+      style={{ 
+        '--avatar-size': `${size}px`, 
+        '--avatar-bg': ROLE_COLORS[person.tier],
+        '--avatar-font-size': `${size * 0.33}px`
+      } as any}
+    >
       <div className={s.avatarRing} />
       {getInitials(person.name)}
     </div>
@@ -239,54 +246,54 @@ function DetailPanel({ person, onClose }: { person: Person; onClose: () => void 
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className={`${s.detailPanel} ${s.detailPanelPos}`}
       >
-      <div className={s.detailHeader}>
-        <Avatar person={person} size={56} />
-        <button aria-label="Tutup panel" onClick={onClose} className={s.closeBtn}>
-          <X size={18} />
-        </button>
-      </div>
+        <div className={s.detailHeader}>
+          <Avatar person={person} size={56} />
+          <button aria-label="Tutup panel" onClick={onClose} className={s.closeBtn}>
+            <X size={18} />
+          </button>
+        </div>
 
-      <h3 className={s.detailName}>{person.name}</h3>
-      <p className={s.detailTitle}>{person.title}</p>
+        <h3 className={s.detailName}>{person.name}</h3>
+        <p className={s.detailTitle}>{person.title}</p>
 
-      <div className={s.badgeRow}>
-        <Badge className={s.badgeFontSm} style={{ background: ROLE_COLORS[person.tier], color: 'white', border: 'none' }}>
-          <Icon size={12} className="mr-1" />
-          {TIER_LABELS[person.tier]}
-        </Badge>
-        <Badge variant="outline" className={s.badgeFontSm}>Aktif</Badge>
-      </div>
+        <div className={s.badgeRow}>
+          <Badge className={s.badgeFontSm} style={{ background: ROLE_COLORS[person.tier], color: 'white', border: 'none' }}>
+            <Icon size={12} className="mr-1" />
+            {TIER_LABELS[person.tier]}
+          </Badge>
+          <Badge variant="outline" className={s.badgeFontSm}>Aktif</Badge>
+        </div>
 
-      <Separator className={s.separatorMy} />
+        <Separator className={s.separatorMy} />
 
-      <div className={s.detailRows}>
-        <DetailRow icon={Award} label="Jawatan" value={person.title} />
-        <DetailRow icon={Building2} label="Organisasi" value="PUSPA" />
-        <DetailRow icon={MapPin} label="Lokasi" value="Gombak, Selangor" />
-        <DetailRow icon={Phone} label="Telefon" value="—" />
-        <DetailRow icon={Mail} label="E-mel" value="—" />
-      </div>
+        <div className={s.detailRows}>
+          <DetailRow icon={Award} label="Jawatan" value={person.title} />
+          <DetailRow icon={Building2} label="Organisasi" value="PUSPA" />
+          <DetailRow icon={MapPin} label="Lokasi" value="Gombak, Selangor" />
+          <DetailRow icon={Phone} label="Telefon" value="—" />
+          <DetailRow icon={Mail} label="E-mel" value="—" />
+        </div>
 
-      {person.children && person.children.length > 0 && (
-        <>
-          <Separator className={s.separatorMy} />
-          <div className={s.directReportsLabel}>
-            DIRECT REPORTS ({person.children.length})
-          </div>
-          <div className={s.directReportsList}>
-            {person.children.map(c => (
-              <div key={c.id} className={s.directReportItem}>
-                <Avatar person={c} size={28} />
-                <div>
-                  <div className={s.directReportName}>{c.name}</div>
-                  <div className={s.directReportTitle}>{c.title}</div>
+        {person.children && person.children.length > 0 && (
+          <>
+            <Separator className={s.separatorMy} />
+            <div className={s.directReportsLabel}>
+              DIRECT REPORTS ({person.children.length})
+            </div>
+            <div className={s.directReportsList}>
+              {person.children.map(c => (
+                <div key={c.id} className={s.directReportItem}>
+                  <Avatar person={c} size={28} />
+                  <div>
+                    <div className={s.directReportName}>{c.name}</div>
+                    <div className={s.directReportTitle}>{c.title}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-    </motion.div>
+              ))}
+            </div>
+          </>
+        )}
+      </motion.div>
     </>
   )
 }

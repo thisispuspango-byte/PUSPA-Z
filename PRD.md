@@ -1,12 +1,12 @@
 # PUSPA V5 — Product Requirements Document
 
-**Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)**  
+**Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)**
 **Malaysian NGO Management Platform**
 
 | Field | Value |
 |---|---|
 | Document Version | 5.0 |
-| Last Updated | May 2026 |
+| Last Updated | 2026-05-08 |
 | Status | Active Development |
 | Author | PUSPA Engineering Team |
 | Classification | Internal — Confidential |
@@ -36,9 +36,9 @@
 
 PUSPA V5 is a full-stack, AI-augmented management platform for **Pertubuhan Urus Peduli Asnaf (PUSPA)**, a Malaysian NGO registered under PPM-024-10-05012022, operating primarily in Kuala Lumpur and Selangor. The platform digitises and streamlines the end-to-end operations of managing asnaf (needy) beneficiaries — from member registration and eKYC verification, through case management and donation tracking, to disbursement processing and regulatory compliance.
 
-The platform comprises **17 core modules** spanning operational management, compliance, and an AI assistant. At its centre is **Maria Puspa**, a RAG-grounded AI assistant with 18 tool-calling capabilities, bilingual fluency (Bahasa Melayu primary, English secondary), and strict adherence to mandatory tool use before answering — eliminating hallucination in operational data queries.
+The platform comprises **23 core modules** spanning operational management, compliance, and an AI assistant. At its centre is **Maria Puspa**, a RAG-grounded AI assistant with 18 tool-calling capabilities, bilingual fluency (Bahasa Melayu primary, English secondary), and strict adherence to mandatory tool use before answering — eliminating hallucination in operational data queries.
 
-PUSPA V5 is built on **Next.js 16 (App Router)** with **Prisma ORM 6** and **SQLite** (with PostgreSQL migration readiness), styled with **Tailwind CSS 4** and **shadcn/ui**, powered by **Zustand 5** for state management, and deployed to **Vercel (serverless)** and **Alibaba Cloud Function Compute**. The AI layer uses **OpenRouter** with key rotation and SSE streaming.
+PUSPA V5 is built on **Next.js 16 (App Router)** with **Prisma ORM 6** and **PostgreSQL**, styled with **Tailwind CSS 4** and **shadcn/ui**, powered by **Zustand 5** for state management, and deployed to **Vercel (serverless)**. The AI layer uses **OpenRouter** with key rotation and SSE streaming. Authentication is handled by **Supabase Auth**.
 
 ### Key Differentiators
 
@@ -166,7 +166,7 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 | F007 | PII Masking | System | IC numbers masked to `****XXXX` in all views, API responses, and AI outputs |
 | F008 | RBAC Enforcement | System | 3-tier role hierarchy (Staff → Admin → Developer) with module-level and tool-level access control |
 | F009 | Activity Audit Log | Activities | Immutable log of all create, update, delete, and approval actions with user attribution |
-| F010 | Maria Puspa Core AI | AI | RAG-grounded AI assistant with 18 tools, mandatory tool use, SSE streaming, key rotation |
+| F010 | Maria Puspa Core AI | AI | RAG-grounded AI assistant with 22 tools, mandatory tool use, SSE streaming, key rotation |
 
 ### 5.2 Should-Have (P1) — Post-Launch Enhancements
 
@@ -196,7 +196,7 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 | F027 | Bank Statement Reconciliation | Donations | Auto-match bank transactions to donation records |
 | F028 | Advanced Analytics | Reports | Predictive analytics for donation forecasting, case resolution time, beneficiary needs |
 | F029 | Mobile App | Mobile | React Native or Capacitor-based mobile app |
-| F030 | PostgreSQL Migration | Infrastructure | Production migration from SQLite to PostgreSQL with zero downtime |
+| F030 | PostgreSQL Readiness | Infrastructure | Production PostgreSQL deployment with connection pooling and zero-downtime migration strategy |
 
 ---
 
@@ -393,6 +393,54 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 | TS-003 | Access audit trail | Filterable log of all data access events, especially PII-related |
 | TS-004 | Admin-only access | TapSecure module requires Admin role or above |
 
+### 6.18 Module 18: Asnafpreneur
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| ASN-001 | Entrepreneur CRUD | Name, category (makanan, jahitan, perkhidmatan, pertanian, kraftangan), initial capital, description, status |
+| ASN-002 | Entrepreneur status | Aktif, Latihan, Tidak Aktif |
+| ASN-003 | Category filtering | Filter entrepreneurs by business category |
+
+### 6.19 Module 19: Sedekah Jumaat
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| SJ-001 | Friday donation tracking | Record and track Friday-specific sedekah contributions |
+| SJ-002 | Donation linking | Link sedekah jumaat entries to the main donation system |
+
+### 6.20 Module 20: Docs
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| DOCS-001 | Documentation hub | Internal documentation pages for PUSPA operations and guidelines |
+| DOCS-002 | Rich content editing | Support for formatted text, images, and structured content |
+
+### 6.21 Module 21: Carta Organisasi
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| CO-001 | Organisation chart display | Visual representation of PUSPA's organisational structure |
+| CO-002 | Member management | Add, edit, and position organisation members by category and role |
+| CO-003 | Hierarchical layout | Display members in a structured tree/hierarchy view |
+
+### 6.22 Module 22: Institusi
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| INS-001 | Institution CRUD | Name, type (Rumah Kebajikan, Maahad Tahfiz, etc.), address, contact, active status |
+| INS-002 | Institution type filtering | Filter by institution type |
+| INS-003 | Partner tracking | Track relationships with external institutions |
+
+### 6.23 Module 23: Permohonan Bantuan
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| PB-001 | Aid application form | Full application form: applicant details, IC, address, phone, marital status, employment, income, health, spouse info, dependents |
+| PB-002 | Application status pipeline | PENDING → reviewed → approved / rejected with reason |
+| PB-003 | PDPA consent | Digital consent checkbox and signature timestamp for PDPA compliance |
+| PB-004 | Other agency help tracking | Record if applicant receives aid from other agencies |
+| PB-005 | Application search & filter | Search by name, IC, status, date range |
+
 ---
 
 ## 7. Non-Functional Requirements
@@ -418,7 +466,7 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 | NFR-S003 | AI tool RBAC | Tool execution validated against user role at runtime |
 | NFR-S004 | Input validation | All inputs validated with Zod schemas; no raw SQL |
 | NFR-S005 | HTTPS enforcement | All production traffic over TLS |
-| NFR-S006 | Session security | HttpOnly cookies, CSRF protection via NextAuth |
+| NFR-S006 | Session security | HttpOnly cookies, CSRF protection via Supabase Auth |
 | NFR-S007 | API key protection | OpenRouter keys stored server-side only, never exposed to client |
 | NFR-S008 | Telegram allowlist | Chat ID-based access control for bot interactions |
 
@@ -450,7 +498,7 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 | NFR-R001 | Uptime target | 99.5% (excluding planned maintenance) |
 | NFR-R002 | Graceful degradation | App functional with DB unavailable (fallback data in AI tools) |
 | NFR-R003 | Error recovery | AI tool failures return structured error messages, not crashes |
-| NFR-R004 | Data durability | SQLite WAL mode; daily backups; PostgreSQL migration path ready |
+| NFR-R004 | Data durability | PostgreSQL with connection pooling via Prisma; daily backups |
 | NFR-R005 | Telegram bot resilience | Auto-restart on 10+ consecutive poll errors; skip stale messages on startup |
 
 ### 7.6 Maintainability
@@ -506,7 +554,7 @@ These rules are **non-negotiable** and enforced via the system prompt:
 | RESP-006 | Start with the answer, then add context if needed | System prompt structure rule |
 | RESP-007 | Never say "Saya harap ini membantu" or similar filler | System prompt exclusion rule |
 
-### 8.4 Tool Registry — 18 Tools with RBAC
+### 8.4 Tool Registry — 22 Tools with RBAC
 
 #### General Tools (Staff+)
 
@@ -528,13 +576,17 @@ These rules are **non-negotiable** and enforced via the system prompt:
 | 14 | `web_read` | Extract content from a web page URL for RAG | staff, admin, developer |
 | 15 | `delegate_task` | Delegate complex multi-step task to sub-agent | staff, admin, developer |
 | 16 | `system_health` | Comprehensive system diagnostics: DB, AI service, tools, errors | staff, admin, developer |
+| 17 | `get_volunteer_list` | List volunteers with filters (status, skills, availability) | staff, admin, developer |
+| 18 | `update_volunteer_status` | Update volunteer status (active, inactive, on_leave) | staff, admin, developer |
+| 19 | `get_asnafpreneur_stats` | Asnafpreneur programme statistics: total entrepreneurs, revenue, grants | staff, admin, developer |
+| 20 | `get_sedekah_masjid_locations` | Masjid locations with GPS coordinates for Sedekah Jumaat | staff, admin, developer |
 
 #### Admin-Only Tools
 
 | # | Tool Name | Description | Required Role |
 |---|---|---|---|
-| 17 | `approve_disbursement` | Approve a pending disbursement by ID | admin, developer |
-| 18 | `delete_case` | Delete a case (requires reason for audit) | admin, developer |
+| 21 | `approve_disbursement` | Approve a pending disbursement by ID | admin, developer |
+| 22 | `delete_case` | Delete a case (requires reason for audit) | admin, developer |
 
 ### 8.5 PII Protection in AI
 
@@ -573,7 +625,7 @@ The PUSPA Knowledge Base is injected into every Maria Puspa system prompt, conta
 
 | Parameter | Default | Configurable |
 |---|---|---|
-| Model | `openai/gpt-4o-mini` (via OpenRouter) | Yes (OPENROUTER_MODEL env var) |
+| Model | `tencent/hy3-preview:free` (via OpenRouter) | Yes (OPENROUTER_MODEL env var) |
 | Temperature | 0.7 | No (hardcoded) |
 | Max tokens | 2048 | No (hardcoded) |
 | API keys | Up to 4 keys with round-robin rotation | Yes (OPENROUTER_API_KEY_1–4 env vars) |
@@ -587,6 +639,8 @@ The PUSPA Knowledge Base is injected into every Maria Puspa system prompt, conta
 | AI-CHAR-003 | TTS playback should prioritize female voice profiles for persona consistency | P1 |
 | AI-CHAR-004 | Lip-sync animation must react to speech playback boundary/amplitude events | P2 |
 | AI-CHAR-005 | Character runtime must be controllable via feature flags (`NEXT_PUBLIC_MARIA_*`) | P1 |
+| AI-CHAR-006 | VRM model support via `@pixiv/three-vrm` for 3D avatar rendering with blendshape animation | P1 |
+| AI-CHAR-007 | Maria character components (`MariaVRMModel`, `MariaAvatarUnified`, `MariaFloatingWidget`) must be available in the maria components directory | P1 |
 | Tool choice | `auto` | No (always auto) |
 
 ---
@@ -600,7 +654,7 @@ Level 3: Developer ─── Full system access + AI module + admin tools + auto
     ↑
 Level 2: Admin ─── Compliance + Reports + eKYC + TapSecure + approve_disbursement + delete_case
     ↑
-Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, Donations, Donors, 
+Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, Donations, Donors,
                      Disbursements, Programmes, Volunteers, Activities, Documents, Settings)
 ```
 
@@ -625,6 +679,12 @@ Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, D
 | TapSecure | ❌ | ✅ | ✅ |
 | Admin | ❌ | ✅ | ✅ |
 | AI (Maria Puspa) | ❌ | ❌ | ✅ |
+| Asnafpreneur | ✅ | ✅ | ✅ |
+| Sedekah Jumaat | ✅ | ✅ | ✅ |
+| Docs | ✅ | ✅ | ✅ |
+| Carta Organisasi | ✅ | ✅ | ✅ |
+| Institusi | ✅ | ✅ | ✅ |
+| Permohonan Bantuan | ✅ | ✅ | ✅ |
 
 ### 9.3 AI Tool Access Matrix
 
@@ -672,7 +732,7 @@ Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, D
 | PDPA-005 | Data retention | Active data retained while member is active; deletion requests honoured |
 | PDPA-006 | Data access rights | Members can request their data; Admin can export member records |
 | PDPA-007 | Data breach notification | Security incidents logged and reported per PDPA requirements |
-| PDPA-008 | Cross-border transfer | Data hosted in Malaysia-region clouds (Alibaba Cloud) or Vercel (US with disclosure) |
+| PDPA-008 | Cross-border transfer | Data hosted on Vercel and Supabase infrastructure with appropriate disclosures |
 
 ### 10.2 PII Protection Implementation
 
@@ -686,7 +746,7 @@ Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, D
 | eKYC Photos | URLs only | Admin+ only | Not disclosed | N/A |
 | Face Match Score | Full | Admin+ only | Risk level only | Admin+ |
 
-### 10.3 Database Schema — 21+ Models
+### 10.3 Database Schema — 26 Models
 
 ```
 User ──────────────────── activities, caseNotes, aiConversations
@@ -712,6 +772,10 @@ AiConversation ────────── user, messages
 AiMessage ─────────────── conversation (cascade)
 OpsWorkItem ───────────── (standalone)
 AutomationJob ─────────── (standalone)
+Entrepreneur ──────────── (standalone — asnafpreneur module)
+OrganizationMember ────── (standalone — carta-organisasi module)
+Institution ───────────── (standalone — institusi module)
+AidApplication ────────── (standalone — permohonan-bantuan module)
 ```
 
 ### 10.4 Data Validation Rules
@@ -742,7 +806,7 @@ AutomationJob ─────────── (standalone)
 | Key Rotation | Up to 4 API keys (`OPENROUTER_API_KEY_1` through `OPENROUTER_API_KEY_4`), round-robin rotation on 429/5xx errors |
 | Optional Headers | `HTTP-Referer` (app URL), `X-OpenRouter-Title` (app name) for rankings |
 | Rate Limiting | Handled via key rotation; 429 triggers automatic key switch |
-| Default Model | `openai/gpt-4o-mini` (configurable via `OPENROUTER_MODEL`) |
+| Default Model | `tencent/hy3-preview:free` (configurable via `OPENROUTER_MODEL`) |
 | Streaming | SSE with `stream: true`; chunks parsed for `content` type deltas |
 
 ### 11.2 Telegram Bot (@MariaPuspaBot)
@@ -768,23 +832,23 @@ AutomationJob ─────────── (standalone)
 | `web_search` | `zai.functions.invoke('web_search', { query })` | Returns titles, URLs, snippets |
 | `web_read` | `zai.functions.invoke('page_reader', { url })` | Returns title, HTML, published time |
 
-### 11.4 Database — SQLite → PostgreSQL Migration Path
+### 11.4 Database — PostgreSQL
 
-| Parameter | SQLite (Current) | PostgreSQL (Target) |
-|---|---|---|
-| Provider | `prisma-client-js` | `prisma-client-js` |
-| URL | `file:./dev.db` | `postgresql://user:pass@host:5432/puspa` |
-| Features | All CRUD, aggregations, groupBy | Full feature set + JSON operators, array types |
-| Migration | N/A | `prisma migrate deploy` with zero-downtime strategy |
-| Backup | File copy | pg_dump with WAL archiving |
-| Connection | Single file | Connection pooling via Prisma |
+| Parameter | Specification |
+|---|---|
+| Provider | `prisma-client-js` |
+| URL | `postgresql://user:pass@host:5432/puspa` (via `DATABASE_URL` env var) |
+| Direct URL | `postgresql://user:pass@host:5432/puspa` (via `DIRECT_URL` env var, for Prisma connection pooling) |
+| Features | Full feature set: CRUD, aggregations, groupBy, JSON operators, array types |
+| Migration | `prisma migrate deploy` with zero-downtime strategy |
+| Backup | pg_dump with WAL archiving |
+| Connection | Connection pooling via Prisma |
 
 ### 11.5 Deployment Targets
 
 | Platform | Configuration |
 |---|---|
-| Vercel (Primary) | Serverless functions; SQLite in-memory fallback; OpenRouter server-side |
-| Alibaba Cloud Function Compute (Secondary) | For Malaysia-region data residency; PostgreSQL with VPC |
+| Vercel (Primary) | Serverless functions; PostgreSQL via Supabase; OpenRouter server-side |
 | Caddy (Local Dev) | Reverse proxy with auto-TLS; bun runtime |
 
 ---
@@ -837,14 +901,16 @@ AutomationJob ─────────── (standalone)
 
 ### Phase 1: Foundation (Q1 2026) — ✅ Complete
 
-- [x] Next.js 16 App Router scaffolding with Turbopack
-- [x] Prisma schema with 21+ models
-- [x] SQLite database with seed data
+- [x] Next.js 16 App Router scaffolding
+- [x] Prisma schema with 26 models
+- [x] PostgreSQL database with seed data
 - [x] shadcn/ui component library (New York style)
-- [x] Core module pages: Dashboard, Members, Cases, Donations, Donors, Disbursements, Programmes, Volunteers, Compliance, eKYC, Documents, Activities, Reports, AI, Admin, Settings, TapSecure
+- [x] Core module pages: Dashboard, Members, Cases, Donations, Donors, Disbursements, Programmes, Volunteers, Compliance, eKYC, Documents, Activities, Reports, AI, Admin, Settings, TapSecure, Asnafpreneur, Sedekah Jumaat, Docs, Carta Organisasi, Institusi, Permohonan Bantuan
 - [x] API routes for all modules under `/api/v1/`
 - [x] RBAC system with 3-tier role hierarchy
 - [x] Zustand store with persist middleware
+- [x] Supabase Auth integration
+- [x] Maria Puspa character components (VRM model, floating widget, avatar unified)
 
 ### Phase 2: AI & Intelligence (Q2 2026) — 🔄 In Progress
 
@@ -868,11 +934,10 @@ AutomationJob ─────────── (standalone)
 - [ ] Receipt PDF generation
 - [ ] Notification system (in-app + email)
 - [ ] Report export (CSV + PDF)
-- [ ] PostgreSQL migration guide and testing
+- [ ] PostgreSQL production deployment and connection pooling
 
 ### Phase 4: Scale & Polish (Q4 2026) — 📋 Planned
 
-- [ ] Alibaba Cloud Function Compute deployment
 - [ ] Public donation page (Maybank integration)
 - [ ] Volunteer self-service portal
 - [ ] Automation jobs framework
@@ -888,7 +953,7 @@ AutomationJob ─────────── (standalone)
 
 | ID | Risk | Impact | Likelihood | Mitigation |
 |---|---|---|---|---|
-| RISK-001 | SQLite concurrency limits under multi-user load | High — data loss or locks | Medium | PostgreSQL migration planned; WAL mode enabled; connection pooling |
+| RISK-001 | PostgreSQL connection limits under multi-user load | High — connection exhaustion | Low | Connection pooling via Prisma; `DIRECT_URL` for direct connections |
 | RISK-002 | OpenRouter API rate limiting or downtime | Medium — AI unavailable | Medium | 4-key rotation; graceful fallback messages; `ping_system` health check |
 | RISK-003 | AI hallucination in operational responses | High — incorrect decisions | Low | Mandatory RAG rules; PII masking; 2–3 sentence limit; tool-citation requirement |
 | RISK-004 | Telegram bot token exposure | High — unauthorised access | Low | Environment variable only; allowlist enforcement; session role limits |
@@ -904,7 +969,7 @@ AutomationJob ─────────── (standalone)
 | RISK-009 | Data migration from existing spreadsheets | Medium — data integrity issues | High | Migration scripts with validation; staged rollout; parallel operation period |
 | RISK-010 | eKYC vendor integration complexity | Medium — delayed eKYC launch | Medium | Start with manual verification; add OCR/face match in Phase 3 |
 | RISK-011 | PUSPA organisational changes (leadership, focus areas) | Low — knowledge base drift | Medium | Knowledge base versioned; leadership data noted as "2023 observed"; annual review cycle |
-| RISK-012 | Insufficient OpenRouter API budget | Medium — AI feature degradation | Low | Cost monitoring; key rotation for rate distribution; `gpt-4o-mini` as cost-efficient default |
+| RISK-012 | Insufficient OpenRouter API budget | Medium — AI feature degradation | Low | Cost monitoring; key rotation for rate distribution; `tencent/hy3-preview:free` as cost-efficient default |
 
 ### 14.3 Open Issues
 
@@ -912,12 +977,12 @@ AutomationJob ─────────── (standalone)
 |---|---|---|---|---|
 | OI-001 | `approve_disbursement` and `delete_case` tools are simulated (not persisted to DB) | Open | Engineering | Phase 3 — implement real DB mutations with audit trail |
 | OI-002 | `delegate_task` tool returns simulated delegation response | Open | Engineering | Phase 4 — implement sub-agent spawning with result callback |
-| OI-003 | No authentication system (NextAuth configured but not enforced on routes) | Open | Engineering | Phase 3 — enforce auth on all `/api/v1/*` routes |
+| OI-003 | Authentication enforcement on API routes (Supabase Auth configured but not fully enforced on all routes) | Open | Engineering | Phase 3 — enforce Supabase Auth on all `/api/v1/*` routes |
 | OI-004 | AI module page requires Developer role — may be too restrictive for Admin users who want chat access | Under Discussion | Product | Consider splitting AI chat (Admin+) from AI config (Developer+) |
 | OI-005 | Programme `type` field referenced in tools but not in Prisma schema | Open | Engineering | Add `type` field to Programme model or update tool queries |
 | OI-006 | No automated testing framework configured | Open | Engineering | Phase 2 — add Vitest for unit tests, Playwright for E2E |
 | OI-007 | Audit trail for compliance status changes not tracked | Open | Engineering | Phase 3 — add ComplianceRecordChange model |
-| OI-008 | No data export/backup automation | Open | Operations | Phase 3 — daily SQLite backup; PostgreSQL pg_dump cron |
+| OI-008 | No data export/backup automation | Open | Operations | Phase 3 — daily PostgreSQL backup via pg_dump cron |
 | OI-009 | Self-reported PUSPA metrics in knowledge base may be outdated | Acknowledged | Product | Annual review; clear labelling in AI responses |
 | OI-010 | No rate limiting on AI API endpoints | Open | Engineering | Phase 3 — implement per-user rate limiting on `/api/v1/ai` |
 
@@ -927,27 +992,62 @@ AutomationJob ─────────── (standalone)
 
 | Layer | Technology | Version | Purpose |
 |---|---|---|---|
-| Framework | Next.js (App Router) | 16.x | Full-stack React framework with SSR/SSG |
-| Build | Turbopack | Latest | Fast development bundler |
+| Framework | Next.js (App Router) | 16.1.1 | Full-stack React framework with SSR/SSG |
 | Language | TypeScript | 5.x | Type-safe JavaScript |
 | Styling | Tailwind CSS | 4.x | Utility-first CSS |
 | UI Components | shadcn/ui (New York) | Latest | Accessible component library |
-| Database ORM | Prisma | 6.x | Type-safe database access |
-| Database | SQLite | 3.x | Development database |
-| State Management | Zustand | 5.x | Client-side state with persistence |
+| Database ORM | Prisma | 6.11.1 | Type-safe database access |
+| Database | PostgreSQL | — | Production database (via Supabase) |
+| State Management | Zustand | 5.0.6 | Client-side state with persistence |
 | AI Backend | OpenRouter | API v1 | LLM proxy with key rotation |
 | Web SDK | z-ai-web-dev-sdk | 0.0.17+ | Web search and page reading |
-| Validation | Zod | 4.x | Schema validation |
-| Forms | React Hook Form | 7.x | Form state management |
-| Charts | Recharts | 2.x | Data visualisation |
-| Tables | TanStack Table | 8.x | Advanced data tables |
-| Auth | NextAuth | 4.x | Authentication framework |
-| i18n | next-intl | 4.x | Internationalisation |
-| Animation | Framer Motion | 12.x | UI animations |
+| Validation | Zod | 4.0.2 | Schema validation |
+| Forms | React Hook Form | 7.60.0 | Form state management |
+| Charts | Recharts | 2.15.4 | Data visualisation |
+| Tables | TanStack Table | 8.21.3 | Advanced data tables |
+| Data Fetching | TanStack Query | 5.82.0 | Server state management |
+| Auth | Supabase Auth | 2.105.3 | Authentication and session management |
+| i18n | next-intl | 4.3.4 | Internationalisation |
+| Animation | Framer Motion | 12.38.0 | UI animations |
+| 3D Rendering | Three.js | 0.184.0 | 3D graphics and VRM model rendering |
+| 3D React | @react-three/fiber | 9.6.1 | React renderer for Three.js |
+| 3D Helpers | @react-three/drei | 10.7.7 | Useful helpers for React Three Fiber |
+| VRM Models | @pixiv/three-vrm | 3.5.2 | VRM avatar model loading and animation |
+| WebGL | ogl | 1.0.11 | Lightweight WebGL library |
+| Maps | Leaflet + react-leaflet | 1.9.4 / 5.0.0 | Interactive maps |
+| Notifications | sonner | 2.0.6 | Toast notifications |
+| Themes | next-themes | 0.4.6 | Light/dark theme support |
+| Command Menu | cmdk | 1.1.1 | Command palette component |
+| Carousel | embla-carousel-react | 8.6.0 | Carousel/slider component |
+| Image Processing | sharp | 0.34.3 | Image optimisation |
+| UUID | uuid | 11.1.0 | UUID generation |
+| Drawer | vaul | 1.1.2 | Drawer component |
 | Runtime | Bun | Latest | JavaScript runtime |
 | Deployment | Vercel | — | Serverless deployment |
-| Deployment | Alibaba Cloud FC | — | Malaysia-region deployment |
 | Telegram | Bot API | — | Long-polling bot |
+
+### Environment Variables
+
+| Variable | Required | Default | Purpose |
+|---|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | — | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | — | Supabase publishable/anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes | — | Supabase service role key |
+| `DATABASE_URL` | Yes | — | PostgreSQL connection string |
+| `DIRECT_URL` | Yes | — | Direct PostgreSQL connection (Prisma pooling) |
+| `OPENROUTER_API_KEY_1` | Yes | — | Primary OpenRouter API key |
+| `OPENROUTER_API_KEY_2` | No | — | Secondary key (rotation) |
+| `OPENROUTER_API_KEY_3` | No | — | Tertiary key (rotation) |
+| `OPENROUTER_API_KEY_4` | No | — | Quaternary key (rotation) |
+| `OPENROUTER_BASE_URL` | No | `https://openrouter.ai/api/v1` | OpenRouter API base URL |
+| `OPENROUTER_MODEL` | No | `tencent/hy3-preview:free` | Default OpenRouter model |
+| `HERMES_RUNTIME_MODE` | No | `cli` | Hermes runtime mode (`cli` or `gateway`) |
+| `HERMES_CLI_TIMEOUT_MS` | No | `45000` | Hermes CLI timeout in milliseconds |
+| `TELEGRAM_BOT_TOKEN` | Yes* | — | Telegram bot token (*required for bot) |
+| `PUSPA_INTERNAL_API_TOKEN` | Yes | — | Internal API authentication token |
+| `NEXT_PUBLIC_MARIA_WIDGET_ENABLED` | No | `true` | Enable Maria floating widget |
+| `NEXT_PUBLIC_MARIA_TTS_ENABLED` | No | `true` | Enable Maria TTS |
+| `NEXT_PUBLIC_MARIA_LIPSYNC_ENABLED` | No | `true` | Enable Maria lip-sync |
 
 ## Appendix B: Asnaf Category Definitions
 

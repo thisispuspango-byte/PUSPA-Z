@@ -11,7 +11,7 @@ const VRM_MODEL_URL = '/models/maria.vrm'; // placeholder — replace with actua
 
 function AvatarModel() {
   const vrmRef = useRef<VRM | null>(null);
-  const groupRef = useRef<THREE.Group>(new THREE.Group());
+  const group = React.useMemo(() => new THREE.Group(), []);
 
   useEffect(() => {
     const loader = new GLTFLoader();
@@ -24,7 +24,7 @@ function AvatarModel() {
         if (vrm) {
           vrmRef.current = vrm;
           vrm.scene.rotation.y = Math.PI; // face camera
-          groupRef.current.add(vrm.scene);
+          group.add(vrm.scene);
         }
       },
       undefined,
@@ -33,7 +33,7 @@ function AvatarModel() {
 
     return () => {
       if (vrmRef.current) {
-        groupRef.current.remove(vrmRef.current.scene);
+        group.remove(vrmRef.current.scene);
         vrmRef.current = null;
       }
     };
@@ -51,12 +51,14 @@ function AvatarModel() {
     }
   });
 
-  return <primitive object={groupRef.current} position-y={-1} />;
+  return <primitive object={group} position-y={-1} />;
 }
+
+import s from './MariaVRMModel.module.css'
 
 export default function MariaAvatarScene() {
   return (
-    <div style={{ width: '100%', height: '500px', background: 'linear-gradient(to bottom, #1a1a2e, #16213e)', borderRadius: '20px', overflow: 'hidden' }}>
+    <div className={s.canvasContainer}>
       <Canvas camera={{ position: [0, 1.5, 2], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />

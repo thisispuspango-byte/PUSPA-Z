@@ -1,9 +1,10 @@
 import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireRole } from '@/lib/auth'
+import { requireAuth, requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
+    await requireAuth()
     await requireRole('admin')
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') || 'operational'

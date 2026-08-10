@@ -29,15 +29,17 @@
 |-------|-----------|---------|-------|
 | **Framework** | Next.js (App Router, Turbopack) | 16.1.x | Standalone output for serverless |
 | **Language** | TypeScript | 5.x | Strict mode, ES2022 target |
-| **Styling** | Tailwind CSS + shadcn/ui | 4.x / New York style | Radix UI primitives, CSS variables |
-| **Database** | Prisma ORM + managed Postgres (production) | 6.x | SQLite for local dev only |
-| **State Management** | Zustand + persist middleware | 5.x | localStorage persistence |
+| **Styling** | Tailwind CSS 4 + shadcn/ui | 4.x / New York style | Radix UI primitives, CSS variables |
+| **Database** | Prisma ORM + PostgreSQL (managed) | 6.11.x | Connection pooling, Supabase |
+| **State Management** | Zustand 5 + persist middleware | 5.x | localStorage persistence |
 | **AI Engine** | OpenRouter API (OpenAI-compatible) | — | Key rotation, SSE streaming |
 | **AI SDK** | z-ai-web-dev-sdk | 0.0.17+ | Web search & page reading tools |
-| **Runtime** | Bun | 1.3.6+ | Package manager + runtime |
+| **Runtime** | Bun | 1.3.x+ | Package manager + runtime |
 | **Charts** | Recharts | 2.15.x | Dashboard visualisations |
 | **Tables** | TanStack React Table | 8.21.x | Data grid with sorting/filtering |
 | **Forms** | React Hook Form + Zod | 7.x / 4.x | Schema validation |
+| **3D** | Three.js + @react-three/fiber + @react-three/drei | 0.184.x / 9.x / 10.x | Maria 3D character rendering (VRM) |
+| **Auth** | Supabase Auth | — | SSR + browser client via @supabase/ssr |
 | **Deployment** | Vercel (primary, no VPS) | — | Serverless web/API |
 | **Telegram Bot** | Hosted worker (Render/Railway/Fly.io) | — | Long-polling, allowlist-based |
 
@@ -45,10 +47,14 @@
 
 ```
 @prisma/client       — ORM & database access
+@supabase/supabase-js — Supabase client (browser + SSR)
+@supabase/ssr        — SSR middleware for Supabase auth
 zustand              — Client-side state (app + AI chat)
 src/lib/openrouter.ts — Internal OpenRouter client (OpenAI-compatible)
 z-ai-web-dev-sdk     — Web search & page reader for RAG tools
+@pixiv/three-vrm     — VRM model loading for Maria 3D character
 recharts             — Charting library
+@tanstack/react-query — Server state (TanStack React Query 5)
 @tanstack/react-table — Advanced data tables
 react-hook-form      — Form state management
 zod                  — Runtime schema validation
@@ -56,6 +62,13 @@ next-themes          — Dark/light mode
 sonner               — Toast notifications
 framer-motion        — Animations
 lucide-react         — Icon library
+leaflet              — Interactive maps (Sedekah Jumaat)
+react-leaflet        — React bindings for Leaflet
+@mdxeditor/editor    — Rich text / MDX editing
+sharp                — Image processing
+ogl                  — WebGL rendering utilities
+uuid                 — UUID generation
+three                — 3D rendering (Maria VRM model)
 ```
 
 ---
@@ -92,12 +105,12 @@ lucide-react         — Icon library
              ▼               ▼                   ▼
 ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
 │  Maria Puspa     │ │    Prisma        │ │   OpenRouter     │
-│  Runtime         │ │    SQLite DB     │ │   API            │
+│  Runtime         │ │    PostgreSQL DB │ │   API            │
 │                  │ │                  │ │                  │
-│  • Memory        │ │  • 22 Models     │ │  • gpt-4o-mini   │
-│  • Tools (18)    │ │  • PII Masking   │ │  • Key Rotation  │
-│  • RBAC          │ │  • Fallback      │ │  • SSE Streaming  │
-│  • RAG           │ │                  │ │  • Tool Calling   │
+│  • Memory        │ │  • 26 Models     │ │  • hy3-preview   │
+│  • Tools (22)    │ │  • PII Masking   │ │  • Key Rotation  │
+│  • RBAC          │ │  • Connection    │ │  • SSE Streaming  │
+│  • RAG           │ │    Pooling       │ │  • Tool Calling   │
 └──────────────────┘ └──────────────────┘ └──────────────────┘
 ```
 
@@ -119,6 +132,7 @@ PUSPA V5 uses a **single-page application** model with NO Next.js page routing. 
 ```
 layout.tsx (root — server component)
 └── page.tsx (SPA shell — client component)
+    ├── QueryProvider (TanStack React Query)
     ├── SidebarProvider
     │   ├── AppSidebar (navigation sidebar)
     │   └── SidebarInset
@@ -136,16 +150,18 @@ layout.tsx (root — server component)
     <body>
       <ThemeProvider>           ← dark/light/system themes
         <Home />                ← SPA shell (client component)
-          <SidebarProvider>     ← shadcn sidebar context
-            <AppSidebar />      ← navigation with role-filtered links
-            <SidebarInset>     ← main content area
-              <AppHeader />     ← breadcrumb, search, user avatar
-              <main>
-                <ViewRenderer />  ← lazy-loaded module renderer
-              </main>
-            </SidebarInset>
-            <AiChatPanel />    ← Maria Puspa chat (resizable)
-          </SidebarProvider>
+          <QueryProvider>      ← TanStack React Query context
+            <SidebarProvider>     ← shadcn sidebar context
+              <AppSidebar />      ← navigation with role-filtered links
+              <SidebarInset>     ← main content area
+                <AppHeader />     ← breadcrumb, search, user avatar
+                <main>
+                  <ViewRenderer />  ← lazy-loaded module renderer
+                </main>
+              </SidebarInset>
+              <AiChatPanel />    ← Maria Puspa chat (resizable)
+            </SidebarProvider>
+          </QueryProvider>
         <Toaster />            ← sonner toast notifications
       </ThemeProvider>
     </body>
@@ -161,9 +177,9 @@ Persisted to `localStorage` via `zustand/middleware/persist`. Key: `puspa-app-st
 
 | State Key | Type | Default | Persisted |
 |-----------|------|---------|-----------|
-| `currentView` | `ViewId` (17 options) | `'dashboard'` | Yes |
+| `currentView` | `ViewId` (23 options) | `'dashboard'` | Yes |
 | `aiChatOpen` | `boolean` | `false` | No |
-| `currentUser` | `{ id, name, email, role }` | Admin PUSPA (admin) | Yes |
+| `currentUser` | `{ id, name, email, role, imageUrl }` | Admin PUSPA (admin) | Yes |
 | `searchQuery` | `string` | `''` | No |
 
 ```typescript
@@ -189,9 +205,13 @@ Session-only (NOT persisted). Manages the Maria Puspa chat experience.
 
 Welcome message: `"Hai, saya Maria Puspa. AI Assistant PUSPA. Apa yang boleh saya bantu?"`
 
+#### Maria Character Store (`src/stores/maria-character-store.ts`)
+
+Shared live-character state for the global Maria widget, TTS, and lip-sync.
+
 ### Module Loading (`src/components/view-renderer.tsx`)
 
-The `ViewRenderer` dynamically imports **17 modules** based on `currentView` from the Zustand store. Each module is loaded with `next/dynamic` and `ssr: false`:
+The `ViewRenderer` dynamically imports **23 modules** based on `currentView` from the Zustand store. Each module is loaded with `next/dynamic` and `ssr: false`:
 
 | View ID | Module Path | Min Role |
 |---------|-------------|----------|
@@ -206,6 +226,12 @@ The `ViewRenderer` dynamically imports **17 modules** based on `currentView` fro
 | `activities` | `@/modules/activities/page` | staff |
 | `documents` | `@/modules/documents/page` | staff |
 | `settings` | `@/modules/settings/page` | staff |
+| `asnafpreneur` | `@/modules/asnafpreneur/page` | staff |
+| `sedekah-jumaat` | `@/modules/sedekah-jumaat/page` | staff |
+| `docs` | `@/modules/docs/page` | staff |
+| `carta-organisasi` | `@/modules/carta-organisasi/page` | staff |
+| `institusi` | `@/modules/institusi/page` | staff |
+| `permohonan-bantuan` | `@/modules/permohonan-bantuan/page` | staff |
 | `compliance` | `@/modules/compliance/page` | admin |
 | `reports` | `@/modules/reports/page` | admin |
 | `ekyc` | `@/modules/ekyc/page` | admin |
@@ -317,13 +343,13 @@ hermes-store.ts (Zustand, client-side)
     ▼
 api/v1/ai/route.ts (Next.js server route)
     │
-    ├─ isMariaPuspaConfigured() → checks OPENROUTER_API_KEY_* env vars
+    ├─ isMariaPuspaConfigured() → checks OPENROUTER_API_KEY env vars
     │   └─ If not configured → 503 response with fallback message in Bahasa Melayu
     │
     ├─ runMariaPuspa() [hermes.runtime.ts]
     │   ├─ getConversationHistory(userId) → DB or in-memory
     │   ├─ Build system prompt + PUSPA knowledge base
-    │   ├─ getToolsForRole(userRole) → 18 tools filtered by RBAC
+    │   ├─ getToolsForRole(userRole) → 22 tools filtered by RBAC
     │   └─ saveMessage(userId, 'user', prompt)
     │
     ├─ createChatCompletionStream() → OpenRouter API
@@ -368,7 +394,7 @@ The system prompt is assembled from three components:
 
 ### Tool Registry
 
-**18 tools** organised by domain, each with RBAC metadata:
+**22 tools** organised by domain, each with RBAC metadata:
 
 | # | Tool Name | Category | Min Role | Description |
 |---|-----------|----------|----------|-------------|
@@ -382,20 +408,29 @@ The system prompt is assembled from three components:
 | 8 | `get_recent_donations` | Donations | staff | Recent donation records |
 | 9 | `get_donation_stats` | Donations | staff | Donation statistics by category |
 | 10 | `get_active_programmes` | Programmes | staff | Active programmes list |
-| 11 | `get_volunteer_stats` | Volunteers | staff | Volunteer statistics |
-| 12 | `get_compliance_status` | Compliance | staff | Compliance overview |
-| 13 | `get_disbursement_summary` | Disbursements | staff | Disbursement totals by status |
-| 14 | `web_search` | RAG | staff | Web search via z-ai-web-dev-sdk |
-| 15 | `web_read` | RAG | staff | Web page content extraction |
-| 16 | `delegate_task` | Delegation | staff | Sub-agent task delegation |
-| 17 | `approve_disbursement` | Admin | admin | Approve pending disbursement |
-| 18 | `delete_case` | Admin | admin | Delete case with audit reason |
+| 11 | `get_volunteer_list` | Volunteers | staff | List volunteers with filters |
+| 12 | `get_volunteer_stats` | Volunteers | staff | Volunteer statistics |
+| 13 | `update_volunteer_status` | Volunteers | staff | Update volunteer status |
+| 14 | `get_asnafpreneur_stats` | Asnafpreneur | staff | Asnafpreneur programme statistics |
+| 15 | `get_sedekah_masjid_locations` | Sedekah Jumaat | staff | Masjid locations with GPS coordinates |
+| 16 | `get_compliance_status` | Compliance | staff | Compliance overview |
+| 17 | `get_disbursement_summary` | Disbursements | staff | Disbursement totals by status |
+| 18 | `web_search` | RAG | staff | Web search via z-ai-web-dev-sdk |
+| 19 | `web_read` | RAG | staff | Web page content extraction |
+| 20 | `delegate_task` | Delegation | staff | Sub-agent task delegation |
+| 21 | `approve_disbursement` | Admin | admin | Approve pending disbursement |
+| 22 | `delete_case` | Admin | admin | Delete case with audit reason |
 
 #### Tool RBAC Enforcement
 
 ```typescript
-// In executeTool() — server-side RBAC check
-if (!tool.requiredRole.includes(userRole)) {
+// In executeTool() — server-side RBAC check using role hierarchy
+const userLevel = roleHierarchy[userRole as Role] || 0
+const minRequiredLevel = tool.requiredRole.length > 0
+  ? Math.min(...tool.requiredRole.map(r => roleHierarchy[r as Role] || 1))
+  : 1
+
+if (userLevel < minRequiredLevel) {
   return { result: null, error: `Access denied: Role "${userRole}" cannot execute tool "${name}"` }
 }
 ```
@@ -485,7 +520,7 @@ datasource db {
 }
 ```
 
-Production deployment uses Postgres-first. SQLite may still be used for local development only.
+Production deployment uses PostgreSQL with connection pooling (via Supabase). The `DIRECT_URL` environment variable provides a direct connection for migrations.
 
 ### Entity Relationship Diagram
 
@@ -531,10 +566,14 @@ Production deployment uses Postgres-first. SQLite may still be used for local de
 │           ── certificates (1:N) ──► VolunteerCertificate │             │
 │                                                          │             │
 │  ComplianceRecord    EKYCVerification    Document        │             │
+│                                                          │             │
+│  Entrepreneur    OrganizationMember    Institution        │             │
+│                                                          │             │
+│  AidApplication (full aid application form)              │             │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 22 Prisma Models
+### 26 Prisma Models
 
 #### Core (3 models)
 | Model | Purpose | Key Fields |
@@ -591,6 +630,21 @@ Production deployment uses Postgres-first. SQLite may still be used for local de
 | `OpsWorkItem` | Dev task tracking | type (task/bug/improvement/automation), executionTrace (JSON) |
 | `AutomationJob` | Scheduled jobs | type, schedule (cron), config (JSON), lastRunAt |
 
+#### Organization (1 model)
+| Model | Purpose | Key Fields |
+|-------|---------|------------|
+| `OrganizationMember` | Carta organisasi | name, role, category, position, order |
+
+#### Institutions (1 model)
+| Model | Purpose | Key Fields |
+|-------|---------|------------|
+| `Institution` | Rumah kebajikan, maahad tahfiz | name, type, address, contact |
+
+#### Aid Application (1 model)
+| Model | Purpose | Key Fields |
+|-------|---------|------------|
+| `AidApplication` | Borang permohonan bantuan lengkap | applicantName, applicantIC, dependents (JSON), applicantConsent |
+
 ### Fallback Strategy (Serverless)
 
 When the database is unavailable (common on Vercel serverless):
@@ -630,6 +684,8 @@ When the database is unavailable (common on Vercel serverless):
 │  ├─ Dashboard, Members, Cases, Programmes                │
 │  ├─ Donations, Donors, Disbursements                     │
 │  ├─ Volunteers, Activities, Documents                    │
+│  ├─ Asnafpreneur, Sedekah Jumaat, Docs                   │
+│  ├─ Carta Organisasi, Institusi, Permohonan Bantuan      │
 │  ├─ Settings                                             │
 │  └─ Read-only tools + web search/RAG                     │
 └──────────────────────────────────────────────────────────┘
@@ -650,8 +706,8 @@ When the database is unavailable (common on Vercel serverless):
 ┌────────────────────────────────────────────────┐
 │          OpenRouter Key Rotation                │
 │                                                │
-│  Keys: OPENROUTER_API_KEY_1..4                 │
-│  ├─ Up to 4 keys for load distribution         │
+│  Keys: OPENROUTER_API_KEY (single key)         │
+│  ├─ Configurable via environment variable      │
 │  ├─ Round-robin on 429 (rate limit) errors     │
 │  ├─ Round-robin on 5xx (server error)          │
 │  └─ Logged: "[OpenRouter] Rotated to key N"    │
@@ -666,7 +722,7 @@ When the database is unavailable (common on Vercel serverless):
 
 - **API routes**: JSON body parsing with type guards (`typeof` checks)
 - **AI endpoint**: Validates message existence and type before processing
-- **Tool parameters**: Type-checked via `typeof` guards in `execute()` functions
+- **Tool parameters**: Type-checked via Zod schemas in `execute()` functions
 - **Telegram bot**: Allowlist + admin-role guard + internal-token authentication
 
 ---
@@ -746,17 +802,17 @@ interface UserSession {
 │  ├─ Static: main page HTML/CSS/JS                 │
 │  └─ Serverless: API routes as functions           │
 │                                                   │
-│  Limitations:                                     │
-│  ├─ No persistent filesystem → SQLite not suitable │
-│  ├─ AI memory → in-memory fallback                │
-│  ├─ Dashboard → demo data fallback                │
-│  └─ Tools → Bahasa Melayu fallback messages       │
-│                                                   │
 │  Environment Variables (via Dashboard):           │
-│  ├─ OPENROUTER_API_KEY_1..4                       │
+│  ├─ OPENROUTER_API_KEY                            │
 │  ├─ OPENROUTER_MODEL                              │
-│  ├─ DATABASE_URL (managed Postgres)               │
-│  └─ OPENROUTER_APP_NAME / OPENROUTER_APP_URL      │
+│  ├─ DATABASE_URL (managed PostgreSQL)             │
+│  ├─ DIRECT_URL (direct connection for migrations) │
+│  ├─ NEXT_PUBLIC_SUPABASE_URL                      │
+│  ├─ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY          │
+│  ├─ SUPABASE_SERVICE_ROLE_KEY                     │
+│  ├─ HERMES_RUNTIME_MODE                           │
+│  ├─ HERMES_CLI_TIMEOUT_MS                         │
+│  └─ PUSPA_INTERNAL_API_TOKEN                      │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -789,11 +845,11 @@ interface UserSession {
 │                                                   │
 │  Commands:                                        │
 │  ├─ bun run dev       → Next.js dev server :3000  │
-│  ├─ bun run db:push   → Push schema to SQLite     │
+│  ├─ bun run db:push   → Push schema to PostgreSQL │
 │  ├─ bun run db:generate → Generate Prisma client  │
 │  └─ cd mini-services/telegram-bot && bun run dev  │
 │                                                   │
-│  Database: db/custom.db (SQLite)                  │
+│  Database: PostgreSQL (local or Supabase)         │
 │  Telegram: Separate Bun process                   │
 │  Supervisor: supervisor.sh / start-services.sh    │
 └──────────────────────────────────────────────────┘
@@ -849,9 +905,9 @@ All AI error messages are in **Bahasa Melayu**:
 | Strategy | Implementation | Impact |
 |----------|---------------|--------|
 | **Standalone Output** | `output: "standalone"` in next.config.ts | Smaller deployment bundle, no node_modules needed |
-| **Lazy Module Loading** | `next/dynamic` with `ssr: false` for all 17 modules | Only loaded module's JS is fetched |
+| **Lazy Module Loading** | `next/dynamic` with `ssr: false` for all 23 modules | Only loaded module's JS is fetched |
 | **SSE Streaming** | Real-time content deltas via ReadableStream | Users see AI responses immediately, no wait for completion |
-| **Key Rotation** | Up to 4 OpenRouter keys with round-robin | Distributes API rate limits across multiple keys |
+| **Key Rotation** | OpenRouter key rotation on errors | Distributes API rate limits |
 | **Max History 50** | `MAX_HISTORY` in memory layer | Prevents token overflow in AI conversations |
 | **Prisma Singleton** | Cached in `globalThis` during development | Prevents connection pool exhaustion from hot reloading |
 | **DB Availability Cache** | `dbAvailable` boolean, checked once | Avoids repeated failed connection attempts |
@@ -865,6 +921,7 @@ All AI error messages are in **Bahasa Melayu**:
 - **Radix UI**: Individual packages — no full Radix import
 - **Recharts**: Only loaded in dashboard/reports modules (lazy)
 - **MDXEditor**: Heavy editor loaded only in modules that need it
+- **Three.js / VRM**: Heavy 3D libraries loaded only for Maria character rendering
 
 ---
 
@@ -873,19 +930,45 @@ All AI error messages are in **Bahasa Melayu**:
 ```
 my-project/
 ├── prisma/
-│   └── schema.prisma              # 21 Prisma models on SQLite
-├── db/
-│   └── custom.db                  # SQLite database file
-├── public/                        # Static assets (logos, avatars)
-│   ├── puspa-logo.png
-│   ├── puspa-logo-transparent.png
-│   ├── maria-puspa-reference.png
+│   └── schema.prisma              # 26 Prisma models on PostgreSQL
+├── public/                        # Static assets
+│   ├── puspa-logo*.png            # Brand logos (multiple variants)
+│   ├── maria-puspa-*.png          # Maria character images
+│   ├── manifest.json              # PWA manifest
+│   ├── sw.js                      # Service worker
+│   ├── robots.txt
 │   └── ...
+├── docs/
+│   ├── PUSPA_DATA_EXTRACTION.md
+│   └── USER_GUIDELINES.md
+├── hermes/                        # Hermes Agent runtime
+│   ├── config.yaml                # Hermes configuration
+│   ├── SOUL.md                    # Agent identity
+│   ├── USER.md                    # User profile
+│   ├── MEMORY.md                  # Agent memory
+│   ├── state.db                   # Agent state database
+│   ├── kanban.db                  # Task tracking
+│   ├── gateway_state.json         # Gateway state
+│   ├── channel_directory.json     # Channel directory
+│   └── skills/                    # Hermes skill definitions
+│       ├── apple/                 # Apple integrations
+│       ├── autonomous-ai-agents/  # AI agent skills
+│       ├── creative/              # Creative skills (comics, infographics, etc.)
+│       └── ...
 ├── mini-services/
 │   └── telegram-bot/
 │       ├── index.ts               # Standalone Telegram bot (Bun)
 │       ├── package.json
-│       └── *.png                  # Bot profile images
+│       ├── RUN_ME.bat             # Windows launcher
+│       ├── server.py              # Python server (SadTalker integration)
+│       ├── maria.jpg              # Bot profile image
+│       ├── maria-puspa-*.png      # Bot profile images
+│       ├── SadTalker/             # SadTalker face animation
+│       └── *.wav                  # Temporary audio files
+├── scripts/
+│   ├── hermes-agent.ps1           # Hermes agent launcher (PowerShell)
+│   ├── hermes-agent.py            # Hermes agent launcher (Python)
+│   └── maria-smoke.js             # Maria smoke test
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx             # Root layout (ThemeProvider, Toaster)
@@ -915,16 +998,26 @@ my-project/
 │   │   ├── app-header.tsx         # Top bar with search/user
 │   │   ├── view-renderer.tsx      # Dynamic module loader
 │   │   ├── ai-chat-panel.tsx      # Maria Puspa chat panel
-│   │   ├── maria/                 # Maria character UI components
-│   │   │   ├── maria-character-renderer.tsx
-│   │   │   └── maria-floating-widget.tsx
+│   │   ├── query-provider.tsx     # TanStack React Query provider
+│   │   ├── auth-provider.tsx      # Supabase Auth provider
+│   │   ├── user-avatar.tsx        # User avatar component
+│   │   ├── mobile-card.tsx        # Mobile card component
+│   │   ├── Aurora.tsx             # Aurora background effect
 │   │   ├── puspa-logo.tsx         # Animated logo component
 │   │   ├── puspa-loading-spinner.tsx
 │   │   ├── theme-provider.tsx     # Dark/light mode provider
+│   │   ├── maria/                 # Maria character UI components
+│   │   │   ├── MariaAvatarUnified.tsx      # Unified avatar (2D/3D)
+│   │   │   ├── MariaVRMModel.tsx           # 3D VRM model renderer
+│   │   │   ├── MariaVRMModel.module.css    # VRM model styles
+│   │   │   ├── maria-vrm-blendshapes.tsx   # VRM blendshape controls
+│   │   │   ├── maria-floating-widget.tsx   # Global floating widget
+│   │   │   └── maria-character-renderer.tsx # Character renderer
 │   │   └── ui/                    # shadcn/ui components (30+)
 │   ├── hooks/
 │   │   ├── use-toast.ts           # Toast notifications hook
-│   │   └── use-mobile.ts          # Mobile detection hook
+│   │   ├── use-mobile.ts          # Mobile detection hook
+│   │   └── use-realtime.ts        # Realtime subscription hook
 │   ├── lib/
 │   │   ├── store.ts               # App Zustand store (persisted)
 │   │   ├── access-control.ts      # RBAC logic
@@ -937,11 +1030,26 @@ my-project/
 │   │   ├── maria-emotion-map.ts   # Context-to-emotion mapper
 │   │   ├── maria-lipsync.ts       # Lip-sync controller
 │   │   ├── maria-tts.ts           # Browser TTS engine (female-voice priority)
+│   │   ├── maria-quick-prompts.ts # Quick prompt templates
+│   │   ├── ai-cache.ts            # AI response caching
+│   │   ├── ai-rate-limit.ts       # AI rate limiting
+│   │   ├── rate-limit.ts          # General rate limiting
+│   │   ├── audit.ts               # Audit logging utilities
+│   │   ├── validation.ts          # Input validation utilities
+│   │   ├── sentry.ts              # Sentry error tracking
+│   │   ├── auth.ts                # Supabase Auth helpers
+│   │   ├── client.ts              # Supabase browser client
+│   │   ├── server.ts              # Supabase SSR client
+│   │   ├── api-utils.ts           # API utility functions
+│   │   ├── case-intelligence.ts   # Case intelligence utilities
+│   │   ├── domain.ts              # Domain constants
+│   │   ├── donor-sync.ts          # Donor synchronisation
+│   │   ├── sequence.ts            # Sequence utilities
 │   │   └── utils.ts               # cn() + helpers
 │   ├── stores/
 │   │   ├── hermes-store.ts        # AI chat Zustand store (session-only)
 │   │   └── maria-character-store.ts # Shared live character state
-│   ├── modules/                   # Lazy-loaded view modules
+│   ├── modules/                   # Lazy-loaded view modules (23)
 │   │   ├── dashboard/page.tsx
 │   │   ├── members/page.tsx
 │   │   ├── cases/page.tsx
@@ -955,22 +1063,29 @@ my-project/
 │   │   ├── ekyc/page.tsx
 │   │   ├── documents/page.tsx
 │   │   ├── activities/page.tsx
+│   │   ├── asnafpreneur/page.tsx
+│   │   ├── sedekah-jumaat/page.tsx
+│   │   ├── docs/page.tsx
 │   │   ├── ai/page.tsx
 │   │   ├── settings/page.tsx
 │   │   ├── tapsecure/page.tsx
-│   │   └── admin/page.tsx
+│   │   ├── admin/page.tsx
+│   │   ├── carta-organisasi/page.tsx
+│   │   ├── institusi/page.tsx
+│   │   └── permohonan-bantuan/page.tsx
 │   ├── tools/
-│   │   ├── index.ts               # Tool registry (14 core + 4 extended)
+│   │   ├── index.ts               # Tool registry (18 core + 4 extended)
 │   │   ├── donations.ts           # Donation-specific tool queries
 │   │   ├── cases.ts               # Case-specific tool queries
-│   │   └── web-tools.ts           # web_search, web_read, delegate_task, system_health
+│   │   ├── web-tools.ts           # web_search, web_read, delegate_task, system_health
+│   │   └── chrome-devtools.spec.ts # Chrome DevTools MCP spec
 │   └── types/
 │       └── index.ts               # Shared TypeScript types
 ├── next.config.ts                  # Next.js runtime/build configuration
 ├── tailwind.config.ts              # Tailwind CSS 4 config
 ├── tsconfig.json                   # TypeScript configuration
 ├── package.json                    # Dependencies & scripts
-├── Caddyfile                       # Reverse proxy config (Alibaba Cloud)
+├── Caddyfile                       # Reverse proxy config
 ├── supervisor.sh                   # Process supervisor script
 ├── start-services.sh               # Service launcher script
 └── run-telegram.sh                 # Telegram bot launcher
@@ -982,17 +1097,18 @@ my-project/
 
 | Variable | Required | Default | Purpose |
 |----------|----------|---------|---------|
-| `DATABASE_URL` | Yes | — | Managed Postgres connection string |
-| `OPENROUTER_API_KEY_1` | Yes | — | Primary OpenRouter API key |
-| `OPENROUTER_API_KEY_2` | No | — | Secondary key (rotation) |
-| `OPENROUTER_API_KEY_3` | No | — | Tertiary key (rotation) |
-| `OPENROUTER_API_KEY_4` | No | — | Quaternary key (rotation) |
-| `OPENROUTER_MODEL` | No | `openai/gpt-4o-mini` | AI model identifier |
+| `DATABASE_URL` | Yes | — | PostgreSQL connection string (pooled) |
+| `DIRECT_URL` | Yes | — | Direct PostgreSQL connection for migrations |
+| `OPENROUTER_API_KEY` | Yes | — | OpenRouter API key |
 | `OPENROUTER_BASE_URL` | No | `https://openrouter.ai/api/v1` | API base URL |
+| `OPENROUTER_MODEL` | No | `tencent/hy3-preview:free` | AI model identifier |
 | `OPENROUTER_APP_NAME` | No | `PUSPA V5` | App attribution header |
 | `OPENROUTER_APP_URL` | No | `http://localhost:3000` | App URL header |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase only | — | Supabase project URL for browser + SSR client |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase only | — | Supabase publishable API key |
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | — | Supabase project URL for browser + SSR client |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | — | Supabase publishable API key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes | — | Supabase service role key (server-side only) |
+| `HERMES_RUNTIME_MODE` | No | `cli` | Hermes runtime mode (`cli` or `gateway`) |
+| `HERMES_CLI_TIMEOUT_MS` | No | `45000` | Hermes CLI timeout in milliseconds |
 | `NEXT_PUBLIC_MARIA_WIDGET_ENABLED` | No | `true` | Toggle global Maria floating widget |
 | `NEXT_PUBLIC_MARIA_TTS_ENABLED` | No | `true` | Toggle Maria auto-voice playback |
 | `NEXT_PUBLIC_MARIA_LIPSYNC_ENABLED` | No | `true` | Toggle lip-sync animation engine |
@@ -1001,9 +1117,15 @@ my-project/
 | `ALLOWED_CHAT_IDS` | Telegram only | (empty = open) | Comma-separated allowed chat IDs |
 | `TELEGRAM_ADMIN_CHAT_IDS` | Telegram only | (empty) | Chat IDs allowed to set admin/developer role |
 | `PUSPA_INTERNAL_API_TOKEN` | Telegram + API | — | Shared secret for `/api/v1/ai/telegram` |
+| `GATEWAY_ALLOW_ALL_USERS` | No | `false` | Allow all users to access gateway |
+| `WHATSAPP_ENABLED` | No | `true` | Enable WhatsApp integration |
+| `PUSPA_REQUIRE_AUTH_FOR_AI` | No | `true` | Require authentication for AI endpoint |
+| `PUSPA_AI_RATE_WINDOW_MS` | No | `60000` | Rate limit window in milliseconds |
+| `PUSPA_AI_RATE_ANONYMOUS_MAX` | No | `15` | Max anonymous requests per window |
+| `PUSPA_AI_RATE_AUTH_MAX` | No | `45` | Max authenticated requests per window |
 | `NODE_ENV` | Auto | `development` | Environment mode |
 
 ---
 
 *Document generated for PUSPA V5 — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)*
-*Last updated: 2026-05-05*
+*Last updated: 2026-05-08*

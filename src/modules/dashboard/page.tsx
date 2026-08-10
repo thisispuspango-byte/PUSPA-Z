@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, BarChart, Bar 
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, BarChart, Bar
 } from 'recharts'
-import { 
-  Users, FileText, HandCoins, ShieldCheck, 
+import {
+  Users, FileText, HandCoins, ShieldCheck,
   ArrowUpRight, ArrowDownRight, Activity
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -92,7 +92,7 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         <p className="mb-1 text-xs font-bold text-muted-foreground uppercase">{label}</p>
         {payload.map((entry, index: number) => (
           <div key={index} className="flex items-center gap-2 py-0.5">
-            <div className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
+            <div className="h-2 w-2 rounded-full bg-[var(--bg-color)]" style={{ '--bg-color': entry.color } as any} />
             <span className="text-sm font-medium">{entry.name}:</span>
             <span className="text-sm font-bold">RM {entry.value.toLocaleString()}</span>
           </div>
@@ -171,33 +171,33 @@ export default function DashboardOverview() {
     <div className="space-y-8 animate-in fade-in duration-500">
       {/* Top Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard 
-          title="Jumlah Ahli Asnaf" 
-          value={stats.totalMembers.toLocaleString()} 
-          sub="↑ 42 ahli baru bulan ini" 
-          icon={Users} 
-          trend={12.5} 
+        <KpiCard
+          title="Jumlah Ahli Asnaf"
+          value={stats.totalMembers.toLocaleString()}
+          sub="↑ 42 ahli baru bulan ini"
+          icon={Users}
+          trend={12.5}
         />
-        <KpiCard 
-          title="Kes Dalam Proses" 
-          value={stats.activeCases.toLocaleString()} 
-          sub="8 kes urgent perlukan tindakan" 
-          icon={FileText} 
-          trend={-3.2} 
+        <KpiCard
+          title="Kes Dalam Proses"
+          value={stats.activeCases.toLocaleString()}
+          sub="8 kes urgent perlukan tindakan"
+          icon={FileText}
+          trend={-3.2}
         />
-        <KpiCard 
-          title="Jumlah Sumbangan" 
-          value="RM 89,240" 
-          sub="Kutipan Zakat & Sedekah" 
-          icon={HandCoins} 
-          trend={8.7} 
+        <KpiCard
+          title="Jumlah Sumbangan"
+          value="RM 89,240"
+          sub="Kutipan Zakat & Sedekah"
+          icon={HandCoins}
+          trend={8.7}
         />
-        <KpiCard 
-          title="Skor Pematuhan" 
-          value="94.2%" 
-          sub="ROSM & LHDN Up-to-date" 
-          icon={ShieldCheck} 
-          trend={2.1} 
+        <KpiCard
+          title="Skor Pematuhan"
+          value="94.2%"
+          sub="ROSM & LHDN Up-to-date"
+          icon={ShieldCheck}
+          trend={2.1}
         />
       </div>
 
@@ -210,8 +210,8 @@ export default function DashboardOverview() {
               <CardDescription>Prestasi kewangan bagi 6 bulan terakhir</CardDescription>
             </div>
             <div className="flex gap-2">
-               <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-primary" /><span className="text-[10px] text-muted-foreground">Sumbangan</span></div>
-               <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-chart-2" /><span className="text-[10px] text-muted-foreground">Agihan</span></div>
+              <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-primary" /><span className="text-[10px] text-muted-foreground">Sumbangan</span></div>
+              <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-chart-2" /><span className="text-[10px] text-muted-foreground">Agihan</span></div>
             </div>
           </CardHeader>
           <CardContent className="h-[350px] pl-0">
@@ -219,44 +219,44 @@ export default function DashboardOverview() {
               <AreaChart data={trendData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorSumbangan" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorAgihan" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--chart-2)" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="var(--chart-2)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--chart-2)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="var(--chart-2)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis 
-                  dataKey="name" 
+                <XAxis
+                  dataKey="name"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} 
+                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
                   dy={10}
                 />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} 
-                  tickFormatter={(value) => `RM${value/1000}k`}
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
+                  tickFormatter={(value) => `RM${value / 1000}k`}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Area 
-                  type="monotone" 
-                  dataKey="sumbangan" 
-                  stroke="var(--primary)" 
+                <Area
+                  type="monotone"
+                  dataKey="sumbangan"
+                  stroke="var(--primary)"
                   strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorSumbangan)" 
+                  fillOpacity={1}
+                  fill="url(#colorSumbangan)"
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="agihan" 
-                  stroke="var(--chart-2)" 
+                <Area
+                  type="monotone"
+                  dataKey="agihan"
+                  stroke="var(--chart-2)"
                   strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorAgihan)" 
+                  fillOpacity={1}
+                  fill="url(#colorAgihan)"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -297,10 +297,10 @@ export default function DashboardOverview() {
             {asnafData.map((item) => (
               <div key={item.name} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
+                  <div className="h-2 w-2 rounded-full bg-[var(--bg-color)]" style={{ '--bg-color': item.color } as any} />
                   <span className="text-muted-foreground">{item.name}</span>
                 </div>
-                <span className="font-bold">{Math.round((item.value/1355)*100)}%</span>
+                <span className="font-bold">{Math.round((item.value / 1355) * 100)}%</span>
               </div>
             ))}
           </div>
@@ -318,21 +318,21 @@ export default function DashboardOverview() {
             <ResponsiveContainer width="100%" height="100%" debounce={1}>
               <BarChart data={caseStatusData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis 
-                  dataKey="name" 
-                  axisLine={false} 
-                  tickLine={false} 
+                <XAxis
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
                   tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
                 />
                 <YAxis hide />
-                <Tooltip 
+                <Tooltip
                   cursor={{ fill: 'var(--muted)', opacity: 0.4 }}
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                 />
-                <Bar 
-                  dataKey="total" 
-                  fill="var(--primary)" 
-                  radius={[6, 6, 0, 0]} 
+                <Bar
+                  dataKey="total"
+                  fill="var(--primary)"
+                  radius={[6, 6, 0, 0]}
                   barSize={40}
                 />
               </BarChart>
@@ -372,7 +372,7 @@ export default function DashboardOverview() {
                 </div>
               ))}
             </div>
-            <button 
+            <button
               type="button"
               className="w-full mt-6 py-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md"
             >

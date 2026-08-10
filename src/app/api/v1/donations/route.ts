@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           donor: {
-            select: { id: true, name: true, email: true, type: true },
+            select: { id: true, name: true, type: true },
           },
         },
         orderBy: { createdAt: 'desc' },
@@ -48,27 +48,29 @@ export async function GET(request: NextRequest) {
       db.donation.count({ where }),
     ])
 
-    // Compute stats
-    const allDonations = await db.donation.findMany({
-      select: { amount: true, category: true, receiptIssued: true, shariahCompliant: true, createdAt: true },
-    })
-
+    // Compute stats via aggregation (avoids full table scan)
     const now = new Date()
-    const thisMonth = allDonations.filter((d) => {
-      const dDate = new Date(d.createdAt)
-      return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear()
-    })
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
 
-    const totalThisMonth = thisMonth.reduce((sum, d) => sum + d.amount, 0)
+    const [totalAmountAgg, categoryAgg, receiptCount, shariahCount, totalCount, monthAgg] = await Promise.all([
+      db.donation.aggregate({ _sum: { amount: true } }),
+      db.donation.groupBy({ by: ['category'], _sum: { amount: true } }),
+      db.donation.count({ where: { receiptIssued: true } }),
+      db.donation.count({ where: { shariahCompliant: true } }),
+      db.donation.count(),
+      db.donation.aggregate({
+        _sum: { amount: true },
+        where: { createdAt: { gte: monthStart, lte: monthEnd } },
+      }),
+    ])
 
     const categoryTotals: Record<string, number> = {}
-    allDonations.forEach((d) => {
-      categoryTotals[d.category] = (categoryTotals[d.category] || 0) + d.amount
+    categoryAgg.forEach((r) => {
+      categoryTotals[r.category] = r._sum.amount || 0
     })
 
-    const receiptCount = allDonations.filter((d) => d.receiptIssued).length
-    const shariahCount = allDonations.filter((d) => d.shariahCompliant).length
-    const shariahRate = allDonations.length > 0 ? Math.round((shariahCount / allDonations.length) * 100) : 100
+    const shariahRate = totalCount > 0 ? Math.round((shariahCount / totalCount) * 100) : 100
 
     return NextResponse.json({
       donations,
@@ -79,12 +81,12 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
       stats: {
-        totalThisMonth,
+        totalThisMonth: monthAgg._sum.amount || 0,
         categoryTotals,
         receiptCount,
         shariahRate,
-        totalDonations: allDonations.length,
-        totalAmount: allDonations.reduce((sum, d) => sum + d.amount, 0),
+        totalDonations: totalCount,
+        totalAmount: totalAmountAgg._sum.amount || 0,
       },
     })
   } catch (error) {
@@ -96,6 +98,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Auth check: staff and above can create donations
+    await requireAuth()
     await requireRole('staff')
     const body = await request.json()
     const { donorId, donorName, category, amount, method, date, notes, shariahCompliant } = body

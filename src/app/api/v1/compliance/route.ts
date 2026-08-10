@@ -4,6 +4,7 @@ import { requireAuth, requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
+    await requireAuth()
     await requireRole('admin')
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
@@ -93,6 +94,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth()
+    await requireRole('admin')
     const body = await request.json()
     const { title, description, category, status, dueDate, assignedTo, evidenceUrl, notes } = body
 

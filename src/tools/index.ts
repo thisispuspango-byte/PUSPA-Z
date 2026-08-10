@@ -95,8 +95,13 @@ const get_recent_donations: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_recent_donations')
-    const limit = typeof params.limit === 'number' ? params.limit : 10
-    return getRecentDonations(limit)
+    try {
+      const limit = typeof params.limit === 'number' ? params.limit : 10
+      return getRecentDonations(limit)
+    } catch (error: any) {
+      console.error('[get_recent_donations] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil data derma. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -111,7 +116,12 @@ const get_donation_stats: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_donation_stats')
-    return getDonationStats()
+    try {
+      return getDonationStats()
+    } catch (error: any) {
+      console.error('[get_donation_stats] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil statistik derma. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -132,8 +142,13 @@ const get_active_cases: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_active_cases')
-    const status = typeof params.status === 'string' ? params.status : undefined
-    return getActiveCases(status)
+    try {
+      const status = typeof params.status === 'string' ? params.status : undefined
+      return getActiveCases(status)
+    } catch (error: any) {
+      console.error('[get_active_cases] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil data kes aktif. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -154,17 +169,21 @@ const get_case_summary: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_case_summary')
+    try {
+      const schema = z.object({
+        caseId: z.string().min(1, 'ID kes diperlukan'),
+      })
 
-    const schema = z.object({
-      caseId: z.string().min(1, 'ID kes diperlukan'),
-    })
+      const validated = schema.safeParse(params)
+      if (!validated.success) return { error: validated.error.issues[0].message }
 
-    const validated = schema.safeParse(params)
-    if (!validated.success) return { error: validated.error.issues[0].message }
-
-    const result = await getCaseSummary(validated.data.caseId)
-    if (!result) return { error: 'Kes tidak dijumpai dalam pangkalan data' }
-    return result
+      const result = await getCaseSummary(validated.data.caseId)
+      if (!result) return { error: 'Kes tidak dijumpai dalam pangkalan data' }
+      return result
+    } catch (error: any) {
+      console.error('[get_case_summary] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil ringkasan kes. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -180,23 +199,27 @@ const get_asnafpreneur_stats: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_asnafpreneur_stats')
-    
-    const [total, modal] = await Promise.all([
-      db.member.count(),
-      db.disbursement.aggregate({
-        _sum: { amount: true },
-        where: { status: 'disbursed' }
-      })
-    ])
+    try {
+      const [total, modal] = await Promise.all([
+        db.member.count(),
+        db.disbursement.aggregate({
+          _sum: { amount: true },
+          where: { status: 'disbursed' }
+        })
+      ])
 
-    return {
-      total_usahawan: total,
-      kategori_popular: ['Makanan', 'Perkhidmatan', 'Pertanian'],
-      status_bantuan: {
-        selesai: total > 10 ? 10 : total,
-        dalam_proses: 0
-      },
-      modal_terkumpul: `RM ${(modal._sum.amount || 0).toLocaleString()}`
+      return {
+        total_usahawan: total,
+        kategori_popular: ['Makanan', 'Perkhidmatan', 'Pertanian'],
+        status_bantuan: {
+          selesai: total > 10 ? 10 : total,
+          dalam_proses: 0
+        },
+        modal_terkumpul: `RM ${(modal._sum.amount || 0).toLocaleString()}`
+      }
+    } catch (error: any) {
+      console.error('[get_asnafpreneur_stats] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil statistik asnafpreneur. Sila cuba lagi.' }
     }
   },
   requiredRole: ['staff', 'admin', 'developer'],
@@ -223,30 +246,35 @@ const get_member_list: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_member_list')
-    const category = typeof params.category === 'string' ? params.category : undefined
-    const limit = typeof params.limit === 'number' ? Math.min(params.limit, 100) : 20
+    try {
+      const category = typeof params.category === 'string' ? params.category : undefined
+      const limit = typeof params.limit === 'number' ? Math.min(params.limit, 100) : 20
 
-    const where = category ? { asnafCategory: category } : {}
-    const members = await db.member.findMany({
-      where,
-      select: {
-        id: true,
-        name: true,
-        asnafCategory: true,
-        ekycStatus: true,
-        createdAt: true,
-      },
-      take: limit,
-      orderBy: { createdAt: 'desc' },
-    })
+      const where = category ? { asnafCategory: category } : {}
+      const members = await db.member.findMany({
+        where,
+        select: {
+          id: true,
+          name: true,
+          asnafCategory: true,
+          ekycStatus: true,
+          createdAt: true,
+        },
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      })
 
-    return members.map((m) => ({
-      id: m.id,
-      name: m.name,
-      category: m.asnafCategory,
-      ekyc: m.ekycStatus,
-      joined: m.createdAt.toISOString().split('T')[0],
-    }))
+      return members.map((m) => ({
+        id: m.id,
+        name: m.name,
+        category: m.asnafCategory,
+        ekyc: m.ekycStatus,
+        joined: m.createdAt.toISOString().split('T')[0],
+      }))
+    } catch (error: any) {
+      console.error('[get_member_list] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil senarai ahli. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -272,22 +300,27 @@ const get_volunteer_list: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_volunteer_list')
-    const status = typeof params.status === 'string' ? params.status : undefined
-    const limit = typeof params.limit === 'number' ? Math.min(params.limit, 50) : 20
+    try {
+      const status = typeof params.status === 'string' ? params.status : undefined
+      const limit = typeof params.limit === 'number' ? Math.min(params.limit, 50) : 20
 
-    const where = status ? { status } : {}
-    const volunteers = await db.volunteer.findMany({
-      where,
-      select: {
-        id: true,
-        name: true,
-        status: true,
-        skills: true,
-        createdAt: true,
-      },
-      take: limit,
-    })
-    return volunteers
+      const where = status ? { status } : {}
+      const volunteers = await db.volunteer.findMany({
+        where,
+        select: {
+          id: true,
+          name: true,
+          status: true,
+          skills: true,
+          createdAt: true,
+        },
+        take: limit,
+      })
+      return volunteers
+    } catch (error: any) {
+      console.error('[get_volunteer_list] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil senarai sukarelawan. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -340,7 +373,7 @@ const update_volunteer_status: MariaPuspaTool = {
       return { error: 'Gagal mengemaskini status. Sila pastikan ID sukarelawan adalah tepat.' }
     }
   },
-  requiredRole: ['staff', 'admin', 'developer'],
+  requiredRole: ['admin', 'developer'],
 }
 
 // ─── Sedekah Jumaat & Masjid Tools ──────────────────────────────
@@ -360,32 +393,36 @@ const get_sedekah_masjid_locations: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_sedekah_masjid_locations')
-    
-    const area = typeof params.area === 'string' ? params.area : undefined
+    try {
+      const area = typeof params.area === 'string' ? params.area : undefined
 
-    // Mengambil data masjid yang aktif dalam program Sedekah Jumaat
-    const masjids = await db.programme.findMany({
-      where: {
-        category: 'religious',
-        status: 'active',
-        location: area ? { contains: area } : undefined,
-      },
-      select: {
-        id: true,
-        name: true,
-        location: true,
-        // Kita mengandaikan koordinat disimpan dalam metadata atau field khusus
-        // Untuk real implementation, pastikan skema DB mempunyai lat/lng
-      },
-    })
+      // Mengambil data masjid yang aktif dalam program Sedekah Jumaat
+      const masjids = await db.programme.findMany({
+        where: {
+          category: 'religious',
+          status: 'active',
+          location: area ? { contains: area } : undefined,
+        },
+        select: {
+          id: true,
+          name: true,
+          location: true,
+          // Kita mengandaikan koordinat disimpan dalam metadata atau field khusus
+          // Untuk real implementation, pastikan skema DB mempunyai lat/lng
+        },
+      })
 
-    return masjids.map(m => ({
-      id: m.id,
-      masjidName: m.name,
-      address: m.location,
-      // Simulasi koordinat berdasarkan data (Pin Lokasi Sebenar)
-      coordinates: { lat: 3.234 + (Math.random() * 0.1), lng: 101.712 + (Math.random() * 0.1) }
-    }))
+      return masjids.map(m => ({
+        id: m.id,
+        masjidName: m.name,
+        address: m.location,
+        // Simulasi koordinat berdasarkan data (Pin Lokasi Sebenar)
+        coordinates: { lat: 3.234 + (Math.random() * 0.1), lng: 101.712 + (Math.random() * 0.1) }
+      }))
+    } catch (error: any) {
+      console.error('[get_sedekah_masjid_locations] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil lokasi masjid. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -400,18 +437,23 @@ const get_member_stats: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_member_stats')
-    const [total, byCategory, ekycPending, ekycVerified] = await Promise.all([
-      db.member.count(),
-      db.member.groupBy({ by: ['asnafCategory'], _count: { asnafCategory: true } }),
-      db.member.count({ where: { ekycStatus: 'pending' } }),
-      db.member.count({ where: { ekycStatus: 'verified' } }),
-    ])
+    try {
+      const [total, byCategory, ekycPending, ekycVerified] = await Promise.all([
+        db.member.count(),
+        db.member.groupBy({ by: ['asnafCategory'], _count: { asnafCategory: true } }),
+        db.member.count({ where: { ekycStatus: 'pending' } }),
+        db.member.count({ where: { ekycStatus: 'verified' } }),
+      ])
 
-    return {
-      total,
-      byCategory: Object.fromEntries(byCategory.map((r) => [r.asnafCategory, r._count.asnafCategory])),
-      ekycPending,
-      ekycVerified,
+      return {
+        total,
+        byCategory: Object.fromEntries(byCategory.map((r) => [r.asnafCategory, r._count.asnafCategory])),
+        ekycPending,
+        ekycVerified,
+      }
+    } catch (error: any) {
+      console.error('[get_member_stats] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil statistik ahli. Sila cuba lagi.' }
     }
   },
   requiredRole: ['staff', 'admin', 'developer'],
@@ -434,29 +476,34 @@ const get_active_programmes: MariaPuspaTool = {
   },
   execute: async (params) => {
     if (!(await isDbReady())) return dbFallback('get_active_programmes')
-    const limit = typeof params.limit === 'number' ? params.limit : 10
-    const programmes = await db.programme.findMany({
-      where: { status: 'active' },
-      select: {
-        id: true,
-        name: true,
-        category: true,
-        startDate: true,
-        endDate: true,
-        status: true,
-      },
-      take: limit,
-      orderBy: { startDate: 'desc' },
-    })
+    try {
+      const limit = typeof params.limit === 'number' ? params.limit : 10
+      const programmes = await db.programme.findMany({
+        where: { status: 'active' },
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          startDate: true,
+          endDate: true,
+          status: true,
+        },
+        take: limit,
+        orderBy: { startDate: 'desc' },
+      })
 
-    return programmes.map((p) => ({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      start: p.startDate || 'N/A',
-      end: p.endDate || 'Ongoing',
-      status: p.status,
-    }))
+      return programmes.map((p) => ({
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        start: p.startDate || 'N/A',
+        end: p.endDate || 'Ongoing',
+        status: p.status,
+      }))
+    } catch (error: any) {
+      console.error('[get_active_programmes] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil program aktif. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -473,12 +520,17 @@ const get_volunteer_stats: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_volunteer_stats')
-    const [total, active] = await Promise.all([
-      db.volunteer.count(),
-      db.volunteer.count({ where: { status: 'active' } }),
-    ])
+    try {
+      const [total, active] = await Promise.all([
+        db.volunteer.count(),
+        db.volunteer.count({ where: { status: 'active' } }),
+      ])
 
-    return { total, active, inactive: total - active }
+      return { total, active, inactive: total - active }
+    } catch (error: any) {
+      console.error('[get_volunteer_stats] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil statistik sukarelawan. Sila cuba lagi.' }
+    }
   },
   requiredRole: ['staff', 'admin', 'developer'],
 }
@@ -495,29 +547,34 @@ const get_compliance_status: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_compliance_status')
-    const [total, completed, pending, overdue] = await Promise.all([
-      db.complianceRecord.count(),
-      db.complianceRecord.count({ where: { status: 'completed' } }),
-      db.complianceRecord.count({ where: { status: 'pending' } }),
-      db.complianceRecord.count({
-        where: {
-          status: 'pending',
-          dueDate: { lt: new Date().toISOString() },
-        },
-      }),
-    ])
+    try {
+      const [total, completed, pending, overdue] = await Promise.all([
+        db.complianceRecord.count(),
+        db.complianceRecord.count({ where: { status: 'completed' } }),
+        db.complianceRecord.count({ where: { status: 'pending' } }),
+        db.complianceRecord.count({
+          where: {
+            status: 'pending',
+            dueDate: { lt: new Date().toISOString() },
+          },
+        }),
+      ])
 
-    const byCategory = await db.complianceRecord.groupBy({
-      by: ['category'],
-      _count: { category: true },
-    })
+      const byCategory = await db.complianceRecord.groupBy({
+        by: ['category'],
+        _count: { category: true },
+      })
 
-    return {
-      total,
-      completed,
-      pending,
-      overdue,
-      byCategory: Object.fromEntries(byCategory.map((r) => [r.category, r._count.category])),
+      return {
+        total,
+        completed,
+        pending,
+        overdue,
+        byCategory: Object.fromEntries(byCategory.map((r) => [r.category, r._count.category])),
+      }
+    } catch (error: any) {
+      console.error('[get_compliance_status] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil status pematuhan. Sila cuba lagi.' }
     }
   },
   requiredRole: ['staff', 'admin', 'developer'],
@@ -535,22 +592,27 @@ const get_disbursement_summary: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_disbursement_summary')
-    const [total, totalAmount, byStatus] = await Promise.all([
-      db.disbursement.count(),
-      db.disbursement.aggregate({ _sum: { amount: true } }),
-      db.disbursement.groupBy({
-        by: ['status'],
-        _count: { status: true },
-        _sum: { amount: true },
-      }),
-    ])
+    try {
+      const [total, totalAmount, byStatus] = await Promise.all([
+        db.disbursement.count(),
+        db.disbursement.aggregate({ _sum: { amount: true } }),
+        db.disbursement.groupBy({
+          by: ['status'],
+          _count: { status: true },
+          _sum: { amount: true },
+        }),
+      ])
 
-    return {
-      total,
-      totalAmount: totalAmount._sum.amount || 0,
-      byStatus: Object.fromEntries(
-        byStatus.map((r) => [r.status, { count: r._count.status, amount: r._sum.amount || 0 }])
-      ),
+      return {
+        total,
+        totalAmount: totalAmount._sum.amount || 0,
+        byStatus: Object.fromEntries(
+          byStatus.map((r) => [r.status, { count: r._count.status, amount: r._sum.amount || 0 }])
+        ),
+      }
+    } catch (error: any) {
+      console.error('[get_disbursement_summary] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil ringkasan agihan. Sila cuba lagi.' }
     }
   },
   requiredRole: ['staff', 'admin', 'developer'],
@@ -568,36 +630,41 @@ const get_dashboard_overview: MariaPuspaTool = {
   },
   execute: async () => {
     if (!(await isDbReady())) return dbFallback('get_dashboard_overview')
-    const [
-      memberCount,
-      activeCases,
-      donationTotal,
-      donationCount,
-      disbursementTotal,
-      activeProgrammes,
-      volunteerActive,
-      compliancePending,
-      complianceOverdue,
-    ] = await Promise.all([
-      db.member.count(),
-      db.case.count({ where: { status: { notIn: ['closed', 'rejected'] } } }),
-      db.donation.aggregate({ _sum: { amount: true }, _count: true }),
-      db.donation.count(),
-      db.disbursement.aggregate({ _sum: { amount: true } }),
-      db.programme.count({ where: { status: 'active' } }),
-      db.volunteer.count({ where: { status: 'active' } }),
-      db.complianceRecord.count({ where: { status: 'pending' } }),
-      db.complianceRecord.count({ where: { status: 'pending', dueDate: { lt: new Date().toISOString() } } }),
-    ])
+    try {
+      const [
+        memberCount,
+        activeCases,
+        donationTotal,
+        donationCount,
+        disbursementTotal,
+        activeProgrammes,
+        volunteerActive,
+        compliancePending,
+        complianceOverdue,
+      ] = await Promise.all([
+        db.member.count(),
+        db.case.count({ where: { status: { notIn: ['closed', 'rejected'] } } }),
+        db.donation.aggregate({ _sum: { amount: true }, _count: true }),
+        db.donation.count(),
+        db.disbursement.aggregate({ _sum: { amount: true } }),
+        db.programme.count({ where: { status: 'active' } }),
+        db.volunteer.count({ where: { status: 'active' } }),
+        db.complianceRecord.count({ where: { status: 'pending' } }),
+        db.complianceRecord.count({ where: { status: 'pending', dueDate: { lt: new Date().toISOString() } } }),
+      ])
 
-    return {
-      members: memberCount,
-      activeCases,
-      donations: { total: donationTotal._sum.amount || 0, count: donationCount },
-      disbursements: { total: disbursementTotal._sum.amount || 0 },
-      activeProgrammes,
-      activeVolunteers: volunteerActive,
-      compliance: { pending: compliancePending, overdue: complianceOverdue },
+      return {
+        members: memberCount,
+        activeCases,
+        donations: { total: donationTotal._sum.amount || 0, count: donationCount },
+        disbursements: { total: disbursementTotal._sum.amount || 0 },
+        activeProgrammes,
+        activeVolunteers: volunteerActive,
+        compliance: { pending: compliancePending, overdue: complianceOverdue },
+      }
+    } catch (error: any) {
+      console.error('[get_dashboard_overview] Error:', error)
+      return { error: 'Maaf, ralat semasa mengambil gambaran papan pemuka. Sila cuba lagi.' }
     }
   },
   requiredRole: ['staff', 'admin', 'developer'],
@@ -629,12 +696,24 @@ const approve_disbursement: MariaPuspaTool = {
     try {
       const updated = await db.disbursement.update({
         where: { id: disbursementId },
-        data: { 
+        data: {
           status: 'approved',
           // Kita mengandaikan ada field audit/timestamp
           updatedAt: new Date()
         },
       })
+
+      // Audit log for disbursement approval
+      await db.activity.create({
+        data: {
+          title: `Disbursement Approved: ${updated.id}`,
+          category: 'disbursement',
+          type: 'approved',
+          description: `Disbursement ${updated.id} approved for RM ${updated.amount}`,
+          metadata: JSON.stringify({ disbursementId: updated.id, amount: updated.amount, category: updated.category }),
+        },
+      }).catch(() => {})
+
       return {
         action: 'approve_disbursement',
         disbursementId: updated.id,
@@ -684,10 +763,22 @@ const delete_case: MariaPuspaTool = {
 
     try {
       // Menggunakan soft-delete dengan menukar status kes
-      await db.case.update({
+      const updated = await db.case.update({
         where: { id: caseId },
         data: { status: 'rejected' } // Atau status 'deleted' jika skema menyokong
       })
+
+      // Audit log for case deletion
+      await db.activity.create({
+        data: {
+          title: `Case Deleted: ${updated.caseNumber}`,
+          category: 'case',
+          type: 'deleted',
+          description: `Case ${updated.caseNumber} has been soft-deleted (status set to rejected). Reason: ${reason}`,
+          metadata: JSON.stringify({ caseId: updated.id, caseNumber: updated.caseNumber, reason }),
+        },
+      }).catch(() => {})
+
       return {
         action: 'delete_case',
         caseId,
@@ -818,8 +909,12 @@ export async function executeTool(
     
     // Rakam ralat ke audit log jika DB sedia
     if (await isDbReady()) {
+      const safeParams = { ...params }
+      if (safeParams.icNumber) safeParams.icNumber = '****' + String(safeParams.icNumber).slice(-4)
+      if (safeParams.phone) safeParams.phone = '****' + String(safeParams.phone).slice(-4)
+      if (safeParams.email) { const [local, domain] = String(safeParams.email).split('@'); safeParams.email = local.slice(0, 2) + '***@' + domain }
       await db.activity.create({
-        data: { userId, type: 'TOOL_ERROR', category: 'AI_AUDIT', title: `Tool error: ${name}`, metadata: JSON.stringify({ tool: name, params, error: message }) }
+        data: { userId, type: 'TOOL_ERROR', category: 'AI_AUDIT', title: `Tool error: ${name}`, metadata: JSON.stringify({ tool: name, params: safeParams, error: message }) }
       }).catch(() => {})
     }
 

@@ -177,6 +177,12 @@
   flex-shrink: 0;
   position: relative;
 }
+.avatarDynamic {
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  background: var(--avatar-bg);
+  font-size: var(--avatar-font-size);
+}
 .avatarRing {
   position: absolute;
   inset: -2px;
@@ -220,7 +226,6 @@
     z-index: 50;
     border-radius: 0;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
 }
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -255,9 +260,6 @@
   overflow-x: auto;
   overflow-y: visible;
   padding: 20px 0 40px;
-  scrollbar-width: thin;
-  scrollbar-color: hsl(262 40% 50% / 0.3) transparent;
-  -webkit-overflow-scrolling: touch;
 }
 .chartScroll::-webkit-scrollbar { height: 6px; }
 .chartScroll::-webkit-scrollbar-track { background: transparent; }

@@ -1,13 +1,14 @@
-// PUSPA V4 — Pertubuhan Urus Peduli Asnaf NGO Management Platform
-// Database Schema
+// PUSPA V5 — Pertubuhan Urus Peduli Asnaf NGO Management Platform
+// Database Schema (26 models)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─── Users & Auth ───────────────────────────────────────────────

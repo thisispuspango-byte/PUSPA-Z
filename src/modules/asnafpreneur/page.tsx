@@ -142,7 +142,6 @@ export default function AsnafpreneurPage() {
     return Object.entries(stats).map(([name, value]) => ({ name, value }))
   }, [entrepreneurs])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<EntrepreneurFormValues, unknown, EntrepreneurFormValues>({
     resolver: zodResolver(entrepreneurSchema) as any,
     defaultValues: {
@@ -194,7 +193,7 @@ export default function AsnafpreneurPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl" style={{ color: BRAND_COLOR }}>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-[#9b59b6]">
             Asnafpreneur
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -204,7 +203,7 @@ export default function AsnafpreneurPage() {
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2 shrink-0" style={{ backgroundColor: BRAND_COLOR }}>
+            <Button className="gap-2 shrink-0 bg-[#9b59b6] hover:bg-[#8e44ad]">
               <Plus className="h-4 w-4" />
               Daftar Usahawan
             </Button>

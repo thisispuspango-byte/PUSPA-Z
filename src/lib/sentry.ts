@@ -1,7 +1,6 @@
 // PUSPA V5 — Sentry Error Tracking Setup
 // @sentry/nextjs is an optional dependency — only enabled when installed and DSN is configured
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Sentry: any = null;
 
 try {
@@ -32,7 +31,7 @@ if (Sentry && SENTRY_DSN && process.env.NODE_ENV === 'production') {
       Sentry.replayIntegration(),
     ],
     
-    beforeSend(event) {
+    beforeSend(event: { message?: string; exception?: { values?: Array<{ value?: string }> } }) {
       // Sanitize PII (IC numbers, etc.)
       if (event.message) {
         event.message = event.message.replace(/\d{6}-\d{2}-\d{4}/g, '****XXXX');

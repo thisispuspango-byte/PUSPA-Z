@@ -50,9 +50,16 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser()
+    user = authUser
+  } catch (authError) {
+    // Supabase unavailable — skip auth check, let API routes handle their own auth
+    console.warn('[Middleware] Supabase auth unavailable, skipping:', authError)
+  }
 
   // Protected routes - redirect to login if not authenticated
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/')

@@ -32,8 +32,19 @@ export async function auditLog(entry: AuditEntry): Promise<void> {
     timestamp: new Date()
   }
   
-  // Always log to console
-  console.log(`[AUDIT] ${entry.action} by ${entry.userId}`, entry.details)
+  // Sanitize PII from details before logging
+  const safeDetails = entry.details ? { ...entry.details } : undefined
+  if (safeDetails) {
+    if (safeDetails.icNumber) safeDetails.icNumber = '****' + String(safeDetails.icNumber).slice(-4)
+    if (safeDetails.phone) safeDetails.phone = '****' + String(safeDetails.phone).slice(-4)
+    if (safeDetails.email) {
+      const [local, domain] = String(safeDetails.email).split('@')
+      safeDetails.email = local.slice(0, 2) + '***@' + domain
+    }
+  }
+
+  // Always log to console (sanitized)
+  console.log(`[AUDIT] ${entry.action} by ${entry.userId}`, safeDetails)
   
   // Store in memory (for serverless)
   AUDIT_LOG.push(logEntry)

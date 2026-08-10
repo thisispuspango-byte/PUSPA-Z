@@ -19,6 +19,18 @@ export async function POST(request: NextRequest) {
   try {
     // ─── Authentication (before body — rate-limit key uses user / IP) ──
     const authUser = await getCurrentUser()
+
+    // ─── Enforce PUSPA_REQUIRE_AUTH_FOR_AI ──────────────────────
+    // When PUSPA_REQUIRE_AUTH_FOR_AI is true (or not explicitly set to false),
+    // unauthenticated users are denied access to AI features.
+    const requireAuthForAi = process.env.PUSPA_REQUIRE_AUTH_FOR_AI !== 'false'
+    if (requireAuthForAi && !authUser) {
+      return NextResponse.json(
+        { error: 'Unauthorized', content: 'Sila log masuk untuk menggunakan Maria Puspa.' },
+        { status: 401 }
+      )
+    }
+
     const rl = checkMariaAiRateLimit(request, authUser?.id ?? null)
     if (!rl.ok) {
       return NextResponse.json(

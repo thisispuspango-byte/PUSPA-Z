@@ -94,6 +94,7 @@ export async function GET(request: NextRequest) {
 // POST /api/v1/cases — Create a new case
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth()
     await requireRole('staff')
     const body = await request.json()
 

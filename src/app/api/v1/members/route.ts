@@ -46,10 +46,13 @@ export async function GET(request: NextRequest) {
       db.member.count({ where }),
     ])
 
-    // Mask IC numbers for PDPA compliance
+    // Mask PII for PDPA compliance
     const maskedMembers = members.map((m) => ({
       ...m,
       icNumber: m.icNumber ? '****' + m.icNumber.slice(-4) : null,
+      phone: m.phone ? '****' + m.phone.slice(-4) : null,
+      email: m.email ? (() => { const [local, domain] = m.email.split('@'); return local.slice(0, 2) + '***@' + domain; })() : null,
+      address: m.address ? (() => { const parts = m.address.split(','); return parts.length > 1 ? parts[parts.length - 1].trim() : null; })() : null,
       householdMembers: m.householdMembers.map((hm) => ({
         ...hm,
         icNumber: hm.icNumber ? '****' + hm.icNumber.slice(-4) : null,
@@ -78,6 +81,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Auth check: staff and above can create members
+    await requireAuth()
     await requireRole('staff')
 
     const body = await request.json()

@@ -220,8 +220,8 @@ PUSPA V5 is a **Single Page Application** built on Next.js but using **no page-l
 │  │ │ │  │  App     │  │                                     │   │ │││
 │  │ │ │  │  Sidebar │  │  ┌──────────────────────────────┐  │   │ │││
 │  │ │ │  │          │  │  │ <AppHeader />                │  │   │ │││
-│  │ │ │  │  260px   │  │  ├──────────────────────────────┤  │   │ │││
-│  │ │ │  │  max     │  │  │ <main>                       │  │   │ │││
+│  │ │ │  │          │  │  ├──────────────────────────────┤  │   │ │││
+│  │ │ │  │          │  │  │ <main>                       │  │   │ │││
 │  │ │ │  │          │  │  │   <ViewRenderer />           │  │   │ │││
 │  │ │ │  │          │  │  │                              │  │   │ │││
 │  │ │ │  │          │  │  └──────────────────────────────┘  │   │ │││
@@ -244,8 +244,8 @@ When the AI Chat Panel is open on desktop, the main content area receives a righ
 
 ```tsx
 <SidebarInset className={cn(
-  "transition-all duration-300",
-  aiChatOpen ? "md:mr-80" : "mr-0"   // 320px margin when chat open
+  "transition-all duration-300 ease-in-out",
+  aiChatOpen ? "md:pr-96" : ""
 )}>
 ```
 
@@ -282,8 +282,12 @@ When the AI Chat Panel is open on desktop, the main content area receives a righ
 │ 🏦 Donors                │
 │ 💸 Disbursements         │
 ├──────────────────────────┤
-│ OPERASI                  │
+│ PROGRAM                  │
 │ 📦 Programmes            │
+│ 🚀 Asnafpreneur          │
+│ 🍽️ Sedekah Jumaat        │
+├──────────────────────────┤
+│ OPERASI                  │
 │ 🤝 Volunteers            │
 │ 📄 Documents             │
 ├──────────────────────────┤
@@ -294,8 +298,14 @@ When the AI Chat Panel is open on desktop, the main content area receives a righ
 │ ⚙️ Admin                 │
 │ 🔐 TapSecure             │
 ├──────────────────────────┤
-│ AI & OPS                 │
+│ AI & BANTUAN             │
 │ 🤖 PUSPA AI              │
+│ 📖 Panduan               │
+├──────────────────────────┤
+│ ORGANISASI               │
+│ 🏢 Carta Organisasi      │
+│ 🏛️ Institusi             │
+│ 📋 Permohonan Bantuan    │
 ├──────────────────────────┤
 │ SISTEM                   │
 │ 🔧 Settings              │
@@ -309,13 +319,13 @@ When the AI Chat Panel is open on desktop, the main content area receives a righ
 ### 5.2 Configuration
 
 ```tsx
-<Sidebar collapsible="icon" className="border-r-0 max-w-[260px]">
+<Sidebar collapsible="icon" className="border-r-0">
 ```
 
 - **Collapsible**: `"icon"` — collapses to icon-only mode on mobile/narrow screens
-- **Max width**: 260px
 - **No right border**: `border-r-0` (visual separation via color contrast)
 - **SidebarRail**: Drag handle at the right edge for manual resize
+- **Width**: Controlled by SidebarProvider / shadcn sidebar defaults
 
 ### 5.3 Active State
 
@@ -331,25 +341,31 @@ In light mode this renders as a **pale lavender pill** on the deep purple sideba
 
 ### 5.4 Navigation Groups & Items
 
-| Group          | Item         | ViewId          | Icon           | Bilingual Label                         | Min Role    |
-| -------------- | ------------ | --------------- | -------------- | --------------------------------------- | ----------- |
-| **Utama**      | Dashboard    | `dashboard`     | LayoutDashboard | Dashboard / Papan Pemuka               | staff       |
-|                | Members      | `members`       | Users          | Members / Ahli Asnaf                    | staff       |
-|                | Cases        | `cases`         | FileText       | Cases / Kes                             | staff       |
-|                | Activities   | `activities`    | Activity       | Activities / Aktiviti                   | staff       |
-| **Kewangan**   | Donations    | `donations`     | HandCoins      | Donations / Sumbangan                   | staff       |
-|                | Donors       | `donors`        | Heart          | Donors / Penderma                       | staff       |
-|                | Disbursements| `disbursements` | ArrowDownToLine| Disbursements / Agihan                   | staff       |
-| **Operasi**    | Programmes   | `programmes`    | Calendar       | Programmes / Program                    | staff       |
-|                | Volunteers   | `volunteers`    | Sparkles       | Volunteers / Sukarelawan                | staff       |
-|                | Documents    | `documents`     | FolderOpen     | Documents / Dokumen                     | staff       |
-| **Tadbir Urus**| Compliance   | `compliance`    | Shield         | Compliance / Pematuhan                  | admin       |
-|                | Reports      | `reports`       | BarChart3      | Reports / Laporan                       | admin       |
-|                | eKYC         | `ekyc`          | ScanFace       | eKYC / eKYC                             | admin       |
-|                | Admin        | `admin`         | UserCog        | Admin / Pentadbiran                     | admin       |
-|                | TapSecure    | `tapsecure`     | Lock           | TapSecure / TapSecure                   | admin       |
-| **AI & Ops**   | PUSPA AI     | `ai`            | Bot            | PUSPA AI / AI PUSPA                     | developer   |
-| **Sistem**     | Settings     | `settings`      | Settings       | Settings / Tetapan                      | staff       |
+| Group            | Item                | ViewId                | Icon             | Bilingual Label                                | Min Role    |
+| ---------------- | ------------------- | --------------------- | ---------------- | ---------------------------------------------- | ----------- |
+| **Utama**        | Dashboard           | `dashboard`           | LayoutDashboard  | Dashboard / Papan Pemuka                       | staff       |
+|                  | Members             | `members`             | Users            | Members / Ahli Asnaf                           | staff       |
+|                  | Cases               | `cases`               | FileText         | Cases / Kes                                    | staff       |
+|                  | Activities          | `activities`          | Activity         | Activities / Aktiviti                          | staff       |
+| **Kewangan**     | Donations           | `donations`           | HandCoins        | Donations / Sumbangan                          | staff       |
+|                  | Donors              | `donors`              | Heart            | Donors / Penderma                               | staff       |
+|                  | Disbursements       | `disbursements`       | ArrowDownToLine  | Disbursements / Agihan                          | staff       |
+| **Program**      | Programmes          | `programmes`          | Calendar         | Programmes / Program                           | staff       |
+|                  | Asnafpreneur        | `asnafpreneur`        | Rocket           | Asnafpreneur / Asnafpreneur                    | staff       |
+|                  | Sedekah Jumaat      | `sedekah-jumaat`      | UtensilsCrossed  | Sedekah Jumaat / Sedekah Jumaat                | staff       |
+| **Operasi**      | Volunteers          | `volunteers`          | Sparkles         | Volunteers / Sukarelawan                       | staff       |
+|                  | Documents           | `documents`           | FolderOpen       | Documents / Dokumen                            | staff       |
+| **Tadbir Urus**  | Compliance          | `compliance`          | Shield           | Compliance / Pematuhan                         | admin       |
+|                  | Reports             | `reports`             | BarChart3        | Reports / Laporan                              | admin       |
+|                  | eKYC                | `ekyc`                | ScanFace         | eKYC / eKYC                                    | admin       |
+|                  | Admin               | `admin`               | UserCog          | Admin / Pentadbiran                            | admin       |
+|                  | TapSecure           | `tapsecure`           | Lock             | TapSecure / TapSecure                          | admin       |
+| **AI & Bantuan** | PUSPA AI            | `ai`                  | Bot              | PUSPA AI / AI PUSPA                            | developer   |
+|                  | Panduan             | `docs`                | BookOpen         | Panduan / Panduan Pengguna                     | staff       |
+| **Organisasi**   | Carta Organisasi    | `carta-organisasi`    | Building2        | Organization Chart / Carta Organisasi          | staff       |
+|                  | Institusi           | `institusi`           | Building         | Institutions / Institusi & Kawasan             | staff       |
+|                  | Permohonan Bantuan  | `permohonan-bantuan`  | ClipboardList    | Aid Application / Borang Permohonan Bantuan    | staff       |
+| **Sistem**       | Settings            | `settings`            | Settings         | Settings / Tetapan                             | staff       |
 
 ### 5.5 Brand Header
 
@@ -358,9 +374,9 @@ In light mode this renders as a **pale lavender pill** on the deep purple sideba
 
 ### 5.6 User Footer
 
-- **Avatar**: `AvatarFallback` with initial letter, `bg-sidebar-primary/20 text-sidebar-primary`
+- **Avatar**: `UserAvatar` component with `bg-sidebar-primary/20 text-sidebar-primary`
 - **Name**: 12px font-medium, truncated
-- **Role**: 10px, `text-sidebar-foreground/50`, capitalized
+- **Role**: 11px, `text-sidebar-foreground/60`, capitalized
 
 ---
 
@@ -368,13 +384,12 @@ In light mode this renders as a **pale lavender pill** on the deep purple sideba
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ [≡] │ │ English Title              [🔍 Search...] [🔔] [🌙] [💬] │
+│ [≡] │ │ English Title              [🔍 Search...] [🔔] [🌙]     │
 │     │ │ Keterangan Bahasa Melayu                                    │
 └──────────────────────────────────────────────────────────────────┘
-  ↑     ↑   ↑                                ↑      ↑     ↑     ↑
-  │     │   │                                │      │     │     └─ AI Chat toggle
+  ↑     ↑   ↑                                ↑      ↑     ↑
   │     │   │                                │      │     └─ Theme toggle (Sun/Moon)
-  │     │   │                                │      └─ Notifications (badge count)
+  │     │   │                                │      └─ Notifications (toast on click)
   │     │   │                                └─ Search input (md+ only)
   │     │   └─ Bilingual title area
   │     └─ Vertical separator
@@ -393,23 +408,29 @@ In light mode this renders as a **pale lavender pill** on the deep purple sideba
 
 ```typescript
 const viewTitles: Record<ViewId, { en: string; ms: string }> = {
-  dashboard:     { en: 'Dashboard',                ms: 'Papan Pemuka' },
-  members:       { en: 'Member Management',         ms: 'Pengurusan Ahli' },
-  cases:         { en: 'Case Management',            ms: 'Pengurusan Kes' },
-  programmes:    { en: 'Programme Management',       ms: 'Pengurusan Program' },
-  donations:     { en: 'Donation Management',        ms: 'Pengurusan Sumbangan' },
-  donors:        { en: 'Donor CRM',                  ms: 'Pengurusan Penderma' },
-  disbursements: { en: 'Disbursement Management',    ms: 'Pengurusan Agihan' },
-  volunteers:    { en: 'Volunteer Management',       ms: 'Pengurusan Sukarelawan' },
-  compliance:    { en: 'Compliance',                 ms: 'Pematuhan' },
-  reports:       { en: 'Reports & Analytics',        ms: 'Laporan & Analitik' },
-  ekyc:          { en: 'eKYC Verification',          ms: 'Pengesahan eKYC' },
-  documents:     { en: 'Document Management',        ms: 'Pengurusan Dokumen' },
-  activities:    { en: 'Activity Log',               ms: 'Log Aktiviti' },
-  ai:            { en: 'Maria Puspa AI',             ms: 'AI Maria Puspa' },
-  settings:      { en: 'Settings',                   ms: 'Tetapan' },
-  tapsecure:     { en: 'TapSecure',                  ms: 'TapSecure' },
-  admin:         { en: 'Admin Panel',                ms: 'Panel Pentadbir' },
+  dashboard:            { en: 'Dashboard',                   ms: 'Papan Pemuka' },
+  members:              { en: 'Member Management',            ms: 'Pengurusan Ahli' },
+  cases:                { en: 'Case Management',               ms: 'Pengurusan Kes' },
+  programmes:           { en: 'Programme Management',          ms: 'Pengurusan Program' },
+  donations:            { en: 'Donation Management',           ms: 'Pengurusan Sumbangan' },
+  donors:               { en: 'Donor CRM',                     ms: 'Pengurusan Penderma' },
+  disbursements:        { en: 'Disbursement Management',       ms: 'Pengurusan Agihan' },
+  volunteers:           { en: 'Volunteer Management',          ms: 'Pengurusan Sukarelawan' },
+  compliance:           { en: 'Compliance',                    ms: 'Pematuhan' },
+  reports:              { en: 'Reports & Analytics',           ms: 'Laporan & Analitik' },
+  ekyc:                 { en: 'eKYC Verification',             ms: 'Pengesahan eKYC' },
+  documents:            { en: 'Document Management',           ms: 'Pengurusan Dokumen' },
+  activities:           { en: 'Activity Log',                  ms: 'Log Aktiviti' },
+  ai:                   { en: 'Maria Puspa AI',                ms: 'AI Maria Puspa' },
+  settings:             { en: 'Settings',                      ms: 'Tetapan' },
+  tapsecure:            { en: 'TapSecure',                     ms: 'TapSecure' },
+  admin:                { en: 'Admin Panel',                   ms: 'Panel Pentadbir' },
+  asnafpreneur:         { en: 'Asnafpreneur',                 ms: 'Asnafpreneur' },
+  'sedekah-jumaat':     { en: 'Sedekah Jumaat',               ms: 'Sedekah Jumaat' },
+  docs:                 { en: 'Panduan',                       ms: 'Panduan Pengguna' },
+  'carta-organisasi':   { en: 'Organization Chart',           ms: 'Carta Organisasi' },
+  institusi:            { en: 'Institutions & Areas',          ms: 'Institusi & Kawasan Bantuan' },
+  'permohonan-bantuan': { en: 'Aid Application',               ms: 'Borang Permohonan Bantuan' },
 }
 ```
 
@@ -419,9 +440,8 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
 | --------------- | ----------- | ------ | ------------------------------------------- |
 | Sidebar Toggle  | (built-in)  | 28px   | Expand/collapse sidebar                     |
 | Search          | Search      | 32px   | `hidden md:flex` — search input 264px wide  |
-| Notifications   | Bell        | 32px   | Badge with count (e.g. "3") in primary bg   |
+| Notifications   | Bell        | 32px   | Triggers toast notification on click        |
 | Theme Toggle    | Sun / Moon  | 32px   | Rotating icon swap, `next-themes`           |
-| AI Chat Toggle  | MessageSquare | 32px | Purple highlight, toggles `aiChatOpen`      |
 
 ---
 
@@ -432,6 +452,8 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
 - Avatar source is standardized to `public/maria-puspa-reference.png`
 - TTS playback prioritizes female voice profiles for Maria persona
 - Lip-sync animation uses phoneme/amplitude events from speech playback
+- Maria character renderer supports emotion states (warm, focus, alert, empathetic) that change based on route context
+- Debug mode can be enabled via `puspa-settings` localStorage to show Hermes tool call logs
 
 ### 7.1 Panel Layout
 
@@ -462,7 +484,7 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
 │ Maria Puspa — Cer-   │  ← Tagline (desktop only)
 │ das. Mesra.          │
 └──────────────────────┘
-  Fixed right, 320px (w-80)
+  Fixed right, 384px (w-96)
 ```
 
 **Mobile (< md):**
@@ -493,7 +515,7 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
 | Property       | Desktop                     | Mobile                              |
 | -------------- | --------------------------- | ----------------------------------- |
 | Position       | Fixed right, full height    | Fixed bottom, full width            |
-| Width          | `w-80` (320px)              | `inset-x-0` (100%)                  |
+| Width          | `w-96` (384px)              | `inset-x-0` (100%)                  |
 | Height         | Full viewport height        | `85vh` / `95vh` (expandable)        |
 | Border radius  | None (flush right edge)     | `rounded-t-2xl` on top              |
 | Border         | `border-l`                  | `border-t`                          |
@@ -505,8 +527,8 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
 | Property        | User Message                     | AI Message                           |
 | --------------- | -------------------------------- | ------------------------------------ |
 | Alignment       | Right (`flex-row-reverse`)       | Left                                 |
-| Avatar          | User icon in purple circle       | Maria Puspa avatar image             |
-| Avatar size     | 28px (h-7 w-7)                  | 28px (h-7 w-7)                      |
+| Avatar          | User icon via `UserAvatar`       | Maria character renderer             |
+| Avatar size     | small (sm)                       | 32px (h-8 w-8)                       |
 | Bubble bg       | `bg-primary`                     | `bg-muted border border-border`      |
 | Bubble text     | `text-primary-foreground`        | Default foreground                   |
 | Border radius   | `rounded-2xl rounded-tr-sm`      | `rounded-2xl rounded-tl-sm`         |
@@ -524,14 +546,7 @@ When AI is generating a response:
 
 ### 7.5 Quick Prompts
 
-Displayed only when `messages.length <= 1` and not streaming:
-
-| Label      | Full Text Sent                     |
-| ---------- | ---------------------------------- |
-| Ringkasan  | "Ringkasan operasi bulan ini"      |
-| Kes        | "Senarai kes aktif"                |
-| Derma      | "Stats derma bulan semasa"         |
-| Sistem     | "Status sistem"                    |
+Displayed only when `messages.length <= 1` and not streaming. Quick prompts are defined in `@/lib/maria-quick-prompts` with bilingual chip labels, icons, and full prompt text.
 
 Styling: `rounded-full bg-primary/5 border border-primary/15 text-primary hover:bg-primary/10`, 36px min height for touch targets.
 
@@ -543,9 +558,10 @@ When the AI calls tools during a response, a compact indicator shows:
 🔧 2 tools  1/2
 ```
 
-- Wrench icon (2.5px) + count + success ratio badge
-- Text size: 9px
-- Badge: 8px font, outline variant
+- Wrench icon (3px) + count + success ratio badge
+- Text size: 10px
+- Badge: 10px font, outline variant
+- When debug mode is enabled, full Hermes debug logs are shown instead
 
 ### 7.7 SSE Streaming Protocol
 
@@ -565,17 +581,37 @@ The chat communicates with `/api/v1/ai` via Server-Sent Events:
 
 ### 8.1 View Renderer
 
-All 17 modules are lazy-loaded via `next/dynamic` with `{ ssr: false }`:
+All 23 modules are lazy-loaded via `next/dynamic` with `{ ssr: false }`:
 
 ```typescript
 const moduleMap: Record<ViewId, React.ComponentType> = {
-  dashboard: dynamic(() => import('@/modules/dashboard/page'), { ssr: false }),
-  members: dynamic(() => import('@/modules/members/page'), { ssr: false }),
-  // ... all 17 modules
+  dashboard:            dynamic(() => import('@/modules/dashboard/page'), { ssr: false }),
+  members:              dynamic(() => import('@/modules/members/page'), { ssr: false }),
+  cases:                dynamic(() => import('@/modules/cases/page'), { ssr: false }),
+  programmes:           dynamic(() => import('@/modules/programmes/page'), { ssr: false }),
+  donations:            dynamic(() => import('@/modules/donations/page'), { ssr: false }),
+  donors:               dynamic(() => import('@/modules/donors/page'), { ssr: false }),
+  disbursements:        dynamic(() => import('@/modules/disbursements/page'), { ssr: false }),
+  volunteers:           dynamic(() => import('@/modules/volunteers/page'), { ssr: false }),
+  compliance:           dynamic(() => import('@/modules/compliance/page'), { ssr: false }),
+  reports:              dynamic(() => import('@/modules/reports/page'), { ssr: false }),
+  ekyc:                 dynamic(() => import('@/modules/ekyc/page'), { ssr: false }),
+  documents:            dynamic(() => import('@/modules/documents/page'), { ssr: false }),
+  activities:           dynamic(() => import('@/modules/activities/page'), { ssr: false }),
+  asnafpreneur:         dynamic(() => import('@/modules/asnafpreneur/page'), { ssr: false }),
+  'sedekah-jumaat':     dynamic(() => import('@/modules/sedekah-jumaat/page'), { ssr: false }),
+  docs:                 dynamic(() => import('@/modules/docs/page'), { ssr: false }),
+  ai:                   dynamic(() => import('@/modules/ai/page'), { ssr: false }),
+  settings:             dynamic(() => import('@/modules/settings/page'), { ssr: false }),
+  tapsecure:            dynamic(() => import('@/modules/tapsecure/page'), { ssr: false }),
+  admin:                dynamic(() => import('@/modules/admin/page'), { ssr: false }),
+  'carta-organisasi':   dynamic(() => import('@/modules/carta-organisasi/page'), { ssr: false }),
+  institusi:            dynamic(() => import('@/modules/institusi/page'), { ssr: false }),
+  'permohonan-bantuan': dynamic(() => import('@/modules/permohonan-bantuan/page'), { ssr: false }),
 }
 ```
 
-View transitions use `animate-in fade-in-0 duration-200` for a 200ms fade.
+View transitions use `framer-motion` `AnimatePresence` with blur+fade+slide animation (300ms, custom easing curve).
 
 ### 8.2 Access Denied View
 
@@ -601,7 +637,7 @@ When a user lacks permission for a module:
 
 ### 8.3 Dashboard Page Pattern
 
-The dashboard exemplifies the standard module page layout:
+The dashboard exemplifies the standard module page layout across all 23 modules:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -700,7 +736,7 @@ All module pages use skeleton loading states matching their layout:
 | TSX             | `true`             |
 | Icon Library    | `lucide`           |
 
-### 9.2 Installed Components (50+)
+### 9.2 Installed Components (46)
 
 | Component         | Path                                    |
 | ----------------- | --------------------------------------- |
@@ -815,12 +851,12 @@ shadcn/ui Skeleton used throughout for layout-preserving loading:
 | ------------------ | -------------------------------- | -------------------------------- |
 | Sidebar            | Icon-only collapsible            | Full with labels                 |
 | Header search      | Hidden                           | Visible, 264px width             |
-| AI Chat Panel      | Bottom sheet (85–95vh)           | Fixed right panel (320px)        |
+| AI Chat Panel      | Bottom sheet (85–95vh)           | Fixed right panel (384px)        |
 | Metric grids       | 1 col → 2 col (sm)              | 4 col (lg)                       |
 | Chart grids        | 1 col                            | 2 col (lg)                       |
 | Activity + actions | Stacked                          | 2/3 + 1/3 split (lg)            |
 | Content padding    | `p-4` (16px)                     | `p-6` (24px) at lg               |
-| Chat input height  | 44px (h-11)                      | 32px (h-8)                       |
+| Chat input height  | 44px (h-10)                      | 40px (h-10)                      |
 | Touch targets      | 44px minimum                     | Standard 32px                    |
 | Chat backdrop      | Black 50% overlay                | None                             |
 
@@ -878,7 +914,6 @@ shadcn/ui Skeleton used throughout for layout-preserving loading:
 | Element                | ARIA Attribute                    | Purpose                              |
 | ---------------------- | --------------------------------- | ------------------------------------ |
 | Theme toggle           | `sr-only` span                    | "Toggle theme" for screen readers    |
-| AI Chat toggle         | `sr-only` span                    | "Toggle AI chat"                     |
 | Close chat button      | `aria-label="Tutup sembang"`      | Close chat in Bahasa Melayu          |
 | Expand chat button     | `aria-label` (dynamic)            | "Kecilkan" / "Besarkan"              |
 | Send button            | `aria-label="Hantar mesej"`       | Send message                         |
@@ -900,7 +935,7 @@ shadcn/ui Skeleton used throughout for layout-preserving loading:
 
 ### 13.5 Touch Targets
 
-- Mobile buttons: minimum 44px (`h-11 w-11`)
+- Mobile buttons: minimum 44px (`h-10 w-10`)
 - Chat quick prompts: `min-h-[36px]`
 - All touch elements use `touch-manipulation` class for reduced tap delay
 
@@ -954,43 +989,48 @@ The scrollbar is **thin** (6px), **subtle** (low opacity), and **rounded** (3px 
 
 ### 15.2 Icon Usage by Module
 
-| Icon             | Component       | Usage Context                         |
-| ---------------- | --------------- | ------------------------------------- |
-| `LayoutDashboard`| Dashboard       | Main overview                         |
-| `Users`          | Members         | People management                     |
-| `FileText`       | Cases           | Case/file management                  |
-| `Activity`       | Activities      | Activity tracking                     |
-| `HandCoins`      | Donations       | Financial contributions               |
-| `Heart`          | Donors          | Donor CRM                             |
-| `ArrowDownToLine`| Disbursements   | Fund disbursement                     |
-| `Calendar`       | Programmes      | Programme scheduling                  |
-| `Sparkles`       | Volunteers      | Volunteer management                  |
-| `FolderOpen`     | Documents       | Document management                   |
-| `Shield`         | Compliance      | Compliance monitoring                 |
-| `BarChart3`      | Reports         | Analytics & reporting                 |
-| `ScanFace`       | eKYC            | Identity verification                 |
-| `UserCog`        | Admin           | Administration                        |
-| `Lock`           | TapSecure       | Security                              |
-| `Bot`            | PUSPA AI        | AI assistant                          |
-| `Settings`       | Settings        | System settings                       |
-| `Search`         | Header          | Global search                         |
-| `Bell`           | Header          | Notifications                         |
-| `Sun`/`Moon`     | Header          | Theme toggle                          |
-| `MessageSquare`  | Header          | AI chat toggle                        |
-| `Send`           | Chat            | Send message                          |
-| `Loader2`        | Chat            | Loading/spinning                      |
-| `X`              | Chat            | Close/dismiss                         |
-| `Wrench`         | Chat            | Tool call indicator                   |
-| `Mic`            | Chat            | Voice input                           |
-| `ChevronDown`    | Chat            | Expand/collapse                       |
-| `ArrowDown`      | Chat            | Scroll to bottom                      |
-| `TrendingUp`     | Dashboard       | Positive metric change                |
-| `TrendingDown`   | Dashboard       | Negative metric change                |
-| `UserPlus`       | Dashboard       | New member registration               |
-| `Receipt`        | Dashboard       | Disbursement ratio                    |
-| `CheckCircle2`   | Dashboard       | Completed/verified status             |
-| `AlertCircle`    | Dashboard       | Warning/pending status                |
-| `Clock`          | Dashboard       | Timestamp indicator                   |
+| Icon             | Component            | Usage Context                         |
+| ---------------- | -------------------- | ------------------------------------- |
+| `LayoutDashboard`| Dashboard            | Main overview                         |
+| `Users`          | Members              | People management                     |
+| `FileText`       | Cases                | Case/file management                  |
+| `Activity`       | Activities           | Activity tracking                     |
+| `HandCoins`      | Donations            | Financial contributions               |
+| `Heart`          | Donors               | Donor CRM                             |
+| `ArrowDownToLine`| Disbursements        | Fund disbursement                     |
+| `Calendar`       | Programmes           | Programme scheduling                  |
+| `Rocket`         | Asnafpreneur         | Entrepreneurship program              |
+| `UtensilsCrossed`| Sedekah Jumaat       | Friday charity program                |
+| `Sparkles`       | Volunteers           | Volunteer management                  |
+| `FolderOpen`     | Documents            | Document management                   |
+| `Shield`         | Compliance           | Compliance monitoring                 |
+| `BarChart3`      | Reports              | Analytics & reporting                 |
+| `ScanFace`       | eKYC                 | Identity verification                 |
+| `UserCog`        | Admin                | Administration                        |
+| `Lock`           | TapSecure            | Security                              |
+| `Bot`            | PUSPA AI             | AI assistant                          |
+| `BookOpen`       | Panduan (Docs)       | User documentation                    |
+| `Building2`      | Carta Organisasi     | Organization chart                    |
+| `Building`       | Institusi            | Institutions & areas                  |
+| `ClipboardList`  | Permohonan Bantuan   | Aid application forms                 |
+| `Settings`       | Settings             | System settings                       |
+| `Search`         | Header               | Global search                         |
+| `Bell`           | Header               | Notifications                         |
+| `Sun`/`Moon`     | Header               | Theme toggle                          |
+| `Send`           | Chat                 | Send message                          |
+| `Loader2`        | Chat                 | Loading/spinning                      |
+| `X`              | Chat                 | Close/dismiss                         |
+| `Wrench`         | Chat                 | Tool call indicator                   |
+| `Mic`            | Chat                 | Voice input                           |
+| `ChevronDown`    | Chat                 | Expand/collapse                       |
+| `ArrowDown`      | Chat                 | Scroll to bottom                      |
+| `TrendingUp`     | Dashboard            | Positive metric change                |
+| `TrendingDown`   | Dashboard            | Negative metric change                |
+| `UserPlus`       | Dashboard            | New member registration               |
+| `Receipt`        | Dashboard            | Disbursement ratio                    |
+| `CheckCircle2`   | Dashboard            | Completed/verified status             |
+| `AlertCircle`    | Dashboard            | Warning/pending status                |
+| `Clock`          | Dashboard            | Timestamp indicator                   |
 
 ### 15.3 Icon Sizing Convention
 
@@ -1001,8 +1041,8 @@ The scrollbar is **thin** (6px), **subtle** (low opacity), and **rounded** (3px 
 | Metric cards      | `h-5 w-5`        | 20px  |
 | Quick actions     | `h-5 w-5`        | 20px  |
 | Chat avatar icon  | `h-3.5 w-3.5`    | 14px  |
-| Chat tool calls   | `h-2.5 w-2.5`    | 10px  |
-| Chat send button  | `h-5 w-5` / `h-3.5 w-3.5` | 20px / 14px |
+| Chat tool calls   | `h-3 w-3`        | 12px  |
+| Chat send button  | `h-5 w-5` / `h-4 w-4` | 20px / 16px |
 | Activity list     | `h-3.5 w-3.5`    | 14px  |
 
 ---
@@ -1017,12 +1057,12 @@ The scrollbar is **thin** (6px), **subtle** (low opacity), and **rounded** (3px 
 | --------------- | --------------------------- | ------------------- | --------- |
 | `currentView`   | `ViewId`                    | `'dashboard'`       | Yes       |
 | `aiChatOpen`    | `boolean`                   | `false`             | No        |
-| `currentUser`   | `{ id, name, email, role }` | Admin PUSPA object  | Yes       |
+| `currentUser`   | `{ id, name, email, role, imageUrl? }` | Admin PUSPA object | Yes       |
 | `searchQuery`   | `string`                    | `''`                | No        |
 
 **Persistence**: `zustand/middleware/persist` with key `"puspa-app-store"`, partializing to `currentView` and `currentUser`.
 
-#### Maria Puspa Store (`useMariaPuspaStore` / `useHermesStore`)
+#### Hermes Store (`useHermesStore`)
 
 | Property        | Type                        | Default             |
 | --------------- | --------------------------- | ------------------- |
@@ -1034,6 +1074,14 @@ The scrollbar is **thin** (6px), **subtle** (low opacity), and **rounded** (3px 
 
 **Welcome message**: *"Hai, saya Maria Puspa. AI Assistant PUSPA. Apa yang boleh saya bantu?"*
 
+#### Maria Character Store (`useMariaCharacterStore`)
+
+| Property         | Type                       | Default             |
+| ---------------- | -------------------------- | ------------------- |
+| `presenceState`  | Presence state enum        | —                   |
+| `emotionState`   | Emotion state enum         | `'warm'`            |
+| `speechState`    | Phoneme/speech tracking    | —                   |
+
 ### 16.2 ViewId Type
 
 ```typescript
@@ -1041,7 +1089,8 @@ export type ViewId =
   | 'dashboard' | 'members' | 'cases' | 'programmes' | 'donations' 
   | 'disbursements' | 'volunteers' | 'compliance' | 'reports' | 'ekyc'
   | 'documents' | 'activities' | 'donors' | 'ai' | 'settings' 
-  | 'tapsecure' | 'admin'
+  | 'tapsecure' | 'admin' | 'asnafpreneur' | 'sedekah-jumaat' | 'docs'
+  | 'carta-organisasi' | 'institusi' | 'permohonan-bantuan'
 ```
 
 ---
@@ -1058,25 +1107,31 @@ export type ViewId =
 
 ### 17.2 View Access Matrix
 
-| View           | Min Role    | Category       |
-| -------------- | ----------- | -------------- |
-| dashboard      | staff       | General        |
-| members        | staff       | General        |
-| cases          | staff       | General        |
-| programmes     | staff       | General        |
-| donations      | staff       | General        |
-| donors         | staff       | General        |
-| disbursements  | staff       | General        |
-| volunteers     | staff       | General        |
-| activities     | staff       | General        |
-| documents      | staff       | General        |
-| settings       | staff       | General        |
-| compliance     | admin       | Governance     |
-| reports        | admin       | Governance     |
-| ekyc           | admin       | Governance     |
-| admin          | admin       | Governance     |
-| tapsecure      | admin       | Governance     |
-| ai             | developer   | AI & Ops       |
+| View                 | Min Role    | Category       |
+| -------------------- | ----------- | -------------- |
+| dashboard            | staff       | General        |
+| members              | staff       | General        |
+| cases                | staff       | General        |
+| programmes           | staff       | General        |
+| donations            | staff       | General        |
+| donors               | staff       | General        |
+| disbursements        | staff       | General        |
+| volunteers           | staff       | General        |
+| activities           | staff       | General        |
+| documents            | staff       | General        |
+| asnafpreneur         | staff       | General        |
+| sedekah-jumaat       | staff       | General        |
+| docs                 | staff       | General        |
+| settings             | staff       | General        |
+| carta-organisasi     | staff       | General        |
+| institusi            | staff       | General        |
+| permohonan-bantuan   | staff       | General        |
+| compliance           | admin       | Governance     |
+| reports              | admin       | Governance     |
+| ekyc                 | admin       | Governance     |
+| admin                | admin       | Governance     |
+| tapsecure            | admin       | Governance     |
+| ai                   | developer   | AI & Ops       |
 
 Higher roles inherit access from lower roles. The sidebar filters items by role, hiding inaccessible modules entirely.
 
@@ -1089,20 +1144,22 @@ Higher roles inherit access from lower roles. The sidebar filters items by role,
 - **CSS**: `tw-animate-css` import in globals.css
 - **Tailwind Plugin**: `tailwindcss-animate`
 - **Custom keyframes**: Defined inline (e.g., `puspa-spin`)
+- **Framer Motion**: Used for view transitions in `ViewRenderer`
 
 ### 18.2 Motion Patterns
 
-| Element              | Animation                       | Duration | Easing      |
-| -------------------- | ------------------------------- | -------- | ----------- |
-| Page transition      | `animate-in fade-in-0`          | 200ms    | Default     |
-| PUSPA Spinner        | `puspa-spin` (360° rotation)    | 4000ms   | linear      |
-| Loading text         | `animate-pulse`                 | 2000ms   | ease-in-out |
-| Theme toggle icon    | `rotate-0 / rotate-90 scale-0/1`| 200ms   | transition-all |
-| Chat panel open/close| `transition-all`                | 300ms    | Default     |
-| Sidebar collapse     | shadcn built-in transition      | 200ms    | Default     |
-| Streaming cursor     | `animate-pulse` (inline block)  | Default  | Default     |
-| Chat overlay fade    | `transition-opacity`            | 300ms    | Default     |
-| Active nav hover     | `hover:bg-sidebar-primary/90`   | Default  | Default     |
+| Element              | Animation                       | Duration | Easing                       |
+| -------------------- | ------------------------------- | -------- | ---------------------------- |
+| Page transition      | blur+fade+slide (framer-motion) | 300ms    | `[0.22, 1, 0.36, 1]`        |
+| PUSPA Spinner        | `puspa-spin` (360° rotation)    | 4000ms   | linear                       |
+| Loading text         | `animate-pulse`                 | 2000ms   | ease-in-out                  |
+| Theme toggle icon    | `rotate-0 / rotate-90 scale-0/1`| 200ms    | transition-all               |
+| Chat panel open/close| `transition-all`                | 300ms    | Default                      |
+| Sidebar collapse     | shadcn built-in transition      | 200ms    | Default                      |
+| Streaming cursor     | `animate-pulse` (inline block)  | Default  | Default                      |
+| Chat overlay fade    | `transition-opacity`            | 300ms    | Default                      |
+| Active nav hover     | `hover:bg-sidebar-primary/90`   | Default  | Default                      |
+| Content area margin  | `transition-all duration-300`   | 300ms    | `ease-in-out`                |
 
 ### 18.3 Reduced Motion
 
@@ -1124,11 +1181,23 @@ src/
 │   ├── app-header.tsx           ← Header bar with search, actions
 │   ├── view-renderer.tsx        ← Dynamic module loader with access control
 │   ├── ai-chat-panel.tsx        ← Maria Puspa chat panel
+│   ├── aurora.tsx               ← Aurora background effect
+│   ├── auth-provider.tsx        ← Supabase auth context provider
+│   ├── mobile-card.tsx          ← Mobile-optimized card component
 │   ├── puspa-logo.tsx           ← SVG logo component
 │   ├── puspa-loading-spinner.tsx ← Branded spinner
 │   ├── theme-provider.tsx       ← next-themes wrapper
-│   └── ui/                      ← 50+ shadcn/ui components
-├── modules/                     ← 17 module pages (one per ViewId)
+│   ├── user-avatar.tsx          ← User avatar with image fallback
+│   ├── query-provider.tsx       ← React Query provider
+│   ├── maria/                   ← Maria Puspa character components
+│   │   ├── maria-character-renderer.tsx  ← Emotion-aware character renderer
+│   │   ├── maria-floating-widget.tsx     ← Floating Maria widget
+│   │   ├── MariaVRMModel.tsx             ← 3D VRM model viewer
+│   │   ├── MariaVRMModel.module.css      ← VRM model styles
+│   │   ├── MariaAvatarUnified.tsx        ← Unified avatar component
+│   │   └── maria-vrm-blendshapes.tsx     ← VRM blendshape definitions
+│   └── ui/                      ← 46 shadcn/ui components
+├── modules/                     ← 23 module pages (one per ViewId)
 │   ├── dashboard/page.tsx
 │   ├── members/page.tsx
 │   ├── cases/page.tsx
@@ -1137,6 +1206,8 @@ src/
 │   ├── donors/page.tsx
 │   ├── disbursements/page.tsx
 │   ├── programmes/page.tsx
+│   ├── asnafpreneur/page.tsx
+│   ├── sedekah-jumaat/page.tsx
 │   ├── volunteers/page.tsx
 │   ├── documents/page.tsx
 │   ├── compliance/page.tsx
@@ -1145,11 +1216,16 @@ src/
 │   ├── admin/page.tsx
 │   ├── tapsecure/page.tsx
 │   ├── ai/page.tsx
-│   └── settings/page.tsx
+│   ├── docs/page.tsx
+│   ├── settings/page.tsx
+│   ├── carta-organisasi/page.tsx
+│   ├── institusi/page.tsx
+│   └── permohonan-bantuan/page.tsx
 ├── stores/
-│   └── hermes-store.ts          ← Maria Puspa AI chat state
+│   ├── hermes-store.ts          ← Maria Puspa AI chat state
+│   └── maria-character-store.ts ← Maria emotion/presence/speech state
 ├── lib/
-│   ├── store.ts                 ← App navigation & user state
+│   ├── store.ts                 ← App navigation & user state (ViewId type)
 │   ├── access-control.ts        ← Role-based view access
 │   ├── utils.ts                 ← cn() utility
 │   ├── puspa-brand-assets.ts    ← Base64 brand image URIs
@@ -1157,7 +1233,25 @@ src/
 │   ├── puspa-knowledge.ts       ← Organization knowledge base
 │   ├── db.ts                    ← Prisma client
 │   ├── memory.ts                ← AI memory store
-│   └── openrouter.ts            ← AI API configuration
+│   ├── openrouter.ts            ← AI API configuration
+│   ├── auth.ts                  ← Auth utilities
+│   ├── ai-cache.ts              ← AI response caching
+│   ├── ai-rate-limit.ts         ← AI rate limiting
+│   ├── rate-limit.ts            ← General rate limiting
+│   ├── audit.ts                 ← Audit logging
+│   ├── validation.ts            ← Input validation schemas
+│   ├── sentry.ts                ← Sentry error tracking
+│   ├── api-utils.ts             ← API utility functions
+│   ├── case-intelligence.ts     ← Case AI intelligence
+│   ├── donor-sync.ts            ← Donor synchronization
+│   ├── domain.ts                ← Domain types
+│   ├── sequence.ts              ← Sequence utilities
+│   ├── client.ts                ← Client-side Supabase
+│   ├── server.ts                ← Server-side Supabase
+│   ├── maria-emotion-map.ts     ← Maria emotion state mapping
+│   ├── maria-lipsync.ts         ← Maria lip-sync engine
+│   ├── maria-tts.ts             ← Maria text-to-speech
+│   └── maria-quick-prompts.ts   ← Quick prompt definitions
 ├── tools/                       ← AI tool definitions
 │   ├── index.ts
 │   ├── web-tools.ts
@@ -1165,13 +1259,39 @@ src/
 │   └── cases.ts
 ├── hooks/
 │   ├── use-mobile.ts
-│   └── use-toast.ts
+│   ├── use-toast.ts
+│   └── use-realtime.ts
 └── types/
     └── index.ts
+
+hermes/                          ← Hermes agent skills directory
+├── skills/
+│   ├── apple/                   ← Apple integrations (Notes, Reminders, Find My, iMessage)
+│   ├── autonomous-ai-agents/    ← AI agent skill definitions
+│   ├── creative/                ← Creative skills (diagrams, art, comics, infographics)
+│   └── ...                      ← Additional skill packs
+
+mini-services/
+└── telegram-bot/
+    ├── index.ts                 ← Telegram bot entry point
+    ├── server.py                ← Python server component
+    ├── package.json             ← Node dependencies
+    ├── RUN_ME.bat               ← Windows launcher
+    ├── maria.jpg                ← Maria profile image
+    └── ...                      ← Audio temp files, SadTalker, results
+
+scripts/
+├── hermes-agent.ps1             ← PowerShell agent launcher
+├── hermes-agent.py              ← Python agent script
+└── maria-smoke.js               ← Maria smoke test
+
+docs/
+├── PUSPA_DATA_EXTRACTION.md     ← Data extraction guide
+└── USER_GUIDELINES.md           ← User guidelines
 ```
 
 ---
 
 *Document version: PUSPA V5 Design System*
-*Last updated: 2026-05-05*
+*Last updated: 2026-05-08*
 *Color space: oklch | Theme: Purple brand | Language: Bahasa Melayu + English*
