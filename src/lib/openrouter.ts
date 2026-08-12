@@ -82,7 +82,7 @@ function getNextModel(): string {
   return model
 }
 
-function rotateModel(): void {
+export function rotateModel(): void {
   if (FREE_MODELS.length > 1) {
     currentModelIndex = (currentModelIndex + 1) % FREE_MODELS.length
     console.log(`[OpenRouter] Rotated to model: ${FREE_MODELS[currentModelIndex]}`)
@@ -120,6 +120,9 @@ function rotateKey(): void {
 // Authorization: Bearer <KEY>
 // HTTP-Referer: <YOUR_SITE_URL> (optional, for rankings)
 // X-OpenRouter-Title: <YOUR_SITE_NAME> (optional, for rankings)
+
+
+
 
 function buildHeaders(apiKey: string): Record<string, string> {
   const headers: Record<string, string> = {
@@ -184,7 +187,7 @@ const MAX_RETRIES = 2
 
 export async function createChatCompletion(options: OpenRouterChatOptions, retryCount = 0) {
   const apiKey = getNextKey()
-  const model = options.model || OPENROUTER_MODEL
+  const model = options.model || getNextModel()
 
   const body: Record<string, unknown> = {
     model,
@@ -209,12 +212,18 @@ export async function createChatCompletion(options: OpenRouterChatOptions, retry
       const errorText = await response.text()
       console.error(`[OpenRouter] API error ${response.status}: ${errorText}`)
 
-      // If rate limited or server error, rotate key and retry
+      // If rate limited or server error, rotate key and model, then retry with exponential backoff
       if (response.status === 429 || response.status >= 500) {
         rotateKey()
+        rotateModel()
         if (retryCount < MAX_RETRIES) {
-          console.log(`[OpenRouter] Retrying (${retryCount + 1}/${MAX_RETRIES})...`)
-          return createChatCompletion(options, retryCount + 1)
+          const delayMs = Math.pow(2, retryCount) * 1000
+          console.log(`[OpenRouter] Retrying (${retryCount + 1}/${MAX_RETRIES}) after ${delayMs}ms...`)
+          await new Promise((resolve) => setTimeout(resolve, delayMs))
+          return createChatCompletion(
+            options.model ? { ...options, model: getNextModel() } : options,
+            retryCount + 1
+          )
         }
       }
 
@@ -233,7 +242,7 @@ export async function createChatCompletion(options: OpenRouterChatOptions, retry
 
 export async function createChatCompletionStream(options: OpenRouterChatOptions, retryCount = 0) {
   const apiKey = getNextKey()
-  const model = options.model || OPENROUTER_MODEL
+  const model = options.model || getNextModel()
 
   const body: Record<string, unknown> = {
     model,
@@ -259,12 +268,18 @@ export async function createChatCompletionStream(options: OpenRouterChatOptions,
       const errorText = await response.text()
       console.error(`[OpenRouter] Stream error ${response.status}: ${errorText}`)
 
-      // If rate limited or server error, rotate key and retry
+      // If rate limited or server error, rotate key and model, then retry with exponential backoff
       if (response.status === 429 || response.status >= 500) {
         rotateKey()
+        rotateModel()
         if (retryCount < MAX_RETRIES) {
-          console.log(`[OpenRouter] Retrying stream (${retryCount + 1}/${MAX_RETRIES})...`)
-          return createChatCompletionStream(options, retryCount + 1)
+          const delayMs = Math.pow(2, retryCount) * 1000
+          console.log(`[OpenRouter] Retrying stream (${retryCount + 1}/${MAX_RETRIES}) after ${delayMs}ms...`)
+          await new Promise((resolve) => setTimeout(resolve, delayMs))
+          return createChatCompletionStream(
+            options.model ? { ...options, model: getNextModel() } : options,
+            retryCount + 1
+          )
         }
       }
 

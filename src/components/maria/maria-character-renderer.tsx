@@ -45,8 +45,12 @@ export function MariaCharacterRenderer({
       }}
       aria-hidden="true"
     >
-      <div className="h-full w-full rounded-full overflow-hidden">
-        <MariaAvatarScene />
+      <div className="h-full w-full rounded-full overflow-hidden bg-purple-950 flex items-center justify-center shadow-inner">
+        <img
+          src="/maria-face-clean.png"
+          alt="Maria Assistant"
+          className="h-full w-full object-cover rounded-full select-none pointer-events-none"
+        />
       </div>
     </div>
   )

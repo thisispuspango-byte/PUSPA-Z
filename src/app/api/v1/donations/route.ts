@@ -1,6 +1,7 @@
 import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth, requireRole } from '@/lib/auth'
+import { AuthError, requireAuth, requireRole } from '@/lib/auth'
+import { createWithGeneratedUniqueValue, generateReceiptNumber } from '@/lib/sequence'
 
 export async function GET(request: NextRequest) {
   try {
@@ -67,7 +68,7 @@ export async function GET(request: NextRequest) {
 
     const categoryTotals: Record<string, number> = {}
     categoryAgg.forEach((r) => {
-      categoryTotals[r.category] = r._sum.amount || 0
+      categoryTotals[r.category] = r._sum.amount ? Number(r._sum.amount) : 0
     })
 
     const shariahRate = totalCount > 0 ? Math.round((shariahCount / totalCount) * 100) : 100
@@ -81,7 +82,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
       stats: {
-        totalThisMonth: monthAgg._sum.amount || 0,
+        totalThisMonth: monthAgg._sum.amount ? Number(monthAgg._sum.amount) : 0,
         categoryTotals,
         receiptCount,
         shariahRate,
@@ -90,6 +91,13 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
+    if (error instanceof AuthError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
+    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
+      const status = error.message.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: error.message }, { status })
+    }
     console.error('Donations GET error:', error)
     return NextResponse.json({ error: 'Failed to fetch donations' }, { status: 500 })
   }
@@ -124,32 +132,41 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Generate receipt number
-    const count = await db.donation.count()
-    const receiptNumber = `REC-${String(count + 1).padStart(5, '0')}`
-
-    const donation = await db.donation.create({
-      data: {
-        donorId: donorId || null,
-        donorName: donorName || null,
-        category,
-        amount: parseFloat(amount),
-        method: method || null,
-        receiptNumber,
-        receiptIssued: false,
-        shariahCompliant: shariahCompliant !== false,
-        date: date || new Date().toISOString().split('T')[0],
-        notes: notes || null,
-      },
-      include: {
-        donor: {
-          select: { id: true, name: true, email: true, type: true },
-        },
-      },
+    // Generate receipt number (race condition proof)
+    const donation = await createWithGeneratedUniqueValue({
+      generateValue: generateReceiptNumber,
+      uniqueFields: ['receiptNumber'],
+      create: (receiptNumber) =>
+        db.donation.create({
+          data: {
+            donorId: donorId || null,
+            donorName: donorName || null,
+            category,
+            amount: parseFloat(amount),
+            method: method || null,
+            receiptNumber,
+            receiptIssued: false,
+            shariahCompliant: shariahCompliant !== false,
+            date: date || new Date().toISOString().split('T')[0],
+            notes: notes || null,
+          },
+          include: {
+            donor: {
+              select: { id: true, name: true, email: true, type: true },
+            },
+          },
+        }),
     })
 
     return NextResponse.json({ donation }, { status: 201 })
   } catch (error) {
+    if (error instanceof AuthError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
+    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
+      const status = error.message.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: error.message }, { status })
+    }
     console.error('Donations POST error:', error)
     return NextResponse.json({ error: 'Failed to create donation' }, { status: 500 })
   }

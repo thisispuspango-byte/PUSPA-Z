@@ -8,31 +8,34 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { SkeletonLoader } from '@/components/ui/skeleton-loader'
+
 // Dynamic imports for all modules - lazy loaded
 const moduleMap: Record<ViewId, React.ComponentType> = {
-  dashboard: dynamic(() => import('@/modules/dashboard/page'), { ssr: false }),
-  members: dynamic(() => import('@/modules/members/page'), { ssr: false }),
-  cases: dynamic(() => import('@/modules/cases/page'), { ssr: false }),
-  programmes: dynamic(() => import('@/modules/programmes/page'), { ssr: false }),
-  donations: dynamic(() => import('@/modules/donations/page'), { ssr: false }),
-  donors: dynamic(() => import('@/modules/donors/page'), { ssr: false }),
-  disbursements: dynamic(() => import('@/modules/disbursements/page'), { ssr: false }),
-  volunteers: dynamic(() => import('@/modules/volunteers/page'), { ssr: false }),
-  compliance: dynamic(() => import('@/modules/compliance/page'), { ssr: false }),
-  reports: dynamic(() => import('@/modules/reports/page'), { ssr: false }),
-  ekyc: dynamic(() => import('@/modules/ekyc/page'), { ssr: false }),
-  documents: dynamic(() => import('@/modules/documents/page'), { ssr: false }),
-  activities: dynamic(() => import('@/modules/activities/page'), { ssr: false }),
-  asnafpreneur: dynamic(() => import('@/modules/asnafpreneur/page'), { ssr: false }),
-  'sedekah-jumaat': dynamic(() => import('@/modules/sedekah-jumaat/page'), { ssr: false }),
-  docs: dynamic(() => import('@/modules/docs/page'), { ssr: false }),
-  ai: dynamic(() => import('@/modules/ai/page'), { ssr: false }),
-  settings: dynamic(() => import('@/modules/settings/page'), { ssr: false }),
-  tapsecure: dynamic(() => import('@/modules/tapsecure/page'), { ssr: false }),
-  admin: dynamic(() => import('@/modules/admin/page'), { ssr: false }),
-  'carta-organisasi': dynamic(() => import('@/modules/carta-organisasi/page'), { ssr: false }),
-  institusi: dynamic(() => import('@/modules/institusi/page'), { ssr: false }),
-  'permohonan-bantuan': dynamic(() => import('@/modules/permohonan-bantuan/page'), { ssr: false }),
+  dashboard: dynamic(() => import('@/modules/dashboard/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  members: dynamic(() => import('@/modules/members/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  cases: dynamic(() => import('@/modules/cases/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  programmes: dynamic(() => import('@/modules/programmes/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  donations: dynamic(() => import('@/modules/donations/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  donors: dynamic(() => import('@/modules/donors/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  disbursements: dynamic(() => import('@/modules/disbursements/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  volunteers: dynamic(() => import('@/modules/volunteers/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  compliance: dynamic(() => import('@/modules/compliance/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  reports: dynamic(() => import('@/modules/reports/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  ekyc: dynamic(() => import('@/modules/ekyc/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  documents: dynamic(() => import('@/modules/documents/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  activities: dynamic(() => import('@/modules/activities/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  asnafpreneur: dynamic(() => import('@/modules/asnafpreneur/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  'sedekah-jumaat': dynamic(() => import('@/modules/sedekah-jumaat/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  docs: dynamic(() => import('@/modules/docs/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  ai: dynamic(() => import('@/modules/ai/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  settings: dynamic(() => import('@/modules/settings/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  tapsecure: dynamic(() => import('@/modules/tapsecure/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  admin: dynamic(() => import('@/modules/admin/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  'carta-organisasi': dynamic(() => import('@/modules/carta-organisasi/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  institusi: dynamic(() => import('@/modules/institusi/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  'permohonan-bantuan': dynamic(() => import('@/modules/permohonan-bantuan/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
+  'puspa-niaga': dynamic(() => import('@/modules/puspa-niaga/page'), { ssr: false, loading: () => <SkeletonLoader /> }),
 }
 
 function AccessDenied({ view }: { view: ViewId }) {

@@ -32,6 +32,7 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
   'carta-organisasi': { en: 'Organization Chart', ms: 'Carta Organisasi' },
   institusi: { en: 'Institutions & Areas', ms: 'Institusi & Kawasan Bantuan' },
   'permohonan-bantuan': { en: 'Aid Application', ms: 'Borang Permohonan Bantuan' },
+  'puspa-niaga': { en: 'PUSPA Niaga', ms: 'PUSPA Niaga' },
 }
 
 export function AppHeader() {
@@ -41,7 +42,8 @@ export function AppHeader() {
   const title = viewTitles[currentView] || { en: currentView, ms: currentView }
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 lg:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-white/20 bg-background/70 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 lg:px-6 dark:border-white/10">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <SidebarTrigger className="-ml-1 size-7" />
       <Separator orientation="vertical" className="mr-2 h-4" />
 

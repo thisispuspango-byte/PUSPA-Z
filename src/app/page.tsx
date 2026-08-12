@@ -11,6 +11,7 @@ import { AiChatPanel } from '@/components/ai-chat-panel'
 import { MariaFloatingWidget } from '@/components/maria/maria-floating-widget'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
+import Aurora from '@/components/Aurora'
 
 // Check if Supabase is configured
 const isSupabaseConfigured = !!(
@@ -81,19 +82,31 @@ export default function Home() {
 
   // Main app (authenticated or no Supabase = simulated auth)
   return (
-    <SidebarProvider>
-      <AppSidebar />
+    <div className="relative min-h-screen">
+      {/* Aurora backdrop — fixed light source behind the glass shell */}
+      <div aria-hidden="true" className="fixed inset-0 -z-10 pointer-events-none">
+        <Aurora colorStops={['#6A0DAD', '#9370DB', '#3B0764']} amplitude={1} speed={0.5} />
+      </div>
 
-      <SidebarInset className={cn("transition-all duration-300 ease-in-out", aiChatOpen ? "md:pr-96" : "")}>
-        <AppHeader />
-        <main className="p-4 lg:p-6">
-          <ViewRenderer />
-        </main>
-      </SidebarInset>
+      <SidebarProvider>
+        <AppSidebar />
 
-      {/* AI Chat Panel — fixed positioned */}
-      <AiChatPanel />
-      <MariaFloatingWidget />
-    </SidebarProvider>
+        <SidebarInset
+          className={cn(
+            'relative bg-background/70 backdrop-blur-2xl transition-all duration-300 ease-in-out',
+            aiChatOpen ? 'md:pr-96' : '',
+          )}
+        >
+          <AppHeader />
+          <main className="p-4 lg:p-6">
+            <ViewRenderer />
+          </main>
+        </SidebarInset>
+
+        {/* AI Chat Panel — fixed positioned */}
+        <AiChatPanel />
+        <MariaFloatingWidget />
+      </SidebarProvider>
+    </div>
   )
 }

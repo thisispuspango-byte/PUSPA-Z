@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
 
         const donationCategoryTotals: Record<string, number> = {}
         donations.forEach((d) => {
-          donationCategoryTotals[d.category] = (donationCategoryTotals[d.category] || 0) + d.amount
+          donationCategoryTotals[d.category] = (donationCategoryTotals[d.category] || 0) + Number(d.amount)
         })
 
         // Monthly donation trends (last 12 months)
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
               const created = new Date(don.createdAt)
               return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
             })
-            .reduce((sum, don) => sum + don.amount, 0)
+            .reduce((sum, don) => sum + Number(don.amount), 0)
           monthlyDonations.push({ month: monthStr, amount })
         }
 
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
         const disbursementCategoryTotals: Record<string, number> = {}
         const disbursementStatusTotals: Record<string, number> = {}
         disbursements.forEach((d) => {
-          disbursementCategoryTotals[d.category] = (disbursementCategoryTotals[d.category] || 0) + d.amount
+          disbursementCategoryTotals[d.category] = (disbursementCategoryTotals[d.category] || 0) + Number(d.amount)
           disbursementStatusTotals[d.status] = (disbursementStatusTotals[d.status] || 0) + 1
         })
 
@@ -129,14 +129,14 @@ export async function GET(request: NextRequest) {
               const created = new Date(dis.createdAt)
               return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
             })
-            .reduce((sum, dis) => sum + dis.amount, 0)
+            .reduce((sum, dis) => sum + Number(dis.amount), 0)
           monthlyDisbursements.push({ month: monthStr, amount })
         }
 
-        const totalDonations = donations.reduce((s, d) => s + d.amount, 0)
+        const totalDonations = donations.reduce((s, d) => s + Number(d.amount), 0)
         const totalDisbursed = disbursements
           .filter((d) => d.status === 'disbursed' || d.status === 'verified')
-          .reduce((s, d) => s + d.amount, 0)
+          .reduce((s, d) => s + Number(d.amount), 0)
         const shariahRate = donations.length > 0
           ? Math.round((donations.filter((d) => d.shariahCompliant).length / donations.length) * 100)
           : 100
@@ -230,13 +230,13 @@ export async function GET(request: NextRequest) {
         programmes.forEach((p) => {
           programmeStatusCounts[p.status] = (programmeStatusCounts[p.status] || 0) + 1
           programmeCategoryCounts[p.category] = (programmeCategoryCounts[p.category] || 0) + 1
-          totalBudget += p.budget
-          totalSpent += p.spent
+          totalBudget += Number(p.budget)
+          totalSpent += Number(p.spent)
           budgetUtilization.push({
             name: '', // Would need name from programme - using generic
-            budget: p.budget,
-            spent: p.spent,
-            utilization: p.budget > 0 ? Math.round((p.spent / p.budget) * 100) : 0,
+            budget: Number(p.budget),
+            spent: Number(p.spent),
+            utilization: Number(p.budget) > 0 ? Math.round((Number(p.spent) / Number(p.budget)) * 100) : 0,
             beneficiaries: p.beneficiaries.length,
             target: p.targetBeneficiaries,
           })
@@ -256,9 +256,9 @@ export async function GET(request: NextRequest) {
 
         const programmeBudgetData = programmesWithNames.map((p) => ({
           name: p.name,
-          budget: p.budget,
-          spent: p.spent,
-          utilization: p.budget > 0 ? Math.round((p.spent / p.budget) * 100) : 0,
+          budget: Number(p.budget),
+          spent: Number(p.spent),
+          utilization: Number(p.budget) > 0 ? Math.round((Number(p.spent) / Number(p.budget)) * 100) : 0,
           beneficiaries: p.beneficiaries.length,
           target: p.targetBeneficiaries,
           status: p.status,

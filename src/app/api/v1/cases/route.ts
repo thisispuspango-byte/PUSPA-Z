@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { requireAuth, requireRole } from '@/lib/auth'
+import { AuthError, requireAuth, requireRole } from '@/lib/auth'
 
 // GET /api/v1/cases — List cases with pagination, search, and filters
 export async function GET(request: NextRequest) {
@@ -83,6 +83,13 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
+    if (error instanceof AuthError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
+    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
+      const status = error.message.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: error.message }, { status })
+    }
     console.error('Error fetching cases:', error)
     return NextResponse.json(
       { error: 'Failed to fetch cases' },
@@ -175,6 +182,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ data: maskedCaseRecord }, { status: 201 })
   } catch (error) {
+    if (error instanceof AuthError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
+    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
+      const status = error.message.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: error.message }, { status })
+    }
     console.error('Error creating case:', error)
     return NextResponse.json(
       { error: 'Failed to create case' },

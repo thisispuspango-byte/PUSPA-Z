@@ -53,8 +53,8 @@ export async function getDonationStats() {
   let total = 0
 
   for (const d of donations) {
-    byCategory[d.category] = (byCategory[d.category] || 0) + d.amount
-    total += d.amount
+    byCategory[d.category] = (byCategory[d.category] || 0) + Number(d.amount)
+    total += Number(d.amount)
   }
 
   return {

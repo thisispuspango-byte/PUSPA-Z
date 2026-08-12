@@ -1,6 +1,7 @@
 import { db } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { requireAuth } from '@/lib/auth';
 
 const institutionSchema = z.object({
   name: z.string().min(1),
@@ -12,6 +13,7 @@ const institutionSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    await requireAuth();
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type') || undefined;
     const activeOnly = searchParams.get('activeOnly') === 'true';
@@ -26,14 +28,18 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: institutions });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[INSTITUTIONS_GET_ERROR]:', error);
-    return NextResponse.json({ error: 'Gagal mengambil data institusi' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Gagal mengambil data institusi' },
+      { status: error.message?.includes('Sesi') ? 401 : 500 }
+    );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth();
     const body = await request.json();
     const validated = institutionSchema.safeParse(body);
 
@@ -49,8 +55,11 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: institution }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[INSTITUTIONS_POST_ERROR]:', error);
-    return NextResponse.json({ error: 'Gagal mencipta institusi' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Gagal mencipta institusi' },
+      { status: error.message?.includes('Sesi') ? 401 : 500 }
+    );
   }
 }

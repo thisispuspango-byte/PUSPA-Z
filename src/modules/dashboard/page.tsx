@@ -1,39 +1,61 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { type ReactNode } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { SkeletonLoader } from '@/components/ui/skeleton-loader'
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, BarChart, Bar
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts'
 import {
-  Users, FileText, HandCoins, ShieldCheck,
-  ArrowUpRight, ArrowDownRight, Activity
+  Activity,
+  ArrowDownRight,
+  ArrowUpRight,
+  FileText,
+  HandCoins,
+  ShieldCheck,
+  Users,
+  Package,
+  Bot,
+  PlusCircle,
+  TrendingUp,
+  Sparkles,
+  ClipboardList,
+  type LucideIcon,
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { useAppStore } from '@/lib/store'
 
-// ─── Type Definitions ──────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────
 
-type TrendItem = {
-  name: string
-  sumbangan: number
-  agihan: number
-}
-
-type AsnafItem = {
-  name: string
-  value: number
-  color: string
-}
-
-type CaseStatusItem = {
-  name: string
-  total: number
-}
+type TrendItem = { name: string; sumbangan: number; agihan: number }
+type AsnafItem = { name: string; value: number; color: string }
+type CaseStatusItem = { name: string; total: number }
 
 type DashboardStats = {
   totalMembers: number
   activeCases: number
+  sumbangan?: number
+  compliance?: number
 }
 
 type DashboardData = {
@@ -45,56 +67,85 @@ type DashboardData = {
 
 type CustomTooltipProps = {
   active?: boolean
-  payload?: Array<{ color: string; name: string; value: number }>
+  payload?: Array<{ name?: string; value?: number; color?: string }>
   label?: string
 }
 
 type KpiCardProps = {
   title: string
-  value: string | number
+  value: string
   sub: string
-  icon: React.ComponentType<{ size?: number }>
+  icon: LucideIcon
   trend: number
+  badgeText?: string
 }
 
-// ─── Demo Data ──────────────────────────────────────────────────
+// ─── Demo fallback data (used when API is unavailable) ────────────────────
 
-const DEFAULT_TREND = [
-  { name: 'Jan', sumbangan: 45000, agihan: 32000 },
-  { name: 'Feb', sumbangan: 52000, agihan: 38000 },
-  { name: 'Mar', sumbangan: 48000, agihan: 41000 },
-  { name: 'Apr', sumbangan: 71000, agihan: 55000 },
-  { name: 'Mei', sumbangan: 65000, agihan: 48000 },
-  { name: 'Jun', sumbangan: 89000, agihan: 62000 },
+const DEFAULT_TREND: TrendItem[] = [
+  { name: 'Jan', sumbangan: 51500, agihan: 40200 },
+  { name: 'Feb', sumbangan: 48200, agihan: 37800 },
+  { name: 'Mac', sumbangan: 53400, agihan: 41900 },
+  { name: 'Apr', sumbangan: 49800, agihan: 37100 },
+  { name: 'Mei', sumbangan: 57600, agihan: 45300 },
+  { name: 'Jun', sumbangan: 64100, agihan: 49800 },
 ]
 
-const DEFAULT_ASNAF = [
-  { name: 'Fakir', value: 400, color: 'var(--chart-1)' },
-  { name: 'Miskin', value: 750, color: 'var(--chart-2)' },
-  { name: 'Muallaf', value: 120, color: 'var(--chart-3)' },
-  { name: 'Gharimin', value: 85, color: 'var(--chart-4)' },
+const DEFAULT_ASNAF: AsnafItem[] = [
+  { name: 'Fakir', value: 320, color: '#a78bfa' },
+  { name: 'Miskin', value: 240, color: '#8b5cf6' },
+  { name: 'Riqab', value: 180, color: '#f97316' },
+  { name: 'Gharimin', value: 140, color: '#10b981' },
+  { name: 'Fisabilillah', value: 110, color: '#eab308' },
+  { name: 'Ibnu Sabil', value: 90, color: '#ef4444' },
+  { name: 'Muallaf', value: 60, color: '#c084fc' },
+  { name: 'Amil', value: 25, color: '#94a3b8' },
 ]
 
-const DEFAULT_CASES = [
-  { name: 'Intake', total: 45 },
-  { name: 'Verification', total: 32 },
-  { name: 'Assessment', total: 28 },
-  { name: 'Approval', total: 15 },
-  { name: 'Disbursement', total: 54 },
+const DEFAULT_CASES: CaseStatusItem[] = [
+  { name: 'Aktif', total: 96 },
+  { name: 'Dalam Proses', total: 42 },
+  { name: 'Selesai', total: 31 },
+  { name: 'Ditunda', total: 5 },
 ]
 
-// ─── Sub-Components ─────────────────────────────────────────────
+const DEFAULT_STATS: DashboardStats = { totalMembers: 1355, activeCases: 174 }
+
+// ─── Shared glass card style for the Liquid Glass treatment ───────────────
+
+const glassCard =
+  'relative overflow-hidden border-none bg-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.06)] ring-1 ring-white/40 backdrop-blur-xl dark:bg-white/[0.06] dark:ring-white/10'
+
+function GlassCard({ className = '', children }: { className?: string; children: ReactNode }) {
+  return (
+    <Card className={`${glassCard} ${className}`}>
+      {/* Top glass highlight */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent dark:via-white/20"
+      />
+      {children}
+    </Card>
+  )
+}
+
+// ─── Chart tooltip ────────────────────────────────────────────────────────
 
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-xl border bg-background/95 p-3 shadow-xl backdrop-blur-sm">
-        <p className="mb-1 text-xs font-bold text-muted-foreground uppercase">{label}</p>
-        {payload.map((entry, index: number) => (
+      <div className="rounded-xl border border-white/20 bg-background/80 p-3 shadow-xl backdrop-blur-md dark:border-white/10">
+        <p className="mb-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          {label}
+        </p>
+        {payload.map((entry, index) => (
           <div key={index} className="flex items-center gap-2 py-0.5">
-            <div className="h-2 w-2 rounded-full bg-[var(--bg-color)]" style={{ '--bg-color': entry.color } as any} />
+            <div
+              className="h-2 w-2 rounded-full"
+              style={{ backgroundColor: entry.color }}
+            />
             <span className="text-sm font-medium">{entry.name}:</span>
-            <span className="text-sm font-bold">RM {entry.value.toLocaleString()}</span>
+            <span className="text-sm font-bold">RM {entry.value?.toLocaleString()}</span>
           </div>
         ))}
       </div>
@@ -103,283 +154,391 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   return null
 }
 
+// ─── KPI Card ─────────────────────────────────────────────────────────────
+
 const KpiCard = ({ title, value, sub, icon: Icon, trend }: KpiCardProps) => (
-  <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-card to-muted/30">
+  <GlassCard>
     <CardContent className="p-6">
       <div className="flex items-center justify-between">
-        <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/10">
           <Icon size={24} />
         </div>
-        <Badge variant={trend > 0 ? "default" : "destructive"} className="h-fit gap-1 bg-opacity-20 text-[10px] font-bold">
+        <Badge
+          variant={trend > 0 ? 'default' : 'destructive'}
+          className="h-fit gap-1 bg-opacity-20 text-[10px] font-bold"
+        >
           {trend > 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
           {Math.abs(trend)}%
         </Badge>
       </div>
-      <div className="mt-4">
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <h3 className="text-2xl font-bold tracking-tight">{value}</h3>
-        <p className="text-[10px] text-muted-foreground mt-1">{sub}</p>
-      </div>
+      <p className="mt-4 text-sm font-medium text-muted-foreground">{title}</p>
+      <p className="mt-1 text-2xl font-black tracking-tight text-foreground">{value}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{sub}</p>
     </CardContent>
-  </Card>
+  </GlassCard>
 )
 
-// ─── Main Component ─────────────────────────────────────────────
+// ─── Dashboard ────────────────────────────────────────────────────────────
 
-export default function DashboardOverview() {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
-  const [loading, setLoading] = useState(true)
+export default function Dashboard() {
+  const { setView, setAiChatOpen } = useAppStore()
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetch('/api/v1/dashboard')
-        const ct = res.headers.get('content-type') || ''
-        if (!res.ok || !ct.includes('application/json')) {
-          // API returned HTML error page (e.g. DB connection failed) — fall back to defaults
-          console.warn('[Dashboard] API returned non-JSON response, using demo data')
-          return
-        }
-        const json = await res.json()
-        if (json.success) setDashboardData(json.data as DashboardData)
-      } catch (err) {
-        console.warn('[Dashboard] Fetch failed, using demo data', err)
-      } finally {
-        setLoading(false)
-      }
+  const { data: dashboardData, isLoading, error } = useQuery<DashboardData>({
+    queryKey: ['dashboard'],
+    queryFn: async () => {
+      const res = await fetch('/api/v1/dashboard')
+      if (!res.ok) throw new Error('Failed to fetch dashboard')
+      return res.json()
     }
-    loadData()
-  }, [])
+  })
 
-  const trendData: TrendItem[] = dashboardData?.trend || DEFAULT_TREND
-  const asnafData: AsnafItem[] = dashboardData?.asnaf || DEFAULT_ASNAF
-  const caseStatusData: CaseStatusItem[] = dashboardData?.caseStatus || DEFAULT_CASES
-  const stats: DashboardStats = dashboardData?.stats || { totalMembers: 1355, activeCases: 174 }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">Memuatkan…</p>
-        </div>
-      </div>
-    )
+  if (error) {
+    toast.error('Gagal memuat turun data Dashboard', {
+      description: error.message
+    })
   }
 
+  if (isLoading) {
+    return <SkeletonLoader />
+  }
+
+  // Merge fetched data with demo fallbacks so charts never render empty
+  const trendData = dashboardData?.trend?.length ? dashboardData.trend : DEFAULT_TREND
+  const asnafData = dashboardData?.asnaf?.length ? dashboardData.asnaf : DEFAULT_ASNAF
+  const caseData = dashboardData?.caseStatus?.length
+    ? dashboardData.caseStatus
+    : DEFAULT_CASES
+  const stats: DashboardStats = dashboardData?.stats || DEFAULT_STATS
+
+  const sumbangan = stats.sumbangan ?? 101000
+  const compliance = stats.compliance ?? 96.8
+  const totalAsnaf = stats.totalMembers || asnafData.reduce((s, i) => s + i.value, 0)
+
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      {/* Top Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-6 pb-8">
+      {/* ─── Executive Welcome Header & Quick Action Launchers ─── */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between rounded-2xl bg-gradient-to-r from-purple-950/80 via-purple-900/40 to-indigo-950/60 p-6 ring-1 ring-purple-500/30 shadow-xl backdrop-blur-xl">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-2xl font-black tracking-tight text-white">
+              Papan Pemuka PUSPA V5
+            </h1>
+            <Badge className="bg-purple-500/20 text-purple-200 ring-1 ring-purple-400/30 text-[11px] font-bold">
+              LIVE OS
+            </Badge>
+          </div>
+          <p className="text-xs text-purple-200/80 font-medium">
+            Sistem Pentadbiran Terpusat Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)
+          </p>
+        </div>
+
+        {/* 1-Click Quick Action Launchers */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <Button
+            onClick={() => setView('permohonan-bantuan')}
+            size="sm"
+            className="bg-purple-600 hover:bg-purple-500 text-white font-bold gap-1.5 shadow-md rounded-xl text-xs"
+          >
+            <PlusCircle className="h-4 w-4" /> Borang Bantuan
+          </Button>
+          <Button
+            onClick={() => setView('donations')}
+            size="sm"
+            variant="outline"
+            className="border-purple-500/40 text-purple-100 hover:bg-purple-900/50 gap-1.5 rounded-xl text-xs"
+          >
+            <HandCoins className="h-4 w-4 text-emerald-400" /> Rekod Derma
+          </Button>
+          <Button
+            onClick={() => setView('puspa-niaga')}
+            size="sm"
+            variant="outline"
+            className="border-purple-500/40 text-purple-100 hover:bg-purple-900/50 gap-1.5 rounded-xl text-xs"
+          >
+            <Package className="h-4 w-4 text-amber-400" /> PUSPA Niaga
+          </Button>
+          <Button
+            onClick={() => setAiChatOpen(true)}
+            size="sm"
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold gap-1.5 shadow-md rounded-xl text-xs"
+          >
+            <Bot className="h-4 w-4 text-purple-200" /> Maria AI
+          </Button>
+        </div>
+      </div>
+
+      {/* ─── 4-Column Bento KPI Cards ─── */}
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
-          title="Jumlah Ahli Asnaf"
+          title="Ahli Asnaf Berdaftar"
           value={stats.totalMembers.toLocaleString()}
-          sub="↑ 42 ahli baru bulan ini"
+          sub="Profil Asnaf Sah & Terverifikasi"
           icon={Users}
           trend={12.5}
         />
         <KpiCard
-          title="Kes Dalam Proses"
-          value={stats.activeCases.toLocaleString()}
-          sub="8 kes urgent perlukan tindakan"
-          icon={FileText}
-          trend={-3.2}
+          title="Pengurusan Kes Aktif"
+          value={stats.activeCases.toString()}
+          sub="Permohonan Memerlukan Tindakan"
+          icon={ClipboardList}
+          trend={4.5}
         />
         <KpiCard
-          title="Jumlah Sumbangan"
-          value="RM 89,240"
-          sub="Kutipan Zakat & Sedekah"
+          title="Sumbangan Terkumpul"
+          value={`RM ${sumbangan.toLocaleString()}`}
+          sub="Zakat, Infaq & Sedekah Jumaat"
           icon={HandCoins}
-          trend={8.7}
+          trend={14.25}
         />
         <KpiCard
-          title="Skor Pematuhan"
-          value="94.2%"
-          sub="ROSM & LHDN Up-to-date"
+          title="Audit & Pematuhan Syariah"
+          value={`${compliance}%`}
+          sub="ROSM & LHDN Audited Clean"
           icon={ShieldCheck}
           trend={2.1}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Main Area Chart */}
-        <Card className="lg:col-span-8 shadow-lg border-none">
+      {/* ─── Trend + Asnaf Row ─── */}
+      <div className="grid gap-4 lg:grid-cols-12">
+        {/* Trend (Sumbangan vs Agihan) */}
+        <GlassCard className="lg:col-span-8">
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <div>
-              <CardTitle className="text-lg font-bold">Trend Sumbangan & Agihan</CardTitle>
-              <CardDescription>Prestasi kewangan bagi 6 bulan terakhir</CardDescription>
+              <CardTitle className="text-base font-bold">Aliran Kewangan</CardTitle>
+              <CardDescription className="text-xs">
+                Sumbangan vs Agihan (6 Bulan)
+              </CardDescription>
             </div>
-            <div className="flex gap-2">
-              <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-primary" /><span className="text-[10px] text-muted-foreground">Sumbangan</span></div>
-              <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-chart-2" /><span className="text-[10px] text-muted-foreground">Agihan</span></div>
-            </div>
-          </CardHeader>
-          <CardContent className="h-[350px] pl-0">
-            <ResponsiveContainer width="100%" height="100%" debounce={1}>
-              <AreaChart data={trendData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorSumbangan" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorAgihan" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--chart-2)" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="var(--chart-2)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
-                  dy={10}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
-                  tickFormatter={(value) => `RM${value / 1000}k`}
-                />
-                <Tooltip content={<CustomTooltip />} />
-                <Area
-                  type="monotone"
-                  dataKey="sumbangan"
-                  stroke="var(--primary)"
-                  strokeWidth={3}
-                  fillOpacity={1}
-                  fill="url(#colorSumbangan)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="agihan"
-                  stroke="var(--chart-2)"
-                  strokeWidth={3}
-                  fillOpacity={1}
-                  fill="url(#colorAgihan)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Donut Chart */}
-        <Card className="lg:col-span-4 shadow-lg border-none">
-          <CardHeader>
-            <CardTitle className="text-lg font-bold">Komposisi Ahli</CardTitle>
-            <CardDescription>Mengikut kategori asnaf</CardDescription>
-          </CardHeader>
-          <CardContent className="h-[300px] relative">
-            <ResponsiveContainer width="100%" height="100%" debounce={1}>
-              <PieChart>
-                <Pie
-                  data={asnafData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={70}
-                  outerRadius={100}
-                  paddingAngle={8}
-                  dataKey="value"
-                >
-                  {asnafData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-3xl font-black">1,355</span>
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Jumlah Ahli</span>
-            </div>
-          </CardContent>
-          <div className="px-6 pb-6 space-y-2">
-            {asnafData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-[var(--bg-color)]" style={{ '--bg-color': item.color } as any} />
-                  <span className="text-muted-foreground">{item.name}</span>
-                </div>
-                <span className="font-bold">{Math.round((item.value / 1355) * 100)}%</span>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Bar Chart - Case Flow */}
-        <Card className="lg:col-span-6 shadow-lg border-none">
-          <CardHeader>
-            <CardTitle className="text-lg font-bold">Aliran Status Kes</CardTitle>
-            <CardDescription>Jumlah kes mengikut peringkat aliran kerja</CardDescription>
-          </CardHeader>
-          <CardContent className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%" debounce={1}>
-              <BarChart data={caseStatusData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
-                />
-                <YAxis hide />
-                <Tooltip
-                  cursor={{ fill: 'var(--muted)', opacity: 0.4 }}
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                />
-                <Bar
-                  dataKey="total"
-                  fill="var(--primary)"
-                  radius={[6, 6, 0, 0]}
-                  barSize={40}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Recent Activity List */}
-        <Card className="lg:col-span-6 shadow-lg border-none">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle className="text-lg font-bold">Aktiviti Terkini</CardTitle>
-              <CardDescription>Log sistem masa nyata</CardDescription>
-            </div>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <Badge variant="outline" className="bg-background/60 text-[10px]">
+              <Activity size={10} className="mr-1" /> Live
+            </Badge>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {[
-                { user: 'Admin PUSPA', action: 'meluluskan agihan bantuan', target: 'DB-2024-0012', time: '2 minit lepas', color: 'bg-emerald-500' },
-                { user: 'Siti Ops', action: 'mendaftar ahli baru', target: 'Ahmad bin Ali', time: '14 minit lepas', color: 'bg-blue-500' },
-                { user: 'Sistem', action: 'auto-jana laporan', target: 'Audit Q1 2025', time: '1 jam lepas', color: 'bg-purple-500' },
-                { user: 'Zaki Finance', action: 'merekod sumbangan', target: 'RM&nbsp;5,000 (Zakat)', time: '3 jam lepas', color: 'bg-amber-500' },
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="relative">
-                    <div className={`h-2.5 w-2.5 rounded-full ${item.color} mt-1.5`} />
-                    {i < 3 && <div className="absolute top-4 left-[4.5px] w-[1px] h-10 bg-border" />}
+            <div className="h-[280px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="sumbanganGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.35} />
+                      <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="agihanGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--chart-2)" stopOpacity={0.35} />
+                      <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--border)"
+                    vertical={false}
+                    opacity={0.6}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                    axisLine={false}
+                    tickLine={false}
+                    tickFormatter={(v: number) => `RM ${(v / 1000).toFixed(0)}k`}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="sumbangan"
+                    name="Sumbangan"
+                    stroke="var(--chart-1)"
+                    strokeWidth={2.5}
+                    fill="url(#sumbanganGrad)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="agihan"
+                    name="Agihan"
+                    stroke="var(--chart-2)"
+                    strokeWidth={2.5}
+                    fill="url(#agihanGrad)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </GlassCard>
+
+        {/* Asnaf Distribution */}
+        <GlassCard className="lg:col-span-4">
+          <CardHeader>
+            <CardTitle className="text-base font-bold">Agihan Mengikut Asnaf</CardTitle>
+            <CardDescription className="text-xs">
+              Pengagihan Zakat (8 Asnaf)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="relative mx-auto h-[200px] w-full max-w-[260px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={asnafData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={62}
+                    outerRadius={92}
+                    paddingAngle={4}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {asnafData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              {/* Center stat — bound to live stats */}
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-3xl font-black tracking-tight">
+                  {stats.totalMembers.toLocaleString()}
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Penerima
+                </span>
+              </div>
+            </div>
+
+            {/* Legend — /stats.totalMembers no longer hardcoded */}
+            <div className="mt-5 space-y-2">
+              {asnafData.map((item) => {
+                const pct = Math.round((item.value / totalAsnaf) * 100)
+                return (
+                  <div key={item.name} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="h-2 w-2 rounded-full"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="text-muted-foreground">{item.name}</span>
+                    </div>
+                    <span className="font-bold">{pct}%</span>
                   </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-xs leading-none">
-                      <span className="font-bold">{item.user}</span> {item.action}{' '}
-                      <span className="font-medium text-primary">{item.target}</span>
-                    </p>
-                    <p className="text-[10px] text-muted-foreground">{item.time}</p>
+                )
+              })}
+            </div>
+          </CardContent>
+        </GlassCard>
+      </div>
+
+      {/* ─── Case Status + Activity Row ─── */}
+      <div className="grid gap-4 lg:grid-cols-12">
+        {/* Case Status (neobrutalist bars) */}
+        <GlassCard className="lg:col-span-7">
+          <CardHeader>
+            <CardTitle className="text-base font-bold">Status Kes</CardTitle>
+            <CardDescription className="text-xs">
+              Ringkasan Kes (Jumlah: {stats.activeCases})
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[240px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={caseData}
+                  margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
+                  barCategoryGap="28%"
+                >
+                  <defs>
+                    <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--primary)" />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--color-puspa-dark, var(--primary))"
+                        stopOpacity={0.85}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--border)"
+                    vertical={false}
+                    opacity={0.6}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                    axisLine={false}
+                    tickLine={false}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    cursor={{ fill: 'var(--muted-foreground)', opacity: 0.08 }}
+                    content={<CustomTooltip />}
+                  />
+                  <Bar
+                    dataKey="total"
+                    name="Kes"
+                    fill="url(#barGrad)"
+                    radius={[8, 8, 2, 2]}
+                    barSize={44}
+                    className="transition-opacity hover:opacity-90"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </GlassCard>
+
+        {/* Recent Activity */}
+        <GlassCard className="lg:col-span-5">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-base font-bold">Aktiviti Terkini</CardTitle>
+            <span className="cursor-pointer text-xs font-semibold text-primary hover:underline">
+              Lihat Semua Aktiviti
+            </span>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-5">
+              {[
+                {
+                  icon: <HandCoins size={16} />,
+                  text: 'Sumbangan baharu RM500 diterima',
+                  time: 'Baru sahaja',
+                },
+                {
+                  icon: <FileText size={16} />,
+                  text: 'Kes bantuan dimulakan untuk Asnaf Fakir',
+                  time: '10 minit lalu',
+                },
+                {
+                  icon: <Users size={16} />,
+                  text: 'Ahli baharu mendaftar: Ahmad Zaki',
+                  time: '25 minit lalu',
+                },
+                {
+                  icon: <Activity size={16} />,
+                  text: 'Laporan bulanan dijana',
+                  time: '1 jam lalu',
+                },
+              ].map((a, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    {a.icon}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{a.text}</p>
+                    <p className="text-xs text-muted-foreground">{a.time}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <button
-              type="button"
-              className="w-full mt-6 py-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md"
-            >
-              Lihat Semua Aktiviti
-            </button>
           </CardContent>
-        </Card>
+        </GlassCard>
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ export const aiRequestSchema = z.object({
     role: z.enum(['user', 'assistant', 'system']),
     content: z.string().min(1).max(10000)
   })).min(1),
-  userId: z.string().uuid().optional(),
+  userId: z.string().cuid().optional(),
   userRole: z.enum(['staff', 'admin', 'developer']).optional(),
   stream: z.boolean().optional()
 })
@@ -46,7 +46,7 @@ export const createCaseSchema = z.object({
   title: z.string().min(5).max(200),
   description: z.string().min(10),
   type: z.enum(['welfare', 'medical', 'education', 'housing', 'emergency', 'financial']),
-  asnafId: z.string().uuid(),
+  asnafId: z.string().cuid(),
   priority: z.enum(['low', 'medium', 'high', 'urgent']).optional()
 })
 

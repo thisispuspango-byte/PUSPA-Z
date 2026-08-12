@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
 
 export interface AuthUser {
   id: string
@@ -19,9 +20,23 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 
     if (!user) return null
 
-    // Extract role from user metadata or default to staff
-    const role = normalizeRole(user.user_metadata?.role)
-    const name = user.user_metadata?.name || user.email?.split('@')[0] || 'User'
+    let role: 'staff' | 'admin' | 'developer' = 'staff'
+    let name = user.user_metadata?.name || user.email?.split('@')[0] || 'User'
+
+    if (user.email || user.id) {
+      const dbUser = await db.user.findFirst({
+        where: {
+          OR: [
+            { id: user.id },
+            ...(user.email ? [{ email: user.email }] : []),
+          ],
+        },
+      })
+      if (dbUser) {
+        role = normalizeRole(dbUser.role)
+        if (dbUser.name) name = dbUser.name
+      }
+    }
 
     return {
       id: user.id,
@@ -34,10 +49,19 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   }
 }
 
+export class AuthError extends Error {
+  status: number
+  constructor(message: string, status: number = 401) {
+    super(message)
+    this.name = 'AuthError'
+    this.status = status
+  }
+}
+
 export async function requireAuth(): Promise<AuthUser> {
   const user = await getCurrentUser()
   if (!user) {
-    throw new Error('Sesi tidak sah. Sila log masuk semula.')
+    throw new AuthError('Sesi tidak sah. Sila log masuk semula.', 401)
   }
   return user
 }
@@ -46,7 +70,7 @@ export async function requireRole(minRole: 'staff' | 'admin' | 'developer'): Pro
   const user = await requireAuth()
   const roleLevel = { staff: 1, admin: 2, developer: 3 }
   if (roleLevel[user.role] < roleLevel[minRole]) {
-    throw new Error(`Akses ditolak. Peranan minimum: ${minRole}`)
+    throw new AuthError(`Akses ditolak. Peranan minimum: ${minRole}`, 403)
   }
   return user
 }

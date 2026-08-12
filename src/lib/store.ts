@@ -7,6 +7,7 @@ export type ViewId =
   | 'documents' | 'activities' | 'donors' | 'ai' | 'settings' 
   | 'tapsecure' | 'admin' | 'asnafpreneur' | 'sedekah-jumaat' | 'docs'
   | 'carta-organisasi' | 'institusi' | 'permohonan-bantuan'
+  | 'puspa-niaga'
 
 interface AppState {
   // Navigation

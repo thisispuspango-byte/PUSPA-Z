@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     const totalDisbursed = allDisbursements
       .filter((d) => d.status === 'disbursed' || d.status === 'verified')
-      .reduce((sum, d) => sum + d.amount, 0)
+      .reduce((sum, d) => sum + Number(d.amount), 0)
 
     const pendingCount = allDisbursements.filter((d) => d.status === 'pending').length
     const approvedCount = allDisbursements.filter((d) => d.status === 'approved').length

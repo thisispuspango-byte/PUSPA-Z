@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth, requireRole } from '@/lib/auth'
+import { AuthError, requireAuth, requireRole } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     // Enrich with computed fields and mask PII
     const enrichedDonors = donors.map((donor) => {
-      const totalDonated = donor.donations.reduce((sum, d) => sum + d.amount, 0)
+      const totalDonated = donor.donations.reduce((sum, d) => sum + Number(d.amount), 0)
       const donationCount = donor.donations.length
       return {
         ...donor,
@@ -67,6 +67,13 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
+    if (error instanceof AuthError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
+    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
+      const status = error.message.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: error.message }, { status })
+    }
     console.error('Donors GET error:', error)
     return NextResponse.json({ error: 'Failed to fetch donors' }, { status: 500 })
   }
@@ -130,6 +137,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ donor }, { status: 201 })
   } catch (error) {
+    if (error instanceof AuthError) {
+      return NextResponse.json({ error: error.message }, { status: error.status })
+    }
+    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
+      const status = error.message.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: error.message }, { status })
+    }
     console.error('Donors POST error:', error)
     return NextResponse.json({ error: 'Failed to create donor' }, { status: 500 })
   }

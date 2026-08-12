@@ -32,7 +32,8 @@ const viewAccess: Record<ViewId, Role> = {
   'carta-organisasi': 'staff',
   institusi: 'staff',
   'permohonan-bantuan': 'staff',
-}
+    'puspa-niaga': 'staff',
+  }
 
 export function canAccessView(view: ViewId, userRole: Role): boolean {
   const requiredRole = viewAccess[view] || 'staff'

@@ -64,6 +64,8 @@ export async function updateSession(request: NextRequest) {
   // Protected routes - redirect to login if not authenticated
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
   const isApiV1Route = request.nextUrl.pathname.startsWith('/api/v1/')
+  const isAdminApiRoute = request.nextUrl.pathname.startsWith('/api/admin')
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isTelegramAiRoute = request.nextUrl.pathname === '/api/v1/ai/telegram'
   /** Web Maria chat: allow anonymous POST unless PUSPA_REQUIRE_AUTH_FOR_AI=true */
   const isMariaWebAiPost =
@@ -72,6 +74,32 @@ export async function updateSession(request: NextRequest) {
     process.env.PUSPA_REQUIRE_AUTH_FOR_AI === 'true'
   const isLoginPage = request.nextUrl.pathname === '/login'
   const isRoot = request.nextUrl.pathname === '/'
+
+  // Protected route check for /api/admin/* (Requires 'admin' role)
+  if (isAdminApiRoute) {
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    const userRole = normalizeRole(user.user_metadata?.role)
+    if (roleLevel(userRole) < roleLevel('admin')) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+  }
+
+  // Protected route check for /admin/* (Requires 'admin' role)
+  if (isAdminRoute) {
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+    const userRole = normalizeRole(user.user_metadata?.role)
+    if (roleLevel(userRole) < roleLevel('admin')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
+  }
 
   if (
     !user &&
