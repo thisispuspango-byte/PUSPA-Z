@@ -13,6 +13,7 @@
  */
 
 import { db } from '@/lib/db'
+import DataLoader from 'dataloader'
 
 // ─── Input Types (mapped to V5 Prisma models) ─────────────────────
 
@@ -553,19 +554,38 @@ export function computeDisbursementReconciliation(
 
 // ─── DB-Backed Intelligence Functions ─────────────────────────────
 
+// DataLoader to batch DB requests (cache disabled to prevent memory leaks and stale data)
+export const caseLoader = new DataLoader(async (caseIds: readonly string[]) => {
+  const cases = await db.case.findMany({
+    where: { id: { in: [...caseIds] } },
+    include: {
+      member: { include: { householdMembers: true } },
+      programmes: { include: { programme: true } },
+    },
+  })
+
+  const caseMap = new Map(cases.map((c) => [c.id, c]))
+  return caseIds.map((id) => caseMap.get(id) || null)
+}, { cache: false })
+
+export const memberLoader = new DataLoader(async (memberIds: readonly string[]) => {
+  const members = await db.member.findMany({
+    where: { id: { in: [...memberIds] } },
+    include: { householdMembers: true },
+  })
+
+  const memberMap = new Map(members.map((m) => [m.id, m]))
+  return memberIds.map((id) => memberMap.get(id) || null)
+}, { cache: false })
+
+
 /**
  * Fetch member with household members from DB, then compute eligibility.
  */
 export async function computeEligibilityFromDB(
   caseId: string
 ): Promise<EligibilityResult | null> {
-  const caseRow = await db.case.findUnique({
-    where: { id: caseId },
-    include: {
-      member: { include: { householdMembers: true } },
-      programmes: { include: { programme: true } },
-    },
-  })
+  const caseRow = await caseLoader.load(caseId)
 
   if (!caseRow) return null
 
@@ -613,10 +633,7 @@ export async function computeEligibilityFromDB(
 export async function computeBeneficiary360FromDB(
   memberId: string
 ): Promise<Beneficiary360 | null> {
-  const memberRow = await db.member.findUnique({
-    where: { id: memberId },
-    include: { householdMembers: true },
-  })
+  const memberRow = await memberLoader.load(memberId)
   if (!memberRow) return null
 
   const [pastCases, disbursements] = await Promise.all([
