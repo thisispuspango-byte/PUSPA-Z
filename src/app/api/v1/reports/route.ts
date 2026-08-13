@@ -38,14 +38,30 @@ export async function GET(request: NextRequest) {
         // Monthly member growth (last 12 months)
         const now = new Date()
         const monthlyGrowth: { month: string; count: number }[] = []
+        const growthMonthMap: Record<string, { monthStr: string; count: number }> = {}
+        const growthMonthKeys: string[] = []
+
         for (let i = 11; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
           const monthStr = d.toISOString().slice(0, 7)
-          const count = members.filter((m) => {
-            const created = new Date(m.createdAt)
-            return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
-          }).length
-          monthlyGrowth.push({ month: monthStr, count })
+          const localKey = `${d.getFullYear()}-${d.getMonth()}`
+          growthMonthKeys.push(localKey)
+          growthMonthMap[localKey] = { monthStr, count: 0 }
+        }
+
+        members.forEach((m) => {
+          const created = new Date(m.createdAt)
+          const localKey = `${created.getFullYear()}-${created.getMonth()}`
+          if (growthMonthMap[localKey]) {
+            growthMonthMap[localKey].count++
+          }
+        })
+
+        for (const key of growthMonthKeys) {
+          monthlyGrowth.push({
+            month: growthMonthMap[key].monthStr,
+            count: growthMonthMap[key].count
+          })
         }
 
         // Activity summary (last 30 days)
@@ -95,16 +111,30 @@ export async function GET(request: NextRequest) {
         // Monthly donation trends (last 12 months)
         const now = new Date()
         const monthlyDonations: { month: string; amount: number }[] = []
+        const donationMonthMap: Record<string, { monthStr: string; amount: number }> = {}
+        const donationMonthKeys: string[] = []
+
         for (let i = 11; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
           const monthStr = d.toISOString().slice(0, 7)
-          const amount = donations
-            .filter((don) => {
-              const created = new Date(don.createdAt)
-              return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
-            })
-            .reduce((sum, don) => sum + Number(don.amount), 0)
-          monthlyDonations.push({ month: monthStr, amount })
+          const localKey = `${d.getFullYear()}-${d.getMonth()}`
+          donationMonthKeys.push(localKey)
+          donationMonthMap[localKey] = { monthStr, amount: 0 }
+        }
+
+        donations.forEach((don) => {
+          const created = new Date(don.createdAt)
+          const localKey = `${created.getFullYear()}-${created.getMonth()}`
+          if (donationMonthMap[localKey]) {
+            donationMonthMap[localKey].amount += Number(don.amount)
+          }
+        })
+
+        for (const key of donationMonthKeys) {
+          monthlyDonations.push({
+            month: donationMonthMap[key].monthStr,
+            amount: donationMonthMap[key].amount
+          })
         }
 
         // Disbursement totals
@@ -121,16 +151,30 @@ export async function GET(request: NextRequest) {
 
         // Monthly disbursement trends
         const monthlyDisbursements: { month: string; amount: number }[] = []
+        const disMonthMap: Record<string, { monthStr: string; amount: number }> = {}
+        const disMonthKeys: string[] = []
+
         for (let i = 11; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
           const monthStr = d.toISOString().slice(0, 7)
-          const amount = disbursements
-            .filter((dis) => {
-              const created = new Date(dis.createdAt)
-              return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
-            })
-            .reduce((sum, dis) => sum + Number(dis.amount), 0)
-          monthlyDisbursements.push({ month: monthStr, amount })
+          const localKey = `${d.getFullYear()}-${d.getMonth()}`
+          disMonthKeys.push(localKey)
+          disMonthMap[localKey] = { monthStr, amount: 0 }
+        }
+
+        disbursements.forEach((dis) => {
+          const created = new Date(dis.createdAt)
+          const localKey = `${created.getFullYear()}-${created.getMonth()}`
+          if (disMonthMap[localKey]) {
+            disMonthMap[localKey].amount += Number(dis.amount)
+          }
+        })
+
+        for (const key of disMonthKeys) {
+          monthlyDisbursements.push({
+            month: disMonthMap[key].monthStr,
+            amount: disMonthMap[key].amount
+          })
         }
 
         const totalDonations = donations.reduce((s, d) => s + Number(d.amount), 0)
