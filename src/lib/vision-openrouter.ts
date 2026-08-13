@@ -1,10 +1,6 @@
 // PUSPA V5 — OpenRouter Vision Client
 // Fallback for vision_analyze when Google Generative Language API is unavailable.
 // Uses OpenRouter free vision-capable models.
-//
-// Usage:
-//   import { analyzeImageWithOpenRouter } from '@/lib/vision-openrouter'
-//   const description = await analyzeImageWithOpenRouter('/path/to/image.jpg', 'Describe this image')
 
 import { readFile } from 'fs/promises'
 import { createChatCompletion, getVisionModel } from './openrouter'
