@@ -36,37 +36,38 @@ export async function GET() {
         createdAt: true,
       },
     })
-
     // 4. Proses data mengikut bulan (Aggregation)
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogos', 'Sep', 'Okt', 'Nov', 'Dis']
     const trendData: Array<{ name: string; sumbangan: number; agihan: number }> = []
+
+    // Grouping logic for performance
+    const groupedDonations = new Map<string, number>()
+    for (let i = 0; i < donations.length; i++) {
+      const d = donations[i]
+      const date = new Date(d.createdAt)
+      const key = `${date.getFullYear()}-${date.getMonth()}`
+      groupedDonations.set(key, (groupedDonations.get(key) || 0) + Number(d.amount || 0))
+    }
+
+    const groupedDisbursements = new Map<string, number>()
+    for (let i = 0; i < disbursements.length; i++) {
+      const d = disbursements[i]
+      const date = new Date(d.createdAt)
+      const key = `${date.getFullYear()}-${date.getMonth()}`
+      groupedDisbursements.set(key, (groupedDisbursements.get(key) || 0) + Number(d.amount || 0))
+    }
 
     for (let i = 0; i < 6; i++) {
       const targetDate = new Date()
       targetDate.setMonth(targetDate.getMonth() - (5 - i))
       const m = targetDate.getMonth()
       const y = targetDate.getFullYear()
-
-      // Filter & Sum Donations untuk bulan tersebut
-      const monthDonations = donations
-        .filter(d => {
-          const date = new Date(d.createdAt)
-          return date.getMonth() === m && date.getFullYear() === y
-        })
-        .reduce((sum, d) => sum + Number(d.amount || 0), 0)
-
-      // Filter & Sum Disbursements untuk bulan tersebut
-      const monthDisbursements = disbursements
-        .filter(d => {
-          const date = new Date(d.createdAt)
-          return date.getMonth() === m && date.getFullYear() === y
-        })
-        .reduce((sum, d) => sum + Number(d.amount || 0), 0)
+      const key = `${y}-${m}`
 
       trendData.push({
         name: monthNames[m],
-        sumbangan: monthDonations,
-        agihan: monthDisbursements,
+        sumbangan: groupedDonations.get(key) || 0,
+        agihan: groupedDisbursements.get(key) || 0,
       })
     }
 
