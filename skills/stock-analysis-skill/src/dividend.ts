@@ -217,10 +217,11 @@ ${analysis.safetyFactors.map((f) => `- ${f}`).join("\n")}
 // ── 批量分析 ──────────────────────────────────────────────
 
 export async function analyzeDividends(tickers: string[]): Promise<DividendAnalysis[]> {
-  const results: DividendAnalysis[] = [];
-  for (const ticker of tickers) {
-    results.push(await analyzeDividend(ticker));
-    await new Promise((r) => setTimeout(r, 200));
-  }
-  return results;
+  const promises = tickers.map(async (ticker, index) => {
+    if (index > 0) {
+      await new Promise((r) => setTimeout(r, index * 200));
+    }
+    return analyzeDividend(ticker);
+  });
+  return Promise.all(promises);
 }
