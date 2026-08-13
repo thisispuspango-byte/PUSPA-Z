@@ -224,12 +224,12 @@ export async function analyzeMultipleStocks(
   positions?: Record<string, PositionInfo>,
   includeDividend = false
 ): Promise<AnalysisResult[]> {
-  const results: AnalysisResult[] = [];
-  for (const data of stockDataList) {
-    const position = positions?.[data.code];
-    results.push(await analyzeStock(data, outputFormat, position, includeDividend));
-  }
-  return results;
+  return Promise.all(
+    stockDataList.map((data) => {
+      const position = positions?.[data.code];
+      return analyzeStock(data, outputFormat, position, includeDividend);
+    })
+  );
 }
 
 // ── K线图分析（VLM）──────────────────────────────────────
