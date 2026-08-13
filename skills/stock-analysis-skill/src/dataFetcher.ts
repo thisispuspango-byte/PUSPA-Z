@@ -58,12 +58,7 @@ export async function fetchMultipleStocks(
   codes: string[],
   mode: FetchMode = "full"
 ): Promise<StockData[]> {
-  const results: StockData[] = [];
-  for (let i = 0; i < codes.length; i++) {
-    results.push(await fetchStockData(codes[i], mode));
-    if (i < codes.length - 1) await new Promise((r) => setTimeout(r, 300));
-  }
-  return results;
+  return await Promise.all(codes.map(code => fetchStockData(code, mode)));
 }
 
 // ── 全球宏观 ──────────────────────────────────────────────
