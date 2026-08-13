@@ -1,63 +1,74 @@
-'use client'
+"use client";
 
-import { useState, type FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@/components/auth-provider'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Eye, EyeOff, LogIn, UserPlus, Loader2 } from 'lucide-react'
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth-provider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Eye, EyeOff, LogIn, UserPlus, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const { signIn, signUp } = useAuth()
+  const router = useRouter();
+  const { signIn, signUp } = useAuth();
 
-  const [isSignUp, setIsSignUp] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setSuccess(null)
-    setLoading(true)
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+    setLoading(true);
 
     try {
       if (isSignUp) {
-        const { error: signUpError } = await signUp(email, password, name)
+        const { error: signUpError } = await signUp(email, password, name);
         if (signUpError) {
-          const translated = translateError(signUpError)
-          setError(translated)
+          const translated = translateError(signUpError);
+          setError(translated);
         } else {
-          setSuccess('Pendaftaran berjaya! Sila semak e-mel anda untuk pengesahan.')
+          setSuccess(
+            "Pendaftaran berjaya! Sila semak e-mel anda untuk pengesahan.",
+          );
         }
       } else {
-        const { error: signInError } = await signIn(email, password)
+        const { error: signInError } = await signIn(email, password);
         if (signInError) {
-          const translated = translateError(signInError)
-          setError(translated)
+          const translated = translateError(signInError);
+          setError(translated);
         } else {
-          router.push('/')
-          router.refresh()
+          router.push("/");
+          router.refresh();
         }
       }
     } catch {
-      setError('Ralat tidak dijangka. Sila cuba lagi.')
+      setError("Ralat tidak dijangka. Sila cuba lagi.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-purple-950 p-4">
       {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+        aria-hidden="true"
+      >
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-purple-200/30 dark:bg-purple-900/20 blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-purple-200/30 dark:bg-purple-900/20 blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-purple-100/20 dark:bg-purple-900/10 blur-3xl" />
@@ -75,7 +86,7 @@ export default function LoginPage() {
                 className="h-14 w-14 object-contain"
               />
             </div>
-            
+
             {/* PUSPA Text Layout */}
             <div className="flex flex-col items-start text-left">
               <h1 className="text-6xl font-black tracking-tighter text-purple-950 dark:text-white leading-none">
@@ -87,7 +98,7 @@ export default function LoginPage() {
               </p>
             </div>
           </div>
-          
+
           <p className="text-xs text-purple-900/60 dark:text-white/40 italic font-medium">
             "Cerdas. Mesra. Sentiasa di sisi anda."
           </p>
@@ -97,12 +108,12 @@ export default function LoginPage() {
         <Card className="border-purple-100 dark:border-purple-900/40 shadow-xl shadow-purple-100/30 dark:shadow-purple-900/20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl text-center">
-              {isSignUp ? 'Daftar Akaun Baru' : 'Log Masuk'}
+              {isSignUp ? "Daftar Akaun Baru" : "Log Masuk"}
             </CardTitle>
             <CardDescription className="text-center">
               {isSignUp
-                ? 'Cipta akaun untuk mengakses platform PUSPA'
-                : 'Masukkan maklumat anda untuk meneruskan'}
+                ? "Cipta akaun untuk mengakses platform PUSPA"
+                : "Masukkan maklumat anda untuk meneruskan"}
             </CardDescription>
           </CardHeader>
 
@@ -146,7 +157,7 @@ export default function LoginPage() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -158,8 +169,13 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    tabIndex={-1}
+                    aria-label={
+                      showPassword
+                        ? "Sembunyikan kata laluan"
+                        : "Tunjukkan kata laluan"
+                    }
+                    aria-pressed={showPassword}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -172,13 +188,17 @@ export default function LoginPage() {
 
               {error && (
                 <div className="rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/50 p-3">
-                  <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+                  <p className="text-sm text-red-700 dark:text-red-400">
+                    {error}
+                  </p>
                 </div>
               )}
 
               {success && (
                 <div className="rounded-lg bg-green-50 dark:bg-green-950/50 border border-green-200 dark:border-green-900/50 p-3">
-                  <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
+                  <p className="text-sm text-green-700 dark:text-green-400">
+                    {success}
+                  </p>
                 </div>
               )}
 
@@ -187,7 +207,7 @@ export default function LoginPage() {
                 className="w-full h-11 bg-purple-700 hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-700 text-white font-bold"
                 disabled={loading}
               >
-{loading ? (
+                {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Memproses...
@@ -208,19 +228,19 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                {isSignUp ? 'Sudah mempunyai akaun?' : 'Belum mempunyai akaun?'}
+                {isSignUp ? "Sudah mempunyai akaun?" : "Belum mempunyai akaun?"}
               </p>
               <button
                 type="button"
                 onClick={() => {
-                  setIsSignUp(!isSignUp)
-                  setError(null)
-                  setSuccess(null)
+                  setIsSignUp(!isSignUp);
+                  setError(null);
+                  setSuccess(null);
                 }}
                 className="mt-1 text-sm font-bold text-purple-700 hover:underline dark:text-purple-400 transition-colors"
                 disabled={loading}
               >
-                {isSignUp ? 'Log masuk di sini' : 'Cipta akaun baru'}
+                {isSignUp ? "Log masuk di sini" : "Cipta akaun baru"}
               </button>
             </div>
           </CardContent>
@@ -234,15 +254,15 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function translateError(error: string): string {
   const translations: Record<string, string> = {
-    'Invalid login credentials': 'E-mel atau kata laluan tidak sah.',
-    'Email not confirmed': 'E-mel belum disahkan.',
-    'User already registered': 'E-mel ini sudah didaftarkan.',
-    'Password should be at least 6 characters': 'Kata laluan terlalu pendek.',
-  }
-  return translations[error] || error
+    "Invalid login credentials": "E-mel atau kata laluan tidak sah.",
+    "Email not confirmed": "E-mel belum disahkan.",
+    "User already registered": "E-mel ini sudah didaftarkan.",
+    "Password should be at least 6 characters": "Kata laluan terlalu pendek.",
+  };
+  return translations[error] || error;
 }
