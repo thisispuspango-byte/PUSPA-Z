@@ -2,7 +2,6 @@ import { db } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { canAccessView, Role } from '@/lib/access-control'
-// import { rateLimit } from '@/lib/rate-limit' // Assumption: rate-limit helper exists
 
 /**
  * PUSPA V5 - Asnafpreneur API
