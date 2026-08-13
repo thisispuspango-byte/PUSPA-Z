@@ -74,7 +74,7 @@ function SortableItem({
             {widget.required && <span className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded">Diperlukan</span>}
           </div>
           {!widget.required && (
-            <Button variant="ghost" size="sm" onClick={() => onToggleHide(widget.id)} className="h-7 px-2">
+            <Button id="dashboard-layout-Button-1" variant="ghost" size="sm" onClick={() => onToggleHide(widget.id)} className="h-7 px-2">
               {isHidden ? <EyeOff size={14} className="text-muted-foreground" /> : <Eye size={14} />}
             </Button>
           )}
@@ -159,15 +159,15 @@ export function DashboardLayout({ widgets }: DashboardLayoutProps) {
       <div className="flex justify-end mb-4">
         {isEditMode ? (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={resetLayout} className="gap-2">
+            <Button id="dashboard-layout-Button-2" variant="outline" size="sm" onClick={resetLayout} className="gap-2">
               <RotateCcw size={14} /> Reset Asal
             </Button>
-            <Button variant="default" size="sm" onClick={() => setIsEditMode(false)} className="gap-2">
+            <Button id="dashboard-layout-Button-3" variant="default" size="sm" onClick={() => setIsEditMode(false)} className="gap-2">
               Selesai Menyusun
             </Button>
           </div>
         ) : (
-          <Button variant="outline" size="sm" onClick={() => setIsEditMode(true)} className="gap-2">
+          <Button id="dashboard-layout-Button-4" variant="outline" size="sm" onClick={() => setIsEditMode(true)} className="gap-2">
             <Settings2 size={14} /> Susun Semula
           </Button>
         )}

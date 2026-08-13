@@ -203,7 +203,7 @@ export default function AsnafpreneurPage() {
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2 shrink-0 bg-[#9b59b6] hover:bg-[#8e44ad]">
+            <Button id="page-Button-1" className="gap-2 shrink-0 bg-[#9b59b6] hover:bg-[#8e44ad]">
               <Plus className="h-4 w-4" />
               Daftar Usahawan
             </Button>
@@ -241,7 +241,7 @@ export default function AsnafpreneurPage() {
                         <FormLabel>Kategori Perniagaan</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger id="page-SelectTrigger-2">
                               <SelectValue placeholder="Pilih kategori" />
                             </SelectTrigger>
                           </FormControl>
@@ -291,10 +291,10 @@ export default function AsnafpreneurPage() {
                 />
 
                 <DialogFooter className="pt-4">
-                  <Button variant="outline" type="button" onClick={() => setDialogOpen(false)}>
+                  <Button id="page-Button-3" variant="outline" type="button" onClick={() => setDialogOpen(false)}>
                     Batal
                   </Button>
-                  <Button 
+                  <Button id="page-Button-4" 
                     type="submit" 
                     disabled={isSubmitting}
                     style={{ backgroundColor: BRAND_COLOR }}
@@ -319,10 +319,10 @@ export default function AsnafpreneurPage() {
       {/* Main Module Tabs */}
       <Tabs defaultValue="usahawan" className="w-full">
         <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
-          <TabsTrigger value="usahawan">Usahawan</TabsTrigger>
-          <TabsTrigger value="analitik">Analitik</TabsTrigger>
-          <TabsTrigger value="latihan">Latihan</TabsTrigger>
-          <TabsTrigger value="geran">Geran</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-5" value="usahawan">Usahawan</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-6" value="analitik">Analitik</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-7" value="latihan">Latihan</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-8" value="geran">Geran</TabsTrigger>
         </TabsList>
         
         <TabsContent value="usahawan" className="space-y-4 mt-6">
@@ -344,7 +344,7 @@ export default function AsnafpreneurPage() {
                     />
                   </div>
                   <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                    <SelectTrigger className="h-9 w-[180px] text-xs">
+                    <SelectTrigger id="page-SelectTrigger-9" className="h-9 w-[180px] text-xs">
                       <Filter className="h-3.5 w-3.5 mr-2" />
                       <SelectValue placeholder="Tapis Kategori" />
                     </SelectTrigger>
@@ -392,7 +392,7 @@ export default function AsnafpreneurPage() {
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button id="page-Button-10" variant="ghost" size="icon">
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>

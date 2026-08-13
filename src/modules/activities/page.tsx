@@ -426,7 +426,7 @@ export default function ActivitiesPage() {
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-3">
             <Select value={filterCategory} onValueChange={(v) => { setFilterCategory(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-1" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Kategori" />
               </SelectTrigger>
               <SelectContent>
@@ -439,7 +439,7 @@ export default function ActivitiesPage() {
               </SelectContent>
             </Select>
             <Select value={filterType} onValueChange={(v) => { setFilterType(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-2" className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Jenis" />
               </SelectTrigger>
               <SelectContent>
@@ -466,7 +466,7 @@ export default function ActivitiesPage() {
               placeholder="Hingga"
             />
             {(filterCategory !== 'all' || filterType !== 'all' || startDate || endDate) && (
-              <Button
+              <Button id="page-Button-3"
                 variant="ghost"
                 size="sm"
                 onClick={() => {
@@ -577,7 +577,7 @@ export default function ActivitiesPage() {
             Menunjukkan {(page - 1) * ITEMS_PER_PAGE + 1}–{Math.min(page * ITEMS_PER_PAGE, filtered.length)} daripada {filtered.length} aktiviti
           </p>
           <div className="flex items-center gap-2">
-            <Button
+            <Button id="page-Button-4"
               variant="outline"
               size="sm"
               disabled={page <= 1}
@@ -589,7 +589,7 @@ export default function ActivitiesPage() {
             </Button>
             <div className="flex items-center gap-1">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <Button
+                <Button id="page-Button-5"
                   key={p}
                   variant={p === page ? 'default' : 'outline'}
                   size="sm"
@@ -600,7 +600,7 @@ export default function ActivitiesPage() {
                 </Button>
               ))}
             </div>
-            <Button
+            <Button id="page-Button-6"
               variant="outline"
               size="sm"
               disabled={page >= totalPages}

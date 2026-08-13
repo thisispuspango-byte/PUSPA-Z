@@ -39,7 +39,7 @@ export function useRealtime({
           table,
           ...(filter ? { filter } : {})
         },
-        (payload) => {
+        (payload: any) => {
           console.log(`[Realtime] INSERT on ${table}:`, payload)
           onInsert(payload.new)
         }
@@ -56,7 +56,7 @@ export function useRealtime({
           table,
           ...(filter ? { filter } : {})
         },
-        (payload) => {
+        (payload: any) => {
           console.log(`[Realtime] UPDATE on ${table}:`, payload)
           onUpdate(payload.new)
         }
@@ -73,7 +73,7 @@ export function useRealtime({
           table,
           ...(filter ? { filter } : {})
         },
-        (payload) => {
+        (payload: any) => {
           console.log(`[Realtime] DELETE on ${table}:`, payload)
           onDelete(payload.old)
         }
@@ -81,7 +81,7 @@ export function useRealtime({
     }
     
     // Subscribe
-    ch.subscribe((status) => {
+    ch.subscribe((status: string) => {
       if (status === 'SUBSCRIBED') {
         console.log(`[Realtime] Subscribed to ${table}`)
       }

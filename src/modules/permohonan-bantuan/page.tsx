@@ -201,7 +201,7 @@ export default function PermohonanBantuanPage() {
           <p className="text-sm text-muted-foreground max-w-md">
             Permohonan bantuan anda telah berjaya dihantar. Pihak PUSPA akan menghubungi anda dalam tempoh 5 hari bekerja untuk tindakan seterusnya.
           </p>
-          <Button onClick={() => { setSubmitted(false); setCurrentStep(0) }} variant="outline">
+          <Button id="page-Button-1" onClick={() => { setSubmitted(false); setCurrentStep(0) }} variant="outline">
             Hantar Permohonan Baru
           </Button>
         </motion.div>
@@ -298,7 +298,7 @@ export default function PermohonanBantuanPage() {
                       name="maritalStatus"
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger><SelectValue placeholder="Pilih status" /></SelectTrigger>
+                          <SelectTrigger id="page-SelectTrigger-2"><SelectValue placeholder="Pilih status" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="berkahwin">Berkahwin</SelectItem>
                             <SelectItem value="bujang">Bujang</SelectItem>
@@ -318,7 +318,7 @@ export default function PermohonanBantuanPage() {
                       name="employment"
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger>
+                          <SelectTrigger id="page-SelectTrigger-3"><SelectValue placeholder="Pilih" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="kerajaan">Kerajaan</SelectItem>
                             <SelectItem value="swasta">Swasta</SelectItem>
@@ -342,7 +342,7 @@ export default function PermohonanBantuanPage() {
                     name="healthStatus"
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value}>
-                        <SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger>
+                        <SelectTrigger id="page-SelectTrigger-4"><SelectValue placeholder="Pilih" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="sihat">Sihat</SelectItem>
                           <SelectItem value="sakit_kronik">Sakit Kronik</SelectItem>
@@ -380,7 +380,7 @@ export default function PermohonanBantuanPage() {
                       name="spouseHealth"
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger>
+                          <SelectTrigger id="page-SelectTrigger-5"><SelectValue placeholder="Pilih" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="sihat">Sihat</SelectItem>
                             <SelectItem value="sakit_kronik">Sakit Kronik</SelectItem>
@@ -403,7 +403,7 @@ export default function PermohonanBantuanPage() {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-3">
                         <Badge variant="outline">Tanggungan #{idx + 1}</Badge>
-                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(idx)} className="h-7 w-7 text-red-500 hover:text-red-700">
+                        <Button id="page-Button-6" type="button" variant="ghost" size="icon" onClick={() => remove(idx)} className="h-7 w-7 text-red-500 hover:text-red-700">
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -424,7 +424,7 @@ export default function PermohonanBantuanPage() {
                     </CardContent>
                   </Card>
                 ))}
-                <Button
+                <Button id="page-Button-7"
                   type="button"
                   variant="outline"
                   onClick={() => append({ name: '', age: undefined, relationship: '', status: '' })}
@@ -527,7 +527,7 @@ export default function PermohonanBantuanPage() {
 
         {/* Navigation Buttons */}
         <div className="flex items-center justify-between mt-4">
-          <Button
+          <Button id="page-Button-8"
             type="button"
             variant="outline"
             onClick={prevStep}
@@ -541,12 +541,12 @@ export default function PermohonanBantuanPage() {
             Langkah {currentStep + 1} / {STEPS.length}
           </span>
           {currentStep < STEPS.length - 1 ? (
-            <Button type="button" onClick={nextStep} className="gap-1.5">
+            <Button id="page-Button-9" type="button" onClick={nextStep} className="gap-1.5">
               Seterusnya
               <ChevronRight className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="submit" className="gap-1.5 bg-green-600 hover:bg-green-700">
+            <Button id="page-Button-10" type="submit" className="gap-1.5 bg-green-600 hover:bg-green-700">
               <Save className="h-4 w-4" />
               Hantar Permohonan
             </Button>

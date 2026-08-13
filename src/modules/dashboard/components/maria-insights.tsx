@@ -64,7 +64,7 @@ export function MariaInsights() {
             </p>
           </div>
         </div>
-        <Button
+        <Button id="maria-insights-Button-1"
           onClick={() => setAiChatOpen(true)}
           size="sm"
           variant="outline"

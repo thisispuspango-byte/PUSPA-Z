@@ -218,7 +218,7 @@ export default function InstitusiPage() {
           />
         </div>
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger id="page-SelectTrigger-1" className="w-full sm:w-[200px]">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Semua Jenis" />
           </SelectTrigger>

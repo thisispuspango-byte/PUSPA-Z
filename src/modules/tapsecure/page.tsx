@@ -199,7 +199,7 @@ export default function TapSecurePage() {
               </CardTitle>
               <CardDescription>Senarai peranti yang mempunyai akses ke akaun anda</CardDescription>
             </div>
-            <Button variant="outline" size="sm" className="gap-1">
+            <Button id="page-Button-1" variant="outline" size="sm" className="gap-1">
               <Plus className="h-3 w-3" />
               Tambah Peranti
             </Button>
@@ -239,7 +239,7 @@ export default function TapSecurePage() {
                     {statusConf.label}
                   </Badge>
                   {device.trustStatus !== 'revoked' && !device.isCurrent && (
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                    <Button id="page-Button-2" variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   )}
@@ -340,7 +340,7 @@ export default function TapSecurePage() {
           </div>
           <Separator />
           <div className="flex justify-end">
-            <Button variant="outline" size="sm" className="gap-1">
+            <Button id="page-Button-3" variant="outline" size="sm" className="gap-1">
               <Shield className="h-3 w-3" />
               Tetapan Keselamatan Lanjutan
             </Button>

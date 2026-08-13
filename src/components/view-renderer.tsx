@@ -53,7 +53,7 @@ function AccessDenied({ view }: { view: ViewId }) {
               You do not have permission to access this module. Contact your administrator.
             </p>
           </div>
-          <Button variant="outline" onClick={() => setView('dashboard')}>
+          <Button id="view-renderer-Button-1" variant="outline" onClick={() => setView('dashboard')}>
             Kembali ke Dashboard
           </Button>
         </CardContent>

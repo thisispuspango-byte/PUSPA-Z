@@ -263,7 +263,7 @@ export default function DisbursementsPage() {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Plus className="h-4 w-4" />
               Agihan Baru
             </Button>
@@ -291,7 +291,7 @@ export default function DisbursementsPage() {
                 <div className="grid gap-2">
                   <Label>Kategori *</Label>
                   <Select value={formCategory} onValueChange={setFormCategory}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="welfare">Kebajikan</SelectItem>
                       <SelectItem value="medical">Perubatan</SelectItem>
@@ -307,7 +307,7 @@ export default function DisbursementsPage() {
                 <div className="grid gap-2">
                   <Label>Kaedah Bayaran</Label>
                   <Select value={formPaymentMethod} onValueChange={setFormPaymentMethod}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-3"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="cash">Tunai</SelectItem>
                       <SelectItem value="bank_transfer">Pindahan Bank</SelectItem>
@@ -326,8 +326,8 @@ export default function DisbursementsPage() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-              <Button onClick={handleSubmit} disabled={submitting || !formMemberId.trim() || !formAmount}>
+              <Button id="page-Button-4" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
+              <Button id="page-Button-5" onClick={handleSubmit} disabled={submitting || !formMemberId.trim() || !formAmount}>
                 {submitting ? 'Menyimpan...' : 'Simpan'}
               </Button>
             </div>
@@ -405,7 +405,7 @@ export default function DisbursementsPage() {
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[170px]">
+              <SelectTrigger id="page-SelectTrigger-6" className="w-full sm:w-[170px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -419,7 +419,7 @@ export default function DisbursementsPage() {
               </SelectContent>
             </Select>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full sm:w-[170px]">
+              <SelectTrigger id="page-SelectTrigger-7" className="w-full sm:w-[170px]">
                 <SelectValue placeholder="Kategori" />
               </SelectTrigger>
               <SelectContent>
@@ -509,7 +509,7 @@ export default function DisbursementsPage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">Lihat</Button>
+                          <Button id="page-Button-8" variant="ghost" size="sm">Lihat</Button>
                         </TableCell>
                       </TableRow>
                     )

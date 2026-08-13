@@ -409,13 +409,13 @@ export default function CartaOrganisasiPage() {
         {viewMode === 'tree' && !searchQ.trim() ? (
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="mb-2">
-              <TabsTrigger value="admin" className="gap-1.5 text-xs">
+              <TabsTrigger id="page-TabsTrigger-1" value="admin" className="gap-1.5 text-xs">
                 <Building2 size={14} /> Carta Administrasi
               </TabsTrigger>
-              <TabsTrigger value="ops" className="gap-1.5 text-xs">
+              <TabsTrigger id="page-TabsTrigger-2" value="ops" className="gap-1.5 text-xs">
                 <Users size={14} /> Carta Operasi
               </TabsTrigger>
-              <TabsTrigger value="honorary" className="gap-1.5 text-xs">
+              <TabsTrigger id="page-TabsTrigger-3" value="honorary" className="gap-1.5 text-xs">
                 <Landmark size={14} /> Ahli Kehormat
               </TabsTrigger>
             </TabsList>

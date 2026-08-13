@@ -19,7 +19,7 @@ export function MariaFloatingWidget() {
   if (aiChatOpen) return null
 
   return (
-    <Button
+    <Button id="maria-floating-widget-Button-1"
       type="button"
       variant="default"
       onClick={() => setAiChatOpen(true)}

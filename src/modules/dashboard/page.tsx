@@ -86,9 +86,9 @@ export default function Dashboard() {
       {isMobile ? (
         <Tabs defaultValue="trend">
           <TabsList className="w-full">
-            <TabsTrigger value="trend" className="flex-1">Aliran</TabsTrigger>
-            <TabsTrigger value="asnaf" className="flex-1">Asnaf</TabsTrigger>
-            <TabsTrigger value="map" className="flex-1">Peta</TabsTrigger>
+            <TabsTrigger id="page-TabsTrigger-1" value="trend" className="flex-1">Aliran</TabsTrigger>
+            <TabsTrigger id="page-TabsTrigger-2" value="asnaf" className="flex-1">Asnaf</TabsTrigger>
+            <TabsTrigger id="page-TabsTrigger-3" value="map" className="flex-1">Peta</TabsTrigger>
           </TabsList>
           <TabsContent value="trend"><FinancialTrend data={trendData} period={period} onPeriodChange={setPeriod} /></TabsContent>
           <TabsContent value="asnaf"><AsnafDistribution data={asnafData} totalMembers={stats.totalMembers} totalAsnaf={totalAsnaf} /></TabsContent>

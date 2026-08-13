@@ -187,7 +187,7 @@ export default function DocumentsPage() {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Upload className="h-4 w-4" />
               Muat Naik Dokumen
             </Button>
@@ -205,7 +205,7 @@ export default function DocumentsPage() {
                 <div className="grid gap-2">
                   <Label>Kategori</Label>
                   <Select value={formCategory} onValueChange={setFormCategory}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="member">Ahli</SelectItem>
                       <SelectItem value="case">Kes</SelectItem>
@@ -229,8 +229,8 @@ export default function DocumentsPage() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-              <Button onClick={handleSubmit} disabled={submitting || !formTitle}>
+              <Button id="page-Button-3" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
+              <Button id="page-Button-4" onClick={handleSubmit} disabled={submitting || !formTitle}>
                 {submitting ? 'Menyimpan...' : 'Muat Naik'}
               </Button>
             </div>
@@ -271,7 +271,7 @@ export default function DocumentsPage() {
               />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-5" className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Kategori" />
               </SelectTrigger>
@@ -371,7 +371,7 @@ export default function DocumentsPage() {
                       <span className="mx-1">•</span>
                       {formatFileSize(doc.fileSize)}
                     </div>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 px-2 text-[10px] gap-1" onClick={() => setDetailDoc(doc)}>
+                    <Button id="page-Button-6" variant="ghost" size="sm" className="h-8 w-8 px-2 text-[10px] gap-1" onClick={() => setDetailDoc(doc)}>
                       <Eye className="h-3 w-3" />
                       Lihat
                     </Button>
@@ -453,7 +453,7 @@ export default function DocumentsPage() {
                   )}
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setDetailDoc(null)}>Tutup</Button>
+                  <Button id="page-Button-7" variant="outline" onClick={() => setDetailDoc(null)}>Tutup</Button>
                 </div>
               </>
             )

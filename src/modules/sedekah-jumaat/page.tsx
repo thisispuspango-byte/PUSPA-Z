@@ -558,7 +558,7 @@ export default function SedekahJumaatPage() {
               Pengurusan agihan makanan tengahari Jumaat kepada 8 rumah kebajikan &amp; Mahad Tahfiz
             </p>
           </div>
-          <Button
+          <Button id="page-Button-1"
             onClick={handleCreate}
             size="lg"
             className="gap-2 shrink-0"
@@ -645,11 +645,11 @@ export default function SedekahJumaatPage() {
         {/* ─── Tabs ─────────────────────────────────────────────────── */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
-            <TabsTrigger value="jadual" className="gap-2">
+            <TabsTrigger id="page-TabsTrigger-2" value="jadual" className="gap-2">
               <UtensilsCrossed className="h-4 w-4" />
               Jadual Agihan
             </TabsTrigger>
-            <TabsTrigger value="institusi" className="gap-2">
+            <TabsTrigger id="page-TabsTrigger-3" value="institusi" className="gap-2">
               <Building2 className="h-4 w-4" />
               Senarai Institusi
             </TabsTrigger>
@@ -678,7 +678,7 @@ export default function SedekahJumaatPage() {
 
                   {/* Type filter */}
                   <Select value={filterType} onValueChange={setFilterType}>
-                    <SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-4">
                       <SelectValue placeholder="Jenis Institusi" />
                     </SelectTrigger>
                     <SelectContent>
@@ -690,7 +690,7 @@ export default function SedekahJumaatPage() {
 
                   {/* Status filter */}
                   <Select value={filterStatus} onValueChange={setFilterStatus}>
-                    <SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-5">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -721,7 +721,7 @@ export default function SedekahJumaatPage() {
                       <TableRow>
                         <TableHead className="w-[130px]">No. Rujukan</TableHead>
                         <TableHead>
-                          <Button variant="ghost" size="sm" className="gap-1 -ml-3 h-8 font-medium" onClick={() => handleSort('institutionName')}>
+                          <Button id="page-Button-6" variant="ghost" size="sm" className="gap-1 -ml-3 h-8 font-medium" onClick={() => handleSort('institutionName')}>
                             Nama Institusi
                             <ArrowUpDown className="h-3 w-3" />
                           </Button>
@@ -732,7 +732,7 @@ export default function SedekahJumaatPage() {
                         <TableHead className="hidden lg:table-cell">Menu</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>
-                          <Button variant="ghost" size="sm" className="gap-1 -ml-3 h-8 font-medium" onClick={() => handleSort('date')}>
+                          <Button id="page-Button-7" variant="ghost" size="sm" className="gap-1 -ml-3 h-8 font-medium" onClick={() => handleSort('date')}>
                             Tarikh
                             <ArrowUpDown className="h-3 w-3" />
                           </Button>
@@ -775,7 +775,7 @@ export default function SedekahJumaatPage() {
                             <TableCell>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                                  <Button id="page-Button-8" variant="ghost" size="icon" className="h-8 w-8">
                                     <MoreHorizontal className="h-4 w-4" />
                                     <span className="sr-only">Tindakan</span>
                                   </Button>
@@ -831,7 +831,7 @@ export default function SedekahJumaatPage() {
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                            <Button id="page-Button-9" variant="ghost" size="icon" className="h-8 w-8 shrink-0">
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -881,7 +881,7 @@ export default function SedekahJumaatPage() {
                   Menunjukkan {((currentPage - 1) * ITEMS_PER_PAGE) + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredDistributions.length)} daripada {filteredDistributions.length}
                 </p>
                 <div className="flex items-center gap-2">
-                  <Button
+                  <Button id="page-Button-10"
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
@@ -892,7 +892,7 @@ export default function SedekahJumaatPage() {
                   </Button>
                   <div className="flex items-center gap-1">
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <Button
+                      <Button id="page-Button-11"
                         key={page}
                         variant={currentPage === page ? 'default' : 'outline'}
                         size="icon"
@@ -904,7 +904,7 @@ export default function SedekahJumaatPage() {
                       </Button>
                     ))}
                   </div>
-                  <Button
+                  <Button id="page-Button-12"
                     variant="outline"
                     size="icon"
                     className="h-8 w-8"
@@ -1020,7 +1020,7 @@ export default function SedekahJumaatPage() {
                       )}
 
                       {/* Quick action */}
-                      <Button
+                      <Button id="page-Button-13"
                         variant="outline"
                         size="sm"
                         className="w-full mt-2 gap-2"
@@ -1062,7 +1062,7 @@ export default function SedekahJumaatPage() {
                         <FormLabel>Institusi</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger id="page-SelectTrigger-14">
                               <SelectValue placeholder="Pilih institusi..." />
                             </SelectTrigger>
                           </FormControl>
@@ -1166,7 +1166,7 @@ export default function SedekahJumaatPage() {
                           <FormLabel>Jenis Makanan</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger id="page-SelectTrigger-15">
                                 <SelectValue />
                               </SelectTrigger>
                             </FormControl>
@@ -1231,7 +1231,7 @@ export default function SedekahJumaatPage() {
                           <FormLabel>Kaedah Penghantaran</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger id="page-SelectTrigger-16">
                                 <SelectValue />
                               </SelectTrigger>
                             </FormControl>
@@ -1256,7 +1256,7 @@ export default function SedekahJumaatPage() {
                           <FormLabel>Masa Penghantaran</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger id="page-SelectTrigger-17">
                                 <SelectValue />
                               </SelectTrigger>
                             </FormControl>
@@ -1281,7 +1281,7 @@ export default function SedekahJumaatPage() {
                           <FormLabel>Status</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger id="page-SelectTrigger-18">
                                 <SelectValue />
                               </SelectTrigger>
                             </FormControl>
@@ -1353,10 +1353,10 @@ export default function SedekahJumaatPage() {
 
                 {/* Actions */}
                 <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                  <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
+                  <Button id="page-Button-19" type="button" variant="outline" onClick={() => setDialogOpen(false)}>
                     Batal
                   </Button>
-                  <Button
+                  <Button id="page-Button-20"
                     type="submit"
                     className="gap-2"
                     style={{ backgroundColor: BRAND_COLOR }}
@@ -1512,7 +1512,7 @@ export default function SedekahJumaatPage() {
                   {/* Actions */}
                   <Separator />
                   <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pb-6">
-                    <Button
+                    <Button id="page-Button-21"
                       variant="outline"
                       className="gap-2"
                       onClick={() => {
@@ -1523,7 +1523,7 @@ export default function SedekahJumaatPage() {
                       <Pencil className="h-4 w-4" />
                       Edit
                     </Button>
-                    <Button
+                    <Button id="page-Button-22"
                       variant="destructive"
                       className="gap-2"
                       onClick={() => {

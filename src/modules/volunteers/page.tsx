@@ -349,7 +349,7 @@ export default function VolunteersPage() {
         </div>
         <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Plus className="h-4 w-4" />
               Daftar Sukarelawan
             </Button>
@@ -405,7 +405,7 @@ export default function VolunteersPage() {
                     value={newForm.availability}
                     onValueChange={(v) => setNewForm((f) => ({ ...f, availability: v }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -421,7 +421,7 @@ export default function VolunteersPage() {
                     value={newForm.status}
                     onValueChange={(v) => setNewForm((f) => ({ ...f, status: v }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-3">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -452,10 +452,10 @@ export default function VolunteersPage() {
                 />
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <Button variant="outline" onClick={() => setShowNewDialog(false)}>
+                <Button id="page-Button-4" variant="outline" onClick={() => setShowNewDialog(false)}>
                   Batal
                 </Button>
-                <Button onClick={handleCreateVolunteer} disabled={!newForm.name}>
+                <Button id="page-Button-5" onClick={handleCreateVolunteer} disabled={!newForm.name}>
                   Daftar
                 </Button>
               </div>
@@ -534,7 +534,7 @@ export default function VolunteersPage() {
               />
             </div>
             <Select value={filterAvailability} onValueChange={setFilterAvailability}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-6" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Ketersediaan" />
               </SelectTrigger>
               <SelectContent>
@@ -545,7 +545,7 @@ export default function VolunteersPage() {
               </SelectContent>
             </Select>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-7" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -641,7 +641,7 @@ export default function VolunteersPage() {
                           {volunteer.totalHours}
                         </TableCell>
                         <TableCell>
-                          <Button
+                          <Button id="page-Button-8"
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8"

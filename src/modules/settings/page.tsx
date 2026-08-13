@@ -156,7 +156,7 @@ export default function SettingsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Tetapan</h1>
           <p className="text-sm text-muted-foreground">Settings — Urus profil dan keutamaan anda</p>
         </div>
-        <Button className="gap-2" onClick={handleSave}>
+        <Button id="page-Button-1" className="gap-2" onClick={handleSave}>
           <Save className="h-4 w-4" />
           Simpan Tetapan
         </Button>
@@ -212,7 +212,7 @@ export default function SettingsPage() {
               <Badge variant="secondary" className="mt-1">{roleLabels[settings.role] || settings.role}</Badge>
             </div>
             <div className="ml-auto flex flex-col gap-1 sm:flex-row sm:items-center">
-              <Button
+              <Button id="page-Button-2"
                 type="button"
                 variant="outline"
                 size="sm"
@@ -223,7 +223,7 @@ export default function SettingsPage() {
                 Tukar Avatar
               </Button>
               {settings.profileImageUrl ? (
-                <Button
+                <Button id="page-Button-3"
                   type="button"
                   variant="ghost"
                   size="sm"
@@ -290,14 +290,14 @@ export default function SettingsPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button
+              <Button id="page-Button-4"
                 variant={settings.language === 'bm' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSettings(prev => ({ ...prev, language: 'bm' }))}
               >
                 Bahasa Melayu
               </Button>
-              <Button
+              <Button id="page-Button-5"
                 variant={settings.language === 'en' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSettings(prev => ({ ...prev, language: 'en' }))}
@@ -320,7 +320,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center gap-2">
               {(['light', 'dark', 'system'] as const).map((t) => (
-                <Button
+                <Button id="page-Button-6"
                   key={t}
                   variant={settings.theme === t ? 'default' : 'outline'}
                   size="sm"

@@ -264,7 +264,7 @@ export default function CompliancePage() {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Plus className="h-4 w-4" />
               Tambah Rekod
             </Button>
@@ -286,7 +286,7 @@ export default function CompliancePage() {
                 <div className="grid gap-2">
                   <Label>Kategori</Label>
                   <Select value={formCategory} onValueChange={setFormCategory}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="rosm">ROSM</SelectItem>
                       <SelectItem value="lhdn">LHDN</SelectItem>
@@ -299,7 +299,7 @@ export default function CompliancePage() {
                 <div className="grid gap-2">
                   <Label>Status</Label>
                   <Select value={formStatus} onValueChange={setFormStatus}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-3"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="pending">Menunggu</SelectItem>
                       <SelectItem value="compliant">Patuh</SelectItem>
@@ -330,8 +330,8 @@ export default function CompliancePage() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-              <Button onClick={handleSubmit} disabled={submitting || !formTitle}>
+              <Button id="page-Button-4" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
+              <Button id="page-Button-5" onClick={handleSubmit} disabled={submitting || !formTitle}>
                 {submitting ? 'Menyimpan...' : 'Simpan'}
               </Button>
             </div>
@@ -369,12 +369,12 @@ export default function CompliancePage() {
       {/* Category Tabs */}
       <Tabs value={currentCategory} onValueChange={setCategoryFilter}>
         <TabsList>
-          <TabsTrigger value="all">Semua</TabsTrigger>
-          <TabsTrigger value="rosm">ROSM</TabsTrigger>
-          <TabsTrigger value="lhdn">LHDN</TabsTrigger>
-          <TabsTrigger value="pdpa">PDPA</TabsTrigger>
-          <TabsTrigger value="internal">Dalaman</TabsTrigger>
-          <TabsTrigger value="audit">Audit</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-6" value="all">Semua</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-7" value="rosm">ROSM</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-8" value="lhdn">LHDN</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-9" value="pdpa">PDPA</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-10" value="internal">Dalaman</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-11" value="audit">Audit</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -392,7 +392,7 @@ export default function CompliancePage() {
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-12" className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -491,7 +491,7 @@ export default function CompliancePage() {
                           )}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="gap-1">
+                          <Button id="page-Button-13" variant="ghost" size="sm" className="gap-1">
                             <Eye className="h-3 w-3" />
                             Lihat
                           </Button>

@@ -1789,7 +1789,7 @@ export default function DocsPage() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile sidebar toggle */}
         <div className="lg:hidden p-4 border-b">
-          <Button
+          <Button id="page-Button-1"
             variant="outline"
             size="sm"
             className="gap-2"
@@ -1852,7 +1852,7 @@ export default function DocsPage() {
             <Separator className="my-10" />
             <div className="flex items-center justify-between gap-4 pb-8">
               {prevPage ? (
-                <Button
+                <Button id="page-Button-2"
                   variant="outline"
                   className="flex items-center gap-2 text-sm"
                   onClick={() => handlePageSelect(prevPage.id)}
@@ -1869,7 +1869,7 @@ export default function DocsPage() {
                 <div />
               )}
               {nextPage ? (
-                <Button
+                <Button id="page-Button-3"
                   variant="outline"
                   className="flex items-center gap-2 text-sm ml-auto"
                   onClick={() => handlePageSelect(nextPage.id)}

@@ -247,7 +247,7 @@ export default function AdminPage() {
               </CardTitle>
               <CardDescription>{activeUsers} pengguna aktif daripada {users.length} jumlah</CardDescription>
             </div>
-            <Button variant="outline" size="sm" className="gap-1">
+            <Button id="page-Button-1" variant="outline" size="sm" className="gap-1">
               <UserPlus className="h-3 w-3" />
               Tambah Pengguna
             </Button>
@@ -283,7 +283,7 @@ export default function AdminPage() {
                         value={user.role}
                         onValueChange={(val) => handleRoleChange(user.id, val as 'staff' | 'admin' | 'developer')}
                       >
-                        <SelectTrigger className="h-8 w-[130px] text-xs">
+                        <SelectTrigger id="page-SelectTrigger-2" className="h-8 w-[130px] text-xs">
                           <Badge variant="secondary" className={`text-[10px] ${roleColors[user.role]}`}>
                             {roleLabels[user.role]}
                           </Badge>
@@ -310,7 +310,7 @@ export default function AdminPage() {
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" className="gap-1 text-xs">
+                      <Button id="page-Button-3" variant="ghost" size="sm" className="gap-1 text-xs">
                         <Eye className="h-3 w-3" />
                         Lihat
                       </Button>
@@ -334,7 +334,7 @@ export default function AdminPage() {
               </CardTitle>
               <CardDescription>Rekod tindakan pentadbir terkini</CardDescription>
             </div>
-            <Button variant="outline" size="sm" className="gap-1">
+            <Button id="page-Button-4" variant="outline" size="sm" className="gap-1">
               <Key className="h-3 w-3" />
               Eksport Log
             </Button>

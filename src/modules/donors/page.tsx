@@ -235,7 +235,7 @@ export default function DonorsPage() {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Plus className="h-4 w-4" />
               Tambah Penderma
             </Button>
@@ -267,7 +267,7 @@ export default function DonorsPage() {
                 <div className="grid gap-2">
                   <Label>Jenis Penderma</Label>
                   <Select value={formType} onValueChange={setFormType}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="individual">Individu</SelectItem>
                       <SelectItem value="corporate">Korporat</SelectItem>
@@ -278,7 +278,7 @@ export default function DonorsPage() {
                 <div className="grid gap-2">
                   <Label>Kategori</Label>
                   <Select value={formCategory} onValueChange={setFormCategory}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-3"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="regular">Tetap</SelectItem>
                       <SelectItem value="occasional">Kadang-kadang</SelectItem>
@@ -293,8 +293,8 @@ export default function DonorsPage() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-              <Button onClick={handleSubmit} disabled={submitting || !formName.trim()}>
+              <Button id="page-Button-4" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
+              <Button id="page-Button-5" onClick={handleSubmit} disabled={submitting || !formName.trim()}>
                 {submitting ? 'Menyimpan...' : 'Simpan'}
               </Button>
             </div>
@@ -359,7 +359,7 @@ export default function DonorsPage() {
               />
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-6" className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Jenis Penderma" />
               </SelectTrigger>
@@ -454,7 +454,7 @@ export default function DonorsPage() {
                         <TableCell className="hidden lg:table-cell text-right font-mono">{formatRM(d.totalDonated)}</TableCell>
                         <TableCell className="text-center">{d.donationCount}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="gap-1" onClick={() => openDonorDetail(d)}>
+                          <Button id="page-Button-7" variant="ghost" size="sm" className="gap-1" onClick={() => openDonorDetail(d)}>
                             <Eye className="h-3.5 w-3.5" />
                             Lihat
                           </Button>

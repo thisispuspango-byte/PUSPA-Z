@@ -185,7 +185,7 @@ export default function AiPage() {
           <Badge variant="outline" className="gap-1 text-xs">
             {currentUser?.role || 'staff'}
           </Badge>
-          <Button variant="outline" size="sm" onClick={handleClear} className="gap-1 touch-manipulation min-h-[36px]">
+          <Button id="page-Button-1" variant="outline" size="sm" onClick={handleClear} className="gap-1 touch-manipulation min-h-[36px]">
             <RotateCcw className="h-3 w-3" />
             Reset
           </Button>
@@ -197,7 +197,7 @@ export default function AiPage() {
         <div className="flex items-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-2 text-sm text-destructive shrink-0">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span className="truncate text-xs sm:text-sm">{lastError}</span>
-          <Button variant="ghost" size="sm" className="ml-auto shrink-0" onClick={() => setLastError(null)}>
+          <Button id="page-Button-2" variant="ghost" size="sm" className="ml-auto shrink-0" onClick={() => setLastError(null)}>
             Dismiss
           </Button>
         </div>
@@ -280,7 +280,7 @@ export default function AiPage() {
           {/* Scroll to bottom button */}
           {showScrollBtn && (
             <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10">
-              <Button
+              <Button id="page-Button-3"
                 variant="secondary"
                 size="icon"
                 className="h-9 w-9 rounded-full shadow-lg touch-manipulation"
@@ -298,7 +298,7 @@ export default function AiPage() {
               <p className="text-xs text-muted-foreground mb-1.5">Cadangan:</p>
               <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
                 {suggestedPrompts.map((prompt) => (
-                  <Button
+                  <Button id="page-Button-4"
                     key={prompt.label}
                     variant="outline"
                     size="sm"
@@ -327,7 +327,7 @@ export default function AiPage() {
                 disabled={isStreaming}
               />
               {/* Mic button — mobile only */}
-              <Button
+              <Button id="page-Button-5"
                 variant="ghost"
                 size="icon"
                 className="h-10 w-10 sm:hidden shrink-0 text-muted-foreground hover:text-primary hover:bg-primary/5 touch-manipulation rounded-full"
@@ -335,7 +335,7 @@ export default function AiPage() {
               >
                 <Mic className="h-5 w-5" />
               </Button>
-              <Button
+              <Button id="page-Button-6"
                 onClick={() => handleSend()}
                 disabled={isStreaming || !input.trim()}
                 size="icon"
@@ -438,19 +438,19 @@ export default function AiPage() {
 
             {/* Quick Actions — full-width on mobile */}
             <div className="mt-3 grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" className="justify-start text-xs gap-1.5 hover:bg-primary/5 hover:border-primary/30 hover:text-primary touch-manipulation min-h-[44px]" onClick={() => handleSend('Ringkasan operasi bulan ini')}>
+              <Button id="page-Button-7" variant="outline" size="sm" className="justify-start text-xs gap-1.5 hover:bg-primary/5 hover:border-primary/30 hover:text-primary touch-manipulation min-h-[44px]" onClick={() => handleSend('Ringkasan operasi bulan ini')}>
                 <History className="h-3 w-3 shrink-0" />
                 <span className="truncate">Ringkasan</span>
               </Button>
-              <Button variant="outline" size="sm" className="justify-start text-xs gap-1.5 hover:bg-primary/5 hover:border-primary/30 hover:text-primary touch-manipulation min-h-[44px]" onClick={() => handleSend('Senarai kes menunggu kelulusan')}>
+              <Button id="page-Button-8" variant="outline" size="sm" className="justify-start text-xs gap-1.5 hover:bg-primary/5 hover:border-primary/30 hover:text-primary touch-manipulation min-h-[44px]" onClick={() => handleSend('Senarai kes menunggu kelulusan')}>
                 <MessageSquare className="h-3 w-3 shrink-0" />
                 <span className="truncate">Kes Menunggu</span>
               </Button>
-              <Button variant="outline" size="sm" className="justify-start text-xs gap-1.5 hover:bg-primary/5 hover:border-primary/30 hover:text-primary touch-manipulation min-h-[44px]" onClick={() => handleSend('Statistik derma bulan semasa')}>
+              <Button id="page-Button-9" variant="outline" size="sm" className="justify-start text-xs gap-1.5 hover:bg-primary/5 hover:border-primary/30 hover:text-primary touch-manipulation min-h-[44px]" onClick={() => handleSend('Statistik derma bulan semasa')}>
                 <Zap className="h-3 w-3 shrink-0" />
                 <span className="truncate">Stats Derma</span>
               </Button>
-              <Button variant="outline" size="sm" className="justify-start text-xs gap-1.5 touch-manipulation min-h-[44px]" onClick={handleClear}>
+              <Button id="page-Button-10" variant="outline" size="sm" className="justify-start text-xs gap-1.5 touch-manipulation min-h-[44px]" onClick={handleClear}>
                 <RotateCcw className="h-3 w-3 shrink-0" />
                 <span className="truncate">Reset</span>
               </Button>
@@ -602,19 +602,19 @@ export default function AiPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" size="sm" className="w-full justify-start text-xs gap-2 hover:bg-primary/5 hover:border-primary/30 hover:text-primary" onClick={() => handleSend('Ringkasan operasi bulan ini')}>
+                <Button id="page-Button-11" variant="outline" size="sm" className="w-full justify-start text-xs gap-2 hover:bg-primary/5 hover:border-primary/30 hover:text-primary" onClick={() => handleSend('Ringkasan operasi bulan ini')}>
                   <History className="h-3 w-3" />
                   Ringkasan Bulanan
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start text-xs gap-2 hover:bg-primary/5 hover:border-primary/30 hover:text-primary" onClick={() => handleSend('Senarai kes menunggu kelulusan')}>
+                <Button id="page-Button-12" variant="outline" size="sm" className="w-full justify-start text-xs gap-2 hover:bg-primary/5 hover:border-primary/30 hover:text-primary" onClick={() => handleSend('Senarai kes menunggu kelulusan')}>
                   <MessageSquare className="h-3 w-3" />
                   Kes Menunggu
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start text-xs gap-2 hover:bg-primary/5 hover:border-primary/30 hover:text-primary" onClick={() => handleSend('Statistik derma bulan semasa')}>
+                <Button id="page-Button-13" variant="outline" size="sm" className="w-full justify-start text-xs gap-2 hover:bg-primary/5 hover:border-primary/30 hover:text-primary" onClick={() => handleSend('Statistik derma bulan semasa')}>
                   <Zap className="h-3 w-3" />
                   Stats Derma
                 </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start text-xs gap-2" onClick={handleClear}>
+                <Button id="page-Button-14" variant="outline" size="sm" className="w-full justify-start text-xs gap-2" onClick={handleClear}>
                   <RotateCcw className="h-3 w-3" />
                   Reset Perbualan
                 </Button>

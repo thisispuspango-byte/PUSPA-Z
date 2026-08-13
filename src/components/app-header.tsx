@@ -82,7 +82,7 @@ export function AppHeader() {
       <div className="flex items-center gap-1">
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 relative">
+            <Button id="app-header-Button-1" variant="ghost" size="icon" className="h-8 w-8 relative">
               <Bell className="h-4 w-4" aria-hidden="true" />
               {notifCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white">
@@ -114,7 +114,7 @@ export function AppHeader() {
           </PopoverContent>
         </Popover>
 
-        <Button
+        <Button id="app-header-Button-2"
           variant="ghost"
           size="icon"
           className="h-8 w-8"

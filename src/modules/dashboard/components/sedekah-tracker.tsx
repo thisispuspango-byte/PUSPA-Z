@@ -37,7 +37,7 @@ export function SedekahTracker() {
             <p className="text-xs text-muted-foreground">Pengagihan Makanan & Bantuan Institusi</p>
           </div>
         </div>
-        <Button
+        <Button id="sedekah-tracker-Button-1"
           variant="ghost"
           size="sm"
           className="text-xs text-primary hover:underline"

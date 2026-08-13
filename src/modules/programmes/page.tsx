@@ -332,7 +332,7 @@ export default function ProgrammesPage() {
         </div>
         <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Plus className="h-4 w-4" />
               Program Baru
             </Button>
@@ -368,7 +368,7 @@ export default function ProgrammesPage() {
                     value={newForm.category}
                     onValueChange={(v) => setNewForm((f) => ({ ...f, category: v }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -386,7 +386,7 @@ export default function ProgrammesPage() {
                     value={newForm.status}
                     onValueChange={(v) => setNewForm((f) => ({ ...f, status: v }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-3">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -458,10 +458,10 @@ export default function ProgrammesPage() {
                 />
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <Button variant="outline" onClick={() => setShowNewDialog(false)}>
+                <Button id="page-Button-4" variant="outline" onClick={() => setShowNewDialog(false)}>
                   Batal
                 </Button>
-                <Button onClick={handleCreateProgramme} disabled={!newForm.name}>
+                <Button id="page-Button-5" onClick={handleCreateProgramme} disabled={!newForm.name}>
                   Cipta Program
                 </Button>
               </div>
@@ -540,7 +540,7 @@ export default function ProgrammesPage() {
               />
             </div>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-6" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -553,7 +553,7 @@ export default function ProgrammesPage() {
               </SelectContent>
             </Select>
             <Select value={filterCategory} onValueChange={setFilterCategory}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-7" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Kategori" />
               </SelectTrigger>
               <SelectContent>
@@ -658,7 +658,7 @@ export default function ProgrammesPage() {
 
                   {/* Actions */}
                   <div className="flex justify-end">
-                    <Button
+                    <Button id="page-Button-8"
                       variant="outline"
                       size="sm"
                       className="gap-1.5"
@@ -676,7 +676,7 @@ export default function ProgrammesPage() {
       )}
 
       {/* Floating Action Button (Mobile Only) */}
-      <Button 
+      <Button id="page-Button-9" 
         onClick={() => setShowNewDialog(true)} 
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl md:hidden z-50 flex items-center justify-center p-0"
       >

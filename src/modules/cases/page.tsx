@@ -471,7 +471,7 @@ export default function CasesPage() {
             Case Management — {total} kes berdaftar
           </p>
         </div>
-        <Button onClick={openNewCase} className="gap-2">
+        <Button id="page-Button-1" onClick={openNewCase} className="gap-2">
           <Plus className="h-4 w-4" />
           Hantar Kes Baru
         </Button>
@@ -546,7 +546,7 @@ export default function CasesPage() {
               />
             </div>
             <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[170px]">
+              <SelectTrigger id="page-SelectTrigger-2" className="w-full sm:w-[170px]">
                 <Filter className="h-4 w-4 mr-1" />
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -558,7 +558,7 @@ export default function CasesPage() {
               </SelectContent>
             </Select>
             <Select value={typeFilter} onValueChange={(v) => { setTypeFilter(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-3" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Jenis" />
               </SelectTrigger>
               <SelectContent>
@@ -569,7 +569,7 @@ export default function CasesPage() {
               </SelectContent>
             </Select>
             <Select value={priorityFilter} onValueChange={(v) => { setPriorityFilter(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-4" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Keutamaan" />
               </SelectTrigger>
               <SelectContent>
@@ -659,7 +659,7 @@ export default function CasesPage() {
                       </td>
                       <td className="p-3 text-center">
                         <div className="flex items-center justify-center gap-1" onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm" className="h-9 w-9 p-0 group-hover:bg-primary group-hover:text-white rounded-xl transition-all shadow-sm" onClick={() => viewCase(caseRecord)}>
+                          <Button id="page-Button-5" variant="ghost" size="sm" className="h-9 w-9 p-0 group-hover:bg-primary group-hover:text-white rounded-xl transition-all shadow-sm" onClick={() => viewCase(caseRecord)}>
                             <Eye className="h-4 w-4" />
                           </Button>
                         </div>
@@ -706,7 +706,7 @@ export default function CasesPage() {
                 Menunjukkan {((page - 1) * 10) + 1}–{Math.min(page * 10, total)} daripada {total} kes
               </p>
               <div className="flex items-center gap-1">
-                <Button
+                <Button id="page-Button-6"
                   variant="outline" size="sm" disabled={page <= 1}
                   onClick={() => setPage(p => p - 1)}
                 >
@@ -715,7 +715,7 @@ export default function CasesPage() {
                 <span className="px-3 text-sm font-medium">
                   {page} / {totalPages}
                 </span>
-                <Button
+                <Button id="page-Button-7"
                   variant="outline" size="sm" disabled={page >= totalPages}
                   onClick={() => setPage(p => p + 1)}
                 >
@@ -728,7 +728,7 @@ export default function CasesPage() {
       </Card>
 
       {/* Floating Action Button (Mobile Only) */}
-      <Button 
+      <Button id="page-Button-8" 
         onClick={openNewCase} 
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl md:hidden z-50 flex items-center justify-center p-0"
       >
@@ -798,7 +798,7 @@ export default function CasesPage() {
               <div className="space-y-1.5">
                 <Label>Jenis Kes *</Label>
                 <Select value={form.watch('type') || ''} onValueChange={(v) => form.setValue('type', v)}>
-                  <SelectTrigger><SelectValue placeholder="Pilih jenis" /></SelectTrigger>
+                  <SelectTrigger id="page-SelectTrigger-9"><SelectValue placeholder="Pilih jenis" /></SelectTrigger>
                   <SelectContent>
                     {Object.entries(TYPE_LABELS).map(([value, label]) => (
                       <SelectItem key={value} value={value}>{label}</SelectItem>
@@ -812,7 +812,7 @@ export default function CasesPage() {
               <div className="space-y-1.5">
                 <Label>Keutamaan</Label>
                 <Select value={form.watch('priority') || 'medium'} onValueChange={(v) => form.setValue('priority', v)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger id="page-SelectTrigger-10"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {Object.entries(PRIORITY_LABELS).map(([value, label]) => (
                       <SelectItem key={value} value={value}>{label}</SelectItem>
@@ -833,10 +833,10 @@ export default function CasesPage() {
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setNewCaseOpen(false)}>
+              <Button id="page-Button-11" type="button" variant="outline" onClick={() => setNewCaseOpen(false)}>
                 Batal
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button id="page-Button-12" type="submit" disabled={submitting}>
                 {submitting ? 'Menyimpan...' : 'Hantar Kes'}
               </Button>
             </DialogFooter>
@@ -1056,18 +1056,18 @@ export default function CasesPage() {
                 <div className="flex flex-wrap gap-2">
                   {selectedCase.status !== 'closed' && selectedCase.status !== 'rejected' && (
                     <>
-                      <Button size="sm" className="gap-1">
+                      <Button id="page-Button-13" size="sm" className="gap-1">
                         <ArrowRight className="h-3 w-3" />
                         Kemaskini Status
                       </Button>
-                      <Button size="sm" variant="outline" className="gap-1 text-destructive hover:text-destructive">
+                      <Button id="page-Button-14" size="sm" variant="outline" className="gap-1 text-destructive hover:text-destructive">
                         <XCircle className="h-3 w-3" />
                         Tolak
                       </Button>
                     </>
                   )}
                   {selectedCase.status === 'closed' && (
-                    <Button size="sm" variant="outline" className="gap-1">
+                    <Button id="page-Button-15" size="sm" variant="outline" className="gap-1">
                       Buka Semula
                     </Button>
                   )}

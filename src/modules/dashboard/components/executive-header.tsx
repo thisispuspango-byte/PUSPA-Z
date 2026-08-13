@@ -26,14 +26,14 @@ export function ExecutiveHeader() {
 
       {/* 1-Click Quick Action Launchers */}
       <div className="flex flex-wrap items-center gap-2 shrink-0">
-        <Button
+        <Button id="executive-header-Button-1"
           onClick={() => setView('permohonan-bantuan')}
           size="sm"
           className="bg-purple-600 hover:bg-purple-500 text-white font-bold gap-1.5 shadow-md rounded-xl text-xs"
         >
           <PlusCircle className="h-4 w-4" /> Borang Bantuan
         </Button>
-        <Button
+        <Button id="executive-header-Button-2"
           onClick={() => setView('donations')}
           size="sm"
           variant="outline"
@@ -41,7 +41,7 @@ export function ExecutiveHeader() {
         >
           <HandCoins className="h-4 w-4 text-emerald-400" /> Rekod Derma
         </Button>
-        <Button
+        <Button id="executive-header-Button-3"
           onClick={() => setView('puspa-niaga')}
           size="sm"
           variant="outline"
@@ -49,7 +49,7 @@ export function ExecutiveHeader() {
         >
           <Package className="h-4 w-4 text-amber-400" /> PUSPA Niaga
         </Button>
-        <Button
+        <Button id="executive-header-Button-4"
           onClick={() => setAiChatOpen(true)}
           size="sm"
           className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold gap-1.5 shadow-md rounded-xl text-xs"

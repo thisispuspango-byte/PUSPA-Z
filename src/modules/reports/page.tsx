@@ -227,7 +227,7 @@ export default function ReportsPage() {
         </div>
         <div className="flex items-center gap-2">
           <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-full sm:w-[160px]">
+            <SelectTrigger id="page-SelectTrigger-1" className="w-full sm:w-[160px]">
               <Calendar className="h-4 w-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -238,7 +238,7 @@ export default function ReportsPage() {
               <SelectItem value="all_time">Semua Masa</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" className="gap-2">
+          <Button id="page-Button-2" variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             <span className="hidden sm:inline">Eksport</span>
           </Button>
@@ -248,10 +248,10 @@ export default function ReportsPage() {
       {/* Report Type Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="w-full sm:w-auto">
-          <TabsTrigger value="operational" className="gap-1"><BarChart3 className="h-4 w-4" /><span className="hidden sm:inline">Operasi</span></TabsTrigger>
-          <TabsTrigger value="financial" className="gap-1"><TrendingUp className="h-4 w-4" /><span className="hidden sm:inline">Kewangan</span></TabsTrigger>
-          <TabsTrigger value="compliance" className="gap-1"><PieChartIcon className="h-4 w-4" /><span className="hidden sm:inline">Pematuhan</span></TabsTrigger>
-          <TabsTrigger value="programme" className="gap-1"><BarChartIcon className="h-4 w-4" /><span className="hidden sm:inline">Program</span></TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-3" value="operational" className="gap-1"><BarChart3 className="h-4 w-4" /><span className="hidden sm:inline">Operasi</span></TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-4" value="financial" className="gap-1"><TrendingUp className="h-4 w-4" /><span className="hidden sm:inline">Kewangan</span></TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-5" value="compliance" className="gap-1"><PieChartIcon className="h-4 w-4" /><span className="hidden sm:inline">Pematuhan</span></TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-6" value="programme" className="gap-1"><BarChartIcon className="h-4 w-4" /><span className="hidden sm:inline">Program</span></TabsTrigger>
         </TabsList>
 
         {/* Operational Tab */}

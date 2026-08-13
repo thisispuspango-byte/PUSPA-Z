@@ -28,8 +28,8 @@ export function FinancialTrend({ data, period, onPeriodChange }: { data: TrendIt
         </div>
         <div className="flex items-center gap-2">
           <Select value={period} onValueChange={onPeriodChange}>
-            <SelectTrigger className="h-7 text-xs">
-              <SelectValue placeholder="Tempoh" />
+            <SelectTrigger id="period-select" className="w-[120px] h-8 text-xs bg-muted/50 border-none">
+              <SelectValue placeholder="Pilih Tempoh" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="1m">1 Bulan</SelectItem>

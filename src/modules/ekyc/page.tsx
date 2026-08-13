@@ -275,7 +275,7 @@ export default function EKYCPage() {
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-1" className="w-full sm:w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -289,7 +289,7 @@ export default function EKYCPage() {
               </SelectContent>
             </Select>
             <Select value={riskFilter} onValueChange={setRiskFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-2" className="w-full sm:w-[180px]">
                 <Shield className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Risiko" />
               </SelectTrigger>
@@ -379,7 +379,7 @@ export default function EKYCPage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" className="gap-1" onClick={() => openDetail(v)}>
+                          <Button id="page-Button-3" variant="ghost" size="sm" className="gap-1" onClick={() => openDetail(v)}>
                             <Eye className="h-3 w-3" />
                             Lihat
                           </Button>
@@ -563,7 +563,7 @@ export default function EKYCPage() {
                         />
                       </div>
                       <div className="flex gap-2">
-                        <Button
+                        <Button id="page-Button-4"
                           className="flex-1 gap-2 bg-green-600 hover:bg-green-700"
                           onClick={() => {
                             setReviewAction('approve')
@@ -574,7 +574,7 @@ export default function EKYCPage() {
                           <ThumbsUp className="h-4 w-4" />
                           Lulus
                         </Button>
-                        <Button
+                        <Button id="page-Button-5"
                           variant="destructive"
                           className="flex-1 gap-2"
                           onClick={() => {

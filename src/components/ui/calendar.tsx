@@ -186,7 +186,7 @@ function CalendarDayButton({
   }, [modifiers.focused])
 
   return (
-    <Button
+    <Button id="calendar-Button-1"
       ref={ref}
       variant="ghost"
       size="icon"

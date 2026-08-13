@@ -256,7 +256,7 @@ function SidebarTrigger({
   const { toggleSidebar } = useSidebar()
 
   return (
-    <Button
+    <Button id="sidebar-Button-1"
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"

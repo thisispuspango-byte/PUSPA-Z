@@ -11,6 +11,9 @@ export function useDashboardData() {
   const { data, isLoading, error } = useQuery<DashboardData>({
     queryKey: ['dashboard', period],
     queryFn: async () => {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+        return {}
+      }
       const res = await fetch(`/api/v1/dashboard?period=${period}`)
       if (!res.ok) throw new Error('Failed to fetch dashboard')
       const json = await res.json()

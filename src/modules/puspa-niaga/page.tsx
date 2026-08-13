@@ -296,7 +296,7 @@ export default function PuspaNiagaPage() {
           </p>
         </div>
         <div className="flex gap-2 shrink-0">
-          <Button
+          <Button id="page-Button-1"
             variant="outline"
             className="gap-2"
             onClick={() => setSaleDialogOpen(true)}
@@ -304,7 +304,7 @@ export default function PuspaNiagaPage() {
             <Receipt className="h-4 w-4" />
             Rekod Jualan
           </Button>
-          <Button className="gap-2 bg-[#9b59b6] hover:bg-[#8e44ad]" onClick={() => setProductDialogOpen(true)}>
+          <Button id="page-Button-2" className="gap-2 bg-[#9b59b6] hover:bg-[#8e44ad]" onClick={() => setProductDialogOpen(true)}>
             <Plus className="h-4 w-4" />
             Daftar Produk
           </Button>
@@ -360,9 +360,9 @@ export default function PuspaNiagaPage() {
       {/* Tabs */}
       <Tabs value={tab} onValueChange={setTab} className="space-y-4">
         <TabsList>
-          <TabsTrigger value="produk">Produk</TabsTrigger>
-          <TabsTrigger value="jualan">Jualan</TabsTrigger>
-          <TabsTrigger value="analisis">Analisis</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-3" value="produk">Produk</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-4" value="jualan">Jualan</TabsTrigger>
+          <TabsTrigger id="page-TabsTrigger-5" value="analisis">Analisis</TabsTrigger>
         </TabsList>
 
         {/* TAB: PRODUK */}
@@ -384,7 +384,7 @@ export default function PuspaNiagaPage() {
                   />
                 </div>
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-40">
+                  <SelectTrigger id="page-SelectTrigger-6" className="w-40">
                     <SelectValue placeholder="Kategori" />
                   </SelectTrigger>
                   <SelectContent>
@@ -532,7 +532,7 @@ export default function PuspaNiagaPage() {
                       <FormLabel>Kategori</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger id="page-SelectTrigger-7">
                             <SelectValue placeholder="Pilih kategori" />
                           </SelectTrigger>
                         </FormControl>
@@ -588,7 +588,7 @@ export default function PuspaNiagaPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isSubmitting} className="w-full bg-[#9b59b6] hover:bg-[#8e44ad]">
+              <Button id="page-Button-8" type="submit" disabled={isSubmitting} className="w-full bg-[#9b59b6] hover:bg-[#8e44ad]">
                 {isSubmitting ? 'Menyimpan...' : 'Daftarkan Produk'}
               </Button>
             </form>
@@ -615,7 +615,7 @@ export default function PuspaNiagaPage() {
                     <FormLabel>Produk</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger id="page-SelectTrigger-9">
                           <SelectValue placeholder="Pilih produk" />
                         </SelectTrigger>
                       </FormControl>
@@ -653,7 +653,7 @@ export default function PuspaNiagaPage() {
                       <FormLabel>Saluran</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger id="page-SelectTrigger-10">
                             <SelectValue placeholder="Pilih saluran" />
                           </SelectTrigger>
                         </FormControl>
@@ -682,7 +682,7 @@ export default function PuspaNiagaPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isSubmitting} className="w-full bg-[#9b59b6] hover:bg-[#8e44ad]">
+              <Button id="page-Button-11" type="submit" disabled={isSubmitting} className="w-full bg-[#9b59b6] hover:bg-[#8e44ad]">
                 {isSubmitting ? 'Menyimpan...' : 'Simpan Jualan'}
               </Button>
             </form>

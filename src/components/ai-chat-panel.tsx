@@ -227,7 +227,7 @@ export function AiChatPanel() {
           </div>
           <div className="flex items-center gap-1">
             {/* Expand/collapse toggle — mobile only */}
-            <Button
+            <Button id="ai-chat-panel-Button-1"
               variant="ghost"
               size="icon"
               className="h-8 w-8 md:hidden text-primary-foreground hover:bg-white/20 touch-manipulation"
@@ -236,7 +236,7 @@ export function AiChatPanel() {
             >
               <ChevronDown className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-180")} />
             </Button>
-            <Button
+            <Button id="ai-chat-panel-Button-2"
               variant="ghost"
               size="icon"
               className="h-8 w-8 text-primary-foreground hover:bg-white/20 touch-manipulation"
@@ -362,7 +362,7 @@ export function AiChatPanel() {
         {/* Scroll to bottom button */}
         {showScrollBtn && (
           <div className="flex justify-center -mt-8 mb-1 relative z-10">
-            <Button
+            <Button id="ai-chat-panel-Button-3"
               variant="secondary"
               size="icon"
               className="h-7 w-7 rounded-full shadow-md touch-manipulation"
@@ -426,7 +426,7 @@ export function AiChatPanel() {
               className="h-10 text-sm border-primary/20 focus:border-primary touch-manipulation rounded-full px-4"
               disabled={isStreaming}
             />
-            <Button
+            <Button id="ai-chat-panel-Button-4"
               type="button"
               variant="ghost"
               size="icon"
@@ -435,7 +435,7 @@ export function AiChatPanel() {
             >
               <Mic className="h-5 w-5" />
             </Button>
-            <Button
+            <Button id="ai-chat-panel-Button-5"
               type="submit"
               size="icon"
               className="h-10 w-10 shrink-0 bg-primary hover:bg-primary/90 touch-manipulation rounded-full"

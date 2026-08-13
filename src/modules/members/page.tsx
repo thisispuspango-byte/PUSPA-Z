@@ -413,7 +413,7 @@ export default function MembersPage() {
             Asnaf Member Management — {total} ahli berdaftar
           </p>
         </div>
-        <Button onClick={openRegister} className="gap-2">
+        <Button id="page-Button-1" onClick={openRegister} className="gap-2">
           <Plus className="h-4 w-4" />
           Daftar Ahli Baru
         </Button>
@@ -447,7 +447,7 @@ export default function MembersPage() {
               />
             </div>
             <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-2" className="w-full sm:w-[160px]">
                 <Filter className="h-4 w-4 mr-1" />
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -459,7 +459,7 @@ export default function MembersPage() {
               </SelectContent>
             </Select>
             <Select value={categoryFilter} onValueChange={(v) => { setCategoryFilter(v); setPage(1) }}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger id="page-SelectTrigger-3" className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Kategori" />
               </SelectTrigger>
               <SelectContent>
@@ -549,13 +549,13 @@ export default function MembersPage() {
                       </td>
                       <td className="p-3 text-center">
                         <div className="flex items-center justify-center gap-1" onClick={(e) => e.stopPropagation()}>
-                          <Button variant="ghost" size="sm" className="h-9 w-9 p-0" onClick={() => viewMember(member)}>
+                          <Button id="page-Button-4" variant="ghost" size="sm" className="h-9 w-9 p-0" onClick={() => viewMember(member)}>
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="h-9 w-9 p-0" onClick={() => openEdit(member)}>
+                          <Button id="page-Button-5" variant="ghost" size="sm" className="h-9 w-9 p-0" onClick={() => openEdit(member)}>
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="h-9 w-9 p-0 text-destructive hover:text-destructive" onClick={() => { setMemberToDelete(member); setDeleteConfirmOpen(true) }}>
+                          <Button id="page-Button-6" variant="ghost" size="sm" className="h-9 w-9 p-0 text-destructive hover:text-destructive" onClick={() => { setMemberToDelete(member); setDeleteConfirmOpen(true) }}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -574,7 +574,7 @@ export default function MembersPage() {
                 Menunjukkan {((page - 1) * 10) + 1}–{Math.min(page * 10, total)} daripada {total} ahli
               </p>
               <div className="flex items-center gap-1">
-                <Button
+                <Button id="page-Button-7"
                   variant="outline" size="sm" disabled={page <= 1}
                   onClick={() => setPage(p => p - 1)}
                 >
@@ -583,7 +583,7 @@ export default function MembersPage() {
                 <span className="px-3 text-sm font-medium">
                   {page} / {totalPages}
                 </span>
-                <Button
+                <Button id="page-Button-8"
                   variant="outline" size="sm" disabled={page >= totalPages}
                   onClick={() => setPage(p => p + 1)}
                 >
@@ -636,7 +636,7 @@ export default function MembersPage() {
                 <div className="space-y-1.5">
                   <Label htmlFor="gender">Jantina</Label>
                   <Select value={form.watch('gender') || ''} onValueChange={(v) => form.setValue('gender', v)}>
-                    <SelectTrigger><SelectValue placeholder="Pilih jantina" /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-9"><SelectValue placeholder="Pilih jantina" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="male">Lelaki</SelectItem>
                       <SelectItem value="female">Perempuan</SelectItem>
@@ -695,7 +695,7 @@ export default function MembersPage() {
                 <div className="space-y-1.5 sm:col-span-2">
                   <Label htmlFor="state">Negeri</Label>
                   <Select value={form.watch('state') || ''} onValueChange={(v) => form.setValue('state', v)}>
-                    <SelectTrigger><SelectValue placeholder="Pilih negeri" /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-10"><SelectValue placeholder="Pilih negeri" /></SelectTrigger>
                     <SelectContent>
                       {MALAYSIAN_STATES.map((s) => (
                         <SelectItem key={s} value={s}>{s}</SelectItem>
@@ -717,7 +717,7 @@ export default function MembersPage() {
                 <div className="space-y-1.5">
                   <Label htmlFor="asnafCategory">Kategori Asnaf</Label>
                   <Select value={form.watch('asnafCategory') || 'fakir'} onValueChange={(v) => form.setValue('asnafCategory', v)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-11"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {Object.entries(ASNAF_LABELS).map(([value, label]) => (
                         <SelectItem key={value} value={value}>{label}</SelectItem>
@@ -741,10 +741,10 @@ export default function MembersPage() {
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setRegisterOpen(false)}>
+              <Button id="page-Button-12" type="button" variant="outline" onClick={() => setRegisterOpen(false)}>
                 Batal
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button id="page-Button-13" type="submit" disabled={submitting}>
                 {submitting ? 'Menyimpan...' : editingMember ? 'Kemaskini' : 'Daftar Ahli'}
               </Button>
             </DialogFooter>
@@ -910,11 +910,11 @@ export default function MembersPage() {
 
                 {/* Actions */}
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1 gap-2" onClick={() => { setDetailOpen(false); openEdit(selectedMember!) }}>
+                  <Button id="page-Button-14" variant="outline" className="flex-1 gap-2" onClick={() => { setDetailOpen(false); openEdit(selectedMember!) }}>
                     <Pencil className="h-4 w-4" />
                     Edit
                   </Button>
-                  <Button variant="outline" className="flex-1 gap-2 text-destructive hover:text-destructive" onClick={() => { setDetailOpen(false); setMemberToDelete(selectedMember!); setDeleteConfirmOpen(true) }}>
+                  <Button id="page-Button-15" variant="outline" className="flex-1 gap-2 text-destructive hover:text-destructive" onClick={() => { setDetailOpen(false); setMemberToDelete(selectedMember!); setDeleteConfirmOpen(true) }}>
                     <Trash2 className="h-4 w-4" />
                     Padam
                   </Button>
@@ -938,10 +938,10 @@ export default function MembersPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)} disabled={submitting}>
+            <Button id="page-Button-16" variant="outline" onClick={() => setDeleteConfirmOpen(false)} disabled={submitting}>
               Batal
             </Button>
-            <Button variant="destructive" onClick={confirmDelete} disabled={submitting}>
+            <Button id="page-Button-17" variant="destructive" onClick={confirmDelete} disabled={submitting}>
               {submitting ? 'Memadam...' : 'Padam'}
             </Button>
           </DialogFooter>

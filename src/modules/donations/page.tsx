@@ -189,7 +189,7 @@ export default function DonationsPage() {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button id="page-Button-1" className="gap-2">
               <Plus className="h-4 w-4" />
               Rekod Derma Baru
             </Button>
@@ -207,7 +207,7 @@ export default function DonationsPage() {
                 <div className="grid gap-2">
                   <Label>Kategori</Label>
                   <Select value={formCategory} onValueChange={setFormCategory}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-2"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="zakat">Zakat</SelectItem>
                       <SelectItem value="sadaqah">Sadaqah</SelectItem>
@@ -226,7 +226,7 @@ export default function DonationsPage() {
                 <div className="grid gap-2">
                   <Label>Kaedah Pembayaran</Label>
                   <Select value={formMethod} onValueChange={setFormMethod}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="page-SelectTrigger-3"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="cash">Tunai</SelectItem>
                       <SelectItem value="bank_transfer">Pindahan Bank</SelectItem>
@@ -250,8 +250,8 @@ export default function DonationsPage() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
-              <Button onClick={handleSubmit} disabled={submitting || !formAmount}>
+              <Button id="page-Button-4" variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
+              <Button id="page-Button-5" onClick={handleSubmit} disabled={submitting || !formAmount}>
                 {submitting ? 'Menyimpan...' : 'Simpan'}
               </Button>
             </div>
@@ -329,7 +329,7 @@ export default function DonationsPage() {
               />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-6" className="w-full sm:w-[160px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Kategori" />
               </SelectTrigger>
@@ -343,7 +343,7 @@ export default function DonationsPage() {
               </SelectContent>
             </Select>
             <Select value={methodFilter} onValueChange={setMethodFilter}>
-              <SelectTrigger className="w-full sm:w-[160px]">
+              <SelectTrigger id="page-SelectTrigger-7" className="w-full sm:w-[160px]">
                 <SelectValue placeholder="Kaedah" />
               </SelectTrigger>
               <SelectContent>
@@ -437,7 +437,7 @@ export default function DonationsPage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm">Lihat</Button>
+                          <Button id="page-Button-8" variant="ghost" size="sm">Lihat</Button>
                         </TableCell>
                       </TableRow>
                     )
