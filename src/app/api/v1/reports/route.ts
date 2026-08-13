@@ -38,14 +38,20 @@ export async function GET(request: NextRequest) {
         // Monthly member growth (last 12 months)
         const now = new Date()
         const monthlyGrowth: { month: string; count: number }[] = []
+        const memberGrowthTotals: Record<string, number> = {}
+
+        members.forEach((m) => {
+          const created = new Date(m.createdAt)
+          const year = created.getFullYear()
+          const month = String(created.getMonth() + 1).padStart(2, '0')
+          const monthStr = `${year}-${month}`
+          memberGrowthTotals[monthStr] = (memberGrowthTotals[monthStr] || 0) + 1
+        })
+
         for (let i = 11; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
           const monthStr = d.toISOString().slice(0, 7)
-          const count = members.filter((m) => {
-            const created = new Date(m.createdAt)
-            return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
-          }).length
-          monthlyGrowth.push({ month: monthStr, count })
+          monthlyGrowth.push({ month: monthStr, count: memberGrowthTotals[monthStr] || 0 })
         }
 
         // Activity summary (last 30 days)
@@ -95,16 +101,20 @@ export async function GET(request: NextRequest) {
         // Monthly donation trends (last 12 months)
         const now = new Date()
         const monthlyDonations: { month: string; amount: number }[] = []
+        const donationTrendsTotals: Record<string, number> = {}
+
+        donations.forEach((don) => {
+          const created = new Date(don.createdAt)
+          const year = created.getFullYear()
+          const month = String(created.getMonth() + 1).padStart(2, '0')
+          const monthStr = `${year}-${month}`
+          donationTrendsTotals[monthStr] = (donationTrendsTotals[monthStr] || 0) + Number(don.amount)
+        })
+
         for (let i = 11; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
           const monthStr = d.toISOString().slice(0, 7)
-          const amount = donations
-            .filter((don) => {
-              const created = new Date(don.createdAt)
-              return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
-            })
-            .reduce((sum, don) => sum + Number(don.amount), 0)
-          monthlyDonations.push({ month: monthStr, amount })
+          monthlyDonations.push({ month: monthStr, amount: donationTrendsTotals[monthStr] || 0 })
         }
 
         // Disbursement totals
@@ -121,16 +131,20 @@ export async function GET(request: NextRequest) {
 
         // Monthly disbursement trends
         const monthlyDisbursements: { month: string; amount: number }[] = []
+        const disbursementTrendsTotals: Record<string, number> = {}
+
+        disbursements.forEach((dis) => {
+          const created = new Date(dis.createdAt)
+          const year = created.getFullYear()
+          const month = String(created.getMonth() + 1).padStart(2, '0')
+          const monthStr = `${year}-${month}`
+          disbursementTrendsTotals[monthStr] = (disbursementTrendsTotals[monthStr] || 0) + Number(dis.amount)
+        })
+
         for (let i = 11; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
           const monthStr = d.toISOString().slice(0, 7)
-          const amount = disbursements
-            .filter((dis) => {
-              const created = new Date(dis.createdAt)
-              return created.getFullYear() === d.getFullYear() && created.getMonth() === d.getMonth()
-            })
-            .reduce((sum, dis) => sum + Number(dis.amount), 0)
-          monthlyDisbursements.push({ month: monthStr, amount })
+          monthlyDisbursements.push({ month: monthStr, amount: disbursementTrendsTotals[monthStr] || 0 })
         }
 
         const totalDonations = donations.reduce((s, d) => s + Number(d.amount), 0)
