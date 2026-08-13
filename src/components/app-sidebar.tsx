@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAppStore, type ViewId } from '@/lib/store'
 import { canAccessView } from '@/lib/access-control'
 import type { LucideIcon } from 'lucide-react'
@@ -112,12 +112,12 @@ export function AppSidebar() {
   }, [setCurrentUser])
 
   // Kelompokkan navigasi mengikut kumpulan secara teratur
-  const groupedItems = navItems.reduce<Record<string, NavItem[]>>((acc, item) => {
+  const groupedItems = useMemo(() => navItems.reduce<Record<string, NavItem[]>>((acc, item) => {
     const group = item.group
     if (!acc[group]) acc[group] = []
     acc[group].push(item)
     return acc
-  }, {})
+  }, {}), [])
 
   return (
     <Sidebar collapsible="icon" className="border-r border-purple-500/30 bg-[#0f071e] text-white shadow-2xl">
