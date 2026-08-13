@@ -48,12 +48,24 @@ export async function GET(request: NextRequest) {
     const categories = ['rosm', 'lhdn', 'pdpa', 'internal', 'audit'] as const
     const categoryScores: Record<string, { total: number; compliant: number; score: number }> = {}
     for (const cat of categories) {
-      const catRecords = allRecords.filter((r) => r.category === cat)
-      const catCompliant = catRecords.filter((r) => r.status === 'compliant').length
-      categoryScores[cat] = {
-        total: catRecords.length,
-        compliant: catCompliant,
-        score: catRecords.length > 0 ? Math.round((catCompliant / catRecords.length) * 100) : 0,
+      categoryScores[cat] = { total: 0, compliant: 0, score: 0 }
+    }
+
+    for (let i = 0; i < allRecords.length; i++) {
+      const r = allRecords[i]
+      const catScore = categoryScores[r.category as typeof categories[number]]
+      if (catScore) {
+        catScore.total++
+        if (r.status === 'compliant') {
+          catScore.compliant++
+        }
+      }
+    }
+
+    for (const cat of categories) {
+      const s = categoryScores[cat]
+      if (s.total > 0) {
+        s.score = Math.round((s.compliant / s.total) * 100)
       }
     }
 
