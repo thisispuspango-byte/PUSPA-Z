@@ -102,6 +102,7 @@ export function DashboardLayout({ widgets }: DashboardLayoutProps) {
       const defaultIds = widgets.map(w => w.id)
       const validOrder = parsedOrder.filter((id: string) => defaultIds.includes(id))
       const missing = defaultIds.filter(id => !validOrder.includes(id))
+      // eslint-disable-next-line
       setOrder([...validOrder, ...missing])
     } else {
       setOrder(widgets.map(w => w.id))

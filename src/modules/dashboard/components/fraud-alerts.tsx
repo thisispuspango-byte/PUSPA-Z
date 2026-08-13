@@ -22,6 +22,7 @@ export function FraudAlerts() {
     if (dismissedAt) {
       const elapsed = Date.now() - parseInt(dismissedAt, 10)
       if (elapsed < 24 * 60 * 60 * 1000) {
+        // eslint-disable-next-line
         setDismissed(true)
       }
     }
