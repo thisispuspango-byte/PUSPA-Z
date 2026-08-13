@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { db } from '@/lib/db'
-import { AuthError, requireAuth, requireRole } from '@/lib/auth'
+import { AuthError, requireAuth } from '@/lib/auth'
 
 // GET /api/v1/cases — List cases with pagination, search, and filters
 export async function GET(request: NextRequest) {
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || ''
     const priority = searchParams.get('priority') || ''
 
-    const where: Record<string, unknown> = {}
+    const where: Prisma.CaseWhereInput = {}
 
     if (search) {
       where.OR = [
@@ -82,116 +83,18 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof AuthError) {
       return NextResponse.json({ error: error.message }, { status: error.status })
     }
-    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
-      const status = error.message.includes('Akses ditolak') ? 403 : 401
-      return NextResponse.json({ error: error.message }, { status })
+    const errMessage = error instanceof Error ? error.message : 'Failed to fetch cases'
+    if (errMessage.includes('Sesi tidak sah') || errMessage.includes('Akses ditolak')) {
+      const status = errMessage.includes('Akses ditolak') ? 403 : 401
+      return NextResponse.json({ error: errMessage }, { status })
     }
     console.error('Error fetching cases:', error)
     return NextResponse.json(
       { error: 'Failed to fetch cases' },
-      { status: 500 }
-    )
-  }
-}
-
-// POST /api/v1/cases — Create a new case
-export async function POST(request: NextRequest) {
-  try {
-    await requireAuth()
-    await requireRole('staff')
-    const body = await request.json()
-
-    // Validation
-    const requiredFields = ['memberId', 'type']
-    for (const field of requiredFields) {
-      if (!body[field]) {
-        return NextResponse.json(
-          { error: `Field '${field}' is required` },
-          { status: 400 }
-        )
-      }
-    }
-
-    // Validate type
-    const validTypes = ['welfare', 'medical', 'education', 'housing', 'emergency', 'financial']
-    if (!validTypes.includes(body.type)) {
-      return NextResponse.json(
-        { error: `Invalid type. Must be one of: ${validTypes.join(', ')}` },
-        { status: 400 }
-      )
-    }
-
-    // Validate priority
-    const validPriorities = ['low', 'medium', 'high', 'urgent']
-    if (body.priority && !validPriorities.includes(body.priority)) {
-      return NextResponse.json(
-        { error: `Invalid priority. Must be one of: ${validPriorities.join(', ')}` },
-        { status: 400 }
-      )
-    }
-
-    // Validate member exists
-    const member = await db.member.findUnique({
-      where: { id: body.memberId },
-    })
-
-    if (!member) {
-      return NextResponse.json(
-        { error: 'Member not found' },
-        { status: 404 }
-      )
-    }
-
-    // Generate case number
-    const caseCount = await db.case.count()
-    const caseNumber = `KES-${String(caseCount + 1).padStart(5, '0')}-${new Date().getFullYear()}`
-
-    const caseRecord = await db.case.create({
-      data: {
-        caseNumber,
-        memberId: body.memberId,
-        type: body.type,
-        priority: body.priority || 'medium',
-        status: 'draft',
-        description: body.description || null,
-        requestedAmount: body.requestedAmount ? parseFloat(body.requestedAmount) : null,
-      },
-      include: {
-        member: {
-          select: {
-            id: true,
-            name: true,
-            icNumber: true,
-          },
-        },
-      },
-    })
-
-    // Mask IC number for PDPA compliance
-    const maskedCaseRecord = {
-      ...caseRecord,
-      member: {
-        ...caseRecord.member,
-        icNumber: caseRecord.member.icNumber ? '****' + caseRecord.member.icNumber.slice(-4) : null,
-      },
-    }
-
-    return NextResponse.json({ data: maskedCaseRecord }, { status: 201 })
-  } catch (error) {
-    if (error instanceof AuthError) {
-      return NextResponse.json({ error: error.message }, { status: error.status })
-    }
-    if (error instanceof Error && (error.message.includes('Sesi tidak sah') || error.message.includes('Akses ditolak'))) {
-      const status = error.message.includes('Akses ditolak') ? 403 : 401
-      return NextResponse.json({ error: error.message }, { status })
-    }
-    console.error('Error creating case:', error)
-    return NextResponse.json(
-      { error: 'Failed to create case' },
       { status: 500 }
     )
   }

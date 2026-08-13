@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { db } from '@/lib/db'
 import { requireAuth, requireRole } from '@/lib/auth'
 import { createMemberSchema, validateRequest } from '@/lib/validation'
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status') || ''
     const asnafCategory = searchParams.get('asnafCategory') || ''
 
-    const where: Record<string, unknown> = {}
+    const where: Prisma.MemberWhereInput = {}
 
     if (search) {
       where.OR = [
@@ -68,11 +69,12 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errMessage = error instanceof Error ? error.message : 'Failed to fetch members'
     console.error('Error fetching members:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch members' },
-      { status: error.message?.includes('Sesi') ? 401 : 500 }
+      { error: errMessage },
+      { status: errMessage.includes('Sesi') ? 401 : 500 }
     )
   }
 }
@@ -135,11 +137,12 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json({ data: member }, { status: 201 })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errMessage = error instanceof Error ? error.message : 'Failed to create member'
     console.error('Error creating member:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to create member' },
-      { status: error.message?.includes('Akses') || error.message?.includes('Sesi') ? 403 : 500 }
+      { error: errMessage },
+      { status: errMessage.includes('Akses') || errMessage.includes('Sesi') ? 403 : 500 }
     )
   }
 }
