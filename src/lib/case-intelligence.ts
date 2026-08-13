@@ -615,20 +615,20 @@ export async function computeBeneficiary360FromDB(
 ): Promise<Beneficiary360 | null> {
   const memberRow = await db.member.findUnique({
     where: { id: memberId },
-    include: { householdMembers: true },
+    include: {
+      householdMembers: true,
+      cases: {
+        orderBy: { createdAt: 'desc' },
+      },
+      disbursements: {
+        orderBy: { createdAt: 'desc' },
+      },
+    },
   })
   if (!memberRow) return null
 
-  const [pastCases, disbursements] = await Promise.all([
-    db.case.findMany({
-      where: { memberId },
-      orderBy: { createdAt: 'desc' },
-    }),
-    db.disbursement.findMany({
-      where: { memberId },
-      orderBy: { createdAt: 'desc' },
-    }),
-  ])
+  const pastCases = memberRow.cases || []
+  const disbursements = memberRow.disbursements || []
 
   const member: Member = {
     id: memberRow.id,
