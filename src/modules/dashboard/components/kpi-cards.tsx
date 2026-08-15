@@ -15,6 +15,7 @@ import { KpiCardProps, DashboardStats } from '../types'
 import { AreaChart, Area, ResponsiveContainer } from 'recharts'
 import { useMediaQuery } from '@reactuses/core'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { motion } from 'framer-motion'
 
 export function KpiCard({ title, value, sub, icon: Icon, trend, sparklineData }: KpiCardProps) {
   const isPositive = trend >= 0
@@ -22,35 +23,72 @@ export function KpiCard({ title, value, sub, icon: Icon, trend, sparklineData }:
     <GlassCard className="h-full">
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/10">
-            <Icon size={24} />
-          </div>
-          <Badge
-            variant={isPositive ? 'default' : 'destructive'}
-            className="h-fit gap-1 bg-opacity-20 text-[10px] font-bold"
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", bounce: 0.5 }}
+            className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary ring-1 ring-primary/20 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-inner"
           >
-            {isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
-            {Math.abs(trend)}%
-          </Badge>
+            <Icon size={24} className="drop-shadow-sm" />
+          </motion.div>
+          <motion.div
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Badge
+              variant={isPositive ? 'default' : 'destructive'}
+              className="h-fit gap-1 bg-opacity-20 text-[10px] font-bold shadow-sm"
+            >
+              {isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+              {Math.abs(trend)}%
+            </Badge>
+          </motion.div>
         </div>
-        <p className="mt-4 text-sm font-medium text-muted-foreground">{title}</p>
-        <p className="mt-1 text-2xl font-black tracking-tight text-foreground">{value}</p>
-        <p className="mt-1 text-xs text-muted-foreground">{sub}</p>
+        <motion.p 
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mt-4 text-sm font-medium text-muted-foreground"
+        >
+          {title}
+        </motion.p>
+        <motion.p 
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mt-1 text-2xl font-black tracking-tight text-foreground"
+        >
+          {value}
+        </motion.p>
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="mt-1 text-xs text-muted-foreground"
+        >
+          {sub}
+        </motion.p>
         {sparklineData && sparklineData.length > 0 && (
-          <div className="mt-3 h-8 w-full">
+          <motion.div 
+            initial={{ opacity: 0, scaleY: 0 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="mt-3 h-8 w-full origin-bottom"
+          >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={sparklineData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id={`spark-${title}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.3} />
+                    <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.4} />
                     <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <Area type="monotone" dataKey="v" stroke="var(--primary)" strokeWidth={1.5}
+                <Area type="monotone" dataKey="v" stroke="var(--primary)" strokeWidth={2}
                   fill={`url(#spark-${title})`} dot={false} />
               </AreaChart>
             </ResponsiveContainer>
-          </div>
+          </motion.div>
         )}
       </CardContent>
     </GlassCard>

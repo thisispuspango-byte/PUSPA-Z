@@ -1,0 +1,112 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/components/auth-provider'
+import { useAppStore } from '@/lib/store'
+import { AppSidebar } from '@/components/app-sidebar'
+import { AppHeader } from '@/components/app-header'
+import { ViewRenderer } from '@/components/view-renderer'
+import { AiChatPanel } from '@/components/ai-chat-panel'
+import { MariaFloatingWidget } from '@/components/maria/maria-floating-widget'
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
+import Aurora from '@/components/Aurora'
+
+// Check if Supabase is configured
+const isSupabaseConfigured = !!(
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+)
+
+export default function DashboardPage() {
+  const router = useRouter()
+  const { user, loading } = useAuth()
+  const { currentUser, setCurrentUser, aiChatOpen } = useAppStore()
+
+  // Sync Supabase auth user with app store
+  useEffect(() => {
+    if (user && isSupabaseConfigured) {
+      const role = (user.user_metadata?.role as 'staff' | 'admin' | 'developer') || 'staff'
+      const name = user.user_metadata?.name || user.email?.split('@')[0] || 'Pengguna'
+      setCurrentUser({
+        id: user.id,
+        name,
+        email: user.email || '',
+        role,
+      })
+    }
+  }, [user, setCurrentUser])
+
+  // Redirect to login if Supabase is configured and user is not authenticated
+  useEffect(() => {
+    if (isSupabaseConfigured && !loading && !user) {
+      router.push('/login')
+    }
+  }, [user, loading, router])
+
+  // Show loading screen while checking auth
+  if (isSupabaseConfigured && loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <img
+            src="/puspa-logo-official.png"
+            alt="PUSPA Logo"
+            width={64}
+            height={64}
+            className="h-16 w-16 object-contain rounded-full bg-white p-1"
+            style={{ animation: 'puspa-spin 4s linear infinite' }}
+          />
+          <style>{`
+            @keyframes puspa-spin {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="h-2 w-2 rounded-full bg-purple-600 animate-bounce [animation-delay:-0.3s]" />
+            <div className="h-2 w-2 rounded-full bg-purple-600 animate-bounce [animation-delay:-0.15s]" />
+            <div className="h-2 w-2 rounded-full bg-purple-600 animate-bounce" />
+          </div>
+          <p className="text-sm text-muted-foreground">Memuatkan PUSPA-Z…</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show nothing while redirecting to login
+  if (isSupabaseConfigured && !user) {
+    return null
+  }
+
+  // Main app (authenticated or simulated auth for development)
+  return (
+    <div className="relative min-h-screen">
+      {/* Aurora backdrop — fixed light source behind the glass shell */}
+      <div aria-hidden="true" className="fixed inset-0 -z-10 pointer-events-none">
+        <Aurora colorStops={['#6A0DAD', '#9370DB', '#3B0764']} amplitude={1} speed={0.5} />
+      </div>
+
+      <SidebarProvider>
+        <AppSidebar />
+
+        <SidebarInset
+          className={cn(
+            'relative bg-background/70 backdrop-blur-2xl transition-all duration-300 ease-in-out',
+            aiChatOpen ? 'md:pr-96' : '',
+          )}
+        >
+          <AppHeader />
+          <main className="p-4 lg:p-6">
+            <ViewRenderer />
+          </main>
+        </SidebarInset>
+
+        {/* AI Chat Panel — fixed positioned */}
+        <AiChatPanel />
+        <MariaFloatingWidget />
+      </SidebarProvider>
+    </div>
+  )
+}

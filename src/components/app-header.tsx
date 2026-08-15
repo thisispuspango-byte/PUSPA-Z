@@ -1,5 +1,7 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { cn } from '@/lib/utils'
 import { useAppStore, type ViewId } from '@/lib/store'
 import { Search, Moon, Sun, Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -44,6 +46,20 @@ export function AppHeader() {
   
   const title = viewTitles[currentView] || { en: currentView, ms: currentView }
 
+  const [isScrolled, setIsScrolled] = useState(false)
+  
+  useEffect(() => {
+    // Some layouts scroll on a specific container, so we listen to both window and common selectors
+    const scroller = document.querySelector('[data-scroll-container]') || window
+    const handleScroll = (e: Event) => {
+      const target = e.target as Document | Element
+      const y = (target instanceof Element) ? target.scrollTop : window.scrollY
+      setIsScrolled(y > 20)
+    }
+    scroller.addEventListener('scroll', handleScroll, { passive: true })
+    return () => scroller.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const { data: notifications } = useQuery({
     queryKey: ['header-notifications'],
     queryFn: async () => {
@@ -56,8 +72,16 @@ export function AppHeader() {
   const notifCount = notifications?.total ?? 0
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-white/20 bg-background/70 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 lg:px-6 dark:border-white/10">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+    <header className={cn(
+      "sticky top-0 z-30 flex h-14 items-center gap-2 px-4 lg:px-6 transition-all duration-300",
+      isScrolled 
+        ? "bg-background/80 backdrop-blur-2xl border-b border-purple-500/20 shadow-md dark:border-white/10 dark:bg-[#150a2a]/60 ring-1 ring-purple-500/10"
+        : "bg-transparent border-transparent"
+    )}>
+      <div aria-hidden="true" className={cn(
+        "pointer-events-none absolute inset-x-0 bottom-0 h-px transition-opacity duration-300",
+        isScrolled ? "opacity-100 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" : "opacity-0"
+      )} />
       <SidebarTrigger className="-ml-1 size-7" />
       <Separator orientation="vertical" className="mr-2 h-4" />
 

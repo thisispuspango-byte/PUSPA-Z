@@ -1,112 +1,108 @@
 'use client'
 
-import { useEffect } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/components/auth-provider'
-import { useAppStore } from '@/lib/store'
-import { AppSidebar } from '@/components/app-sidebar'
-import { AppHeader } from '@/components/app-header'
-import { ViewRenderer } from '@/components/view-renderer'
-import { AiChatPanel } from '@/components/ai-chat-panel'
-import { MariaFloatingWidget } from '@/components/maria/maria-floating-widget'
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
-import { cn } from '@/lib/utils'
 import Aurora from '@/components/Aurora'
+import { PortalNavbar } from '@/components/portal/portal-navbar'
+import { PortalHero } from '@/components/portal/portal-hero'
+import { PortalMetrics } from '@/components/portal/portal-metrics'
+import { PortalQuickActions } from '@/components/portal/portal-quick-actions'
+import { PortalProgrammes } from '@/components/portal/portal-programmes'
+import { PortalMariaAssistant } from '@/components/portal/portal-maria-assistant'
+import { PortalInteractiveEcosystem } from '@/components/portal/portal-interactive-ecosystem'
+import { PortalAgihanGallery } from '@/components/portal/portal-agihan-gallery'
+import { PortalFooter } from '@/components/portal/portal-footer'
+import { QuickDonateModal } from '@/components/portal/quick-donate-modal'
+import { CheckStatusModal } from '@/components/portal/check-status-modal'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import PermohonanBantuanPage from '@/modules/permohonan-bantuan/page'
 
-// Check if Supabase is configured
-const isSupabaseConfigured = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-)
-
-export default function Home() {
+export default function PublicPortalHome() {
   const router = useRouter()
-  const { user, loading } = useAuth()
-  const { currentUser, setCurrentUser, aiChatOpen } = useAppStore()
+  const [donateModalOpen, setDonateModalOpen] = useState(false)
+  const [checkStatusModalOpen, setCheckStatusModalOpen] = useState(false)
+  const [applyModalOpen, setApplyModalOpen] = useState(false)
 
-  // Sync Supabase auth user with app store
-  useEffect(() => {
-    if (user && isSupabaseConfigured) {
-      const role = (user.user_metadata?.role as 'staff' | 'admin' | 'developer') || 'staff'
-      const name = user.user_metadata?.name || user.email?.split('@')[0] || 'Pengguna'
-      setCurrentUser({
-        id: user.id,
-        name,
-        email: user.email || '',
-        role,
-      })
-    }
-  }, [user, setCurrentUser])
+  const handleOpenDonate = () => setDonateModalOpen(true)
+  const handleOpenCheckStatus = () => setCheckStatusModalOpen(true)
+  const handleOpenApply = () => setApplyModalOpen(true)
 
-  // Redirect to login if Supabase is configured and user is not authenticated
-  useEffect(() => {
-    if (isSupabaseConfigured && !loading && !user) {
-      router.push('/login')
-    }
-  }, [user, loading, router])
-
-  // Show loading screen while checking auth
-  if (isSupabaseConfigured && loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <img
-            src="/puspa-logo-official.png"
-            alt="PUSPA Logo"
-            width={64}
-            height={64}
-            className="h-16 w-16 object-contain rounded-full bg-white p-1"
-            style={{ animation: 'puspa-spin 4s linear infinite' }}
-          />
-          <style>{`
-            @keyframes puspa-spin {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <div className="h-2 w-2 rounded-full bg-purple-600 animate-bounce [animation-delay:-0.3s]" />
-            <div className="h-2 w-2 rounded-full bg-purple-600 animate-bounce [animation-delay:-0.15s]" />
-            <div className="h-2 w-2 rounded-full bg-purple-600 animate-bounce" />
-          </div>
-          <p className="text-sm text-muted-foreground">Memuatkan…</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Show nothing while redirecting to login
-  if (isSupabaseConfigured && !user) {
-    return null
-  }
-
-  // Main app (authenticated or no Supabase = simulated auth)
   return (
-    <div className="relative min-h-screen">
-      {/* Aurora backdrop — fixed light source behind the glass shell */}
-      <div aria-hidden="true" className="fixed inset-0 -z-10 pointer-events-none">
-        <Aurora colorStops={['#6A0DAD', '#9370DB', '#3B0764']} amplitude={1} speed={0.5} />
+    <div className="relative min-h-screen selection:bg-purple-500 selection:text-white bg-background text-foreground">
+      {/* Dynamic Aurora Ambient Light Source */}
+      <div aria-hidden="true" className="fixed inset-0 -z-10 pointer-events-none opacity-80 dark:opacity-60">
+        <Aurora colorStops={['#6A0DAD', '#9370DB', '#3B0764']} amplitude={1.1} speed={0.4} />
       </div>
 
-      <SidebarProvider>
-        <AppSidebar />
+      {/* Glass Floating Navigation Bar */}
+      <PortalNavbar
+        onOpenDonate={handleOpenDonate}
+        onOpenCheckStatus={handleOpenCheckStatus}
+      />
 
-        <SidebarInset
-          className={cn(
-            'relative bg-background/70 backdrop-blur-2xl transition-all duration-300 ease-in-out',
-            aiChatOpen ? 'md:pr-96' : '',
-          )}
-        >
-          <AppHeader />
-          <main className="p-4 lg:p-6">
-            <ViewRenderer />
-          </main>
-        </SidebarInset>
+      {/* Main Landing Sections — Naratif "Perjalanan Ihsan" */}
+      <main className="space-y-4">
+        {/* 1. Pendaratan: Hero Banner with 3D Preview Widget */}
+        <PortalHero
+          onOpenDonate={handleOpenDonate}
+          onOpenCheckStatus={handleOpenCheckStatus}
+          onNavigateToApply={handleOpenApply}
+        />
 
-        {/* AI Chat Panel — fixed positioned */}
-        <AiChatPanel />
-        <MariaFloatingWidget />
-      </SidebarProvider>
+        {/* 2. Terbang: Scroll-scrub Fly-Through 5-Zon PUSPA Ecosystem (#agihan) */}
+        <PortalInteractiveEcosystem onOpenDonate={handleOpenDonate} />
+
+        {/* 3. Kesan: Live Glassmorphic Metric Counters (#metrik) */}
+        <PortalMetrics />
+
+        {/* 4. Bukti: Real Field Photo & Institutional Distribution Gallery */}
+        <PortalAgihanGallery onOpenDonate={handleOpenDonate} />
+
+        {/* 5. Tindakan: Direct Action Service Hub (#tindakan) */}
+        <PortalQuickActions
+          onOpenDonate={handleOpenDonate}
+          onOpenCheckStatus={handleOpenCheckStatus}
+          onNavigateToApply={handleOpenApply}
+        />
+
+        {/* 6. Program: Flagship Programmes Showcase (#program) */}
+        <PortalProgrammes onOpenDonate={handleOpenDonate} />
+
+        {/* 7. Sokongan: Maria AI Public Assistant & FAQ (#maria) */}
+        <PortalMariaAssistant />
+      </main>
+
+      {/* Comprehensive Footer */}
+      <PortalFooter
+        onOpenDonate={handleOpenDonate}
+        onOpenCheckStatus={handleOpenCheckStatus}
+      />
+
+      {/* ─── Interactive Modals ─── */}
+      {/* Quick Donate Modal */}
+      <QuickDonateModal
+        open={donateModalOpen}
+        onOpenChange={setDonateModalOpen}
+      />
+
+      {/* Check Status Modal */}
+      <CheckStatusModal
+        open={checkStatusModalOpen}
+        onOpenChange={setCheckStatusModalOpen}
+      />
+
+      {/* Apply Aid Form Modal */}
+      <Dialog open={applyModalOpen} onOpenChange={setApplyModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-2xl border-white/10 p-4 sm:p-6">
+          <PermohonanBantuanPage />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

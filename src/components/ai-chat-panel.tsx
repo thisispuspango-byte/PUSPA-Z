@@ -4,6 +4,7 @@ import { useAppStore } from '@/lib/store'
 import { useHermesStore } from '@/stores/hermes-store'
 import { cn } from '@/lib/utils'
 import { X, Send, Loader2, Sparkles, Wrench, Mic, ChevronDown, ArrowDown, Cpu } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -180,16 +181,19 @@ export function AiChatPanel() {
         className="fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-300"
         onClick={() => setAiChatOpen(false)}
       />
-      <aside className={cn(
-        "fixed z-40 flex flex-col bg-background border-l md:border-l shadow-xl transition-all duration-300",
+      <motion.aside 
+        layout
+        transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+        className={cn(
+        "fixed z-40 flex flex-col bg-background/95 backdrop-blur-2xl border-l md:border-l shadow-[0_0_40px_rgba(0,0,0,0.1)] transition-colors duration-300 dark:bg-black/40",
         // Mobile: bottom sheet — full screen when expanded, 85vh when collapsed
-        "inset-x-0 bottom-0 rounded-t-2xl border-t md:border-t",
+        "inset-x-0 bottom-0 rounded-t-3xl border-t md:border-t ring-1 ring-white/10",
         "pb-[env(safe-area-inset-bottom,0px)]",
         isExpanded
           ? "h-[95vh] max-h-[95vh]"
           : "h-[85vh] max-h-[85vh]",
         // Desktop: side panel — wider for better readability
-        "md:inset-y-0 md:right-0 md:left-auto md:top-0 md:h-full md:w-96 md:rounded-none md:pb-0",
+        "md:inset-y-0 md:right-0 md:left-auto md:top-0 md:h-full md:w-[400px] md:rounded-none md:pb-0",
       )}>
         {/* Mobile drag handle — swipe to dismiss area */}
         <div
@@ -311,9 +315,13 @@ export function AiChatPanel() {
               onScroll={handleScroll}
               className="px-4 py-3 space-y-3"
             >
+              <AnimatePresence initial={false}>
               {messages.map((msg) => (
-                <div
+                <motion.div
                   key={msg.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ type: "spring", bounce: 0.4 }}
                   className={cn(
                     "flex gap-2.5",
                     msg.role === 'user' && "flex-row-reverse"
@@ -353,8 +361,9 @@ export function AiChatPanel() {
                       </span>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
+              </AnimatePresence>
             </div>
           </ScrollArea>
         </div>
@@ -412,10 +421,22 @@ export function AiChatPanel() {
         )}
 
         {/* Input — consistent sizing */}
-        <div className="border-t p-3 bg-background">
+        <div className="relative border-t p-3 bg-background/50 backdrop-blur-xl">
+          {/* Aurora Glow Effect */}
+          <AnimatePresence>
+            {isStreaming && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-14 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 blur-2xl pointer-events-none rounded-full"
+              />
+            )}
+          </AnimatePresence>
           <form
             onSubmit={(e) => { e.preventDefault(); handleSend() }}
-            className="flex gap-2 items-center"
+            className="relative flex gap-2 items-center z-10"
           >
             <Input
               ref={inputRef}
@@ -453,7 +474,7 @@ export function AiChatPanel() {
             Maria Puspa — Cerdas. Mesra. Sentiasa di sisi anda.
           </p>
         </div>
-      </aside>
+      </motion.aside>
     </>
   )
 }

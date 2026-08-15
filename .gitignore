@@ -90,6 +90,10 @@ file.tmp
 structure.txt
 /temp/
 
+# Secrets (NEVER commit)
+.secrets/
+*.secrets.md
+
 # Use bun.lock as primary lockfile
 package-lock.json
 
@@ -103,3 +107,6 @@ mini-services/telegram-bot/results_*/
 
 # Generated poster artifacts
 /poster-*.png
+
+# Generated video artifacts (e.g. emons-showcase.mp4 - 47.9MB demo reel)
+public/videos/

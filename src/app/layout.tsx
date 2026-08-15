@@ -47,6 +47,30 @@ export default function RootLayout({
             </ReactQueryProvider>
           </AuthProvider>
         </ThemeProvider>
+
+        {/* NGO Structured Data (JSON-LD) — SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'NGO',
+              name: 'Pertubuhan Urus Peduli Asnaf',
+              alternateName: 'PUSPA',
+              registrationNumber: 'PPM-024-10-05012022',
+              description:
+                'Platform Pengurusan PERTUBUHAN URUS PEDULI ASNAF (PPM-024-10-05012022) — Cerdas. Mesra. Sentiasa di sisi anda.',
+              logo: '/puspa-logo-official.png',
+              areaServed: 'MY',
+              knowsAbout: [
+                'Bantuan Asnaf',
+                'Makanan Barakah',
+                'Tahfiz',
+                'Asnafpreneur',
+              ],
+            }),
+          }}
+        />
       </body>
     </html>
   );

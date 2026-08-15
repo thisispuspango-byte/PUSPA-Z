@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useAppStore, type ViewId } from '@/lib/store'
 import { canAccessView } from '@/lib/access-control'
+import { motion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import {
   LayoutDashboard,
@@ -179,21 +180,26 @@ export function AppSidebar() {
                               : 'hover:bg-purple-900/30 hover:text-white text-purple-100/80 text-xs py-2 rounded-xl transition-all duration-200 group'
                           }
                         >
-                          {/* Indicator Garisan Aksen Kiri (Infinitekala Style) */}
+                          {/* Indicator Garisan Aksen Kiri (Framer Motion LayoutId) */}
                           {isActive && (
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-gradient-to-b from-purple-400 via-purple-300 to-indigo-400 shadow-[0_0_10px_rgba(167,139,250,0.8)]" />
+                            <motion.span 
+                              layoutId="sidebar-active-indicator"
+                              className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 rounded-r-full bg-gradient-to-b from-purple-300 via-white to-indigo-300 shadow-[0_0_12px_rgba(255,255,255,0.9)]" 
+                            />
                           )}
 
                           {/* Kotak Ikon Mewah (Custom Glassmorphism Icon Container) */}
-                          <div
+                          <motion.div
+                            whileHover={{ scale: 1.05, rotate: [0, -5, 5, 0] }}
+                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
                             className={
                               isActive
                                 ? 'flex h-8 w-8 items-center justify-center shrink-0 rounded-lg bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-700 text-white shadow-[0_0_14px_rgba(167,139,250,0.5)] ring-1 ring-purple-300/40'
-                                : 'flex h-7 w-7 items-center justify-center shrink-0 rounded-lg bg-purple-950/40 text-purple-300/80 ring-1 ring-purple-500/20 group-hover:bg-purple-900/60 group-hover:text-white group-hover:ring-purple-400/40 group-hover:scale-105 transition-all duration-200'
+                                : 'flex h-7 w-7 items-center justify-center shrink-0 rounded-lg bg-purple-950/40 text-purple-300/80 ring-1 ring-purple-500/20 group-hover:bg-purple-900/60 group-hover:text-white group-hover:ring-purple-400/40 transition-all duration-200'
                             }
                           >
                             <Icon className="h-4 w-4 stroke-[1.75]" />
-                          </div>
+                          </motion.div>
 
                           <span className={`truncate flex-1 ml-1.5 ${isActive ? 'font-bold text-white text-sm' : 'font-medium'}`}>
                             {item.label}
