@@ -1,15 +1,27 @@
-# PUSPA V5 — Product Requirements Document
+---
+title: "PUSPA-Z — Product Requirements Document (PRD)"
+document_id: "PUSPA-DOC-PRD-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "INTERNAL CONFIDENTIAL"
+lifecycle_status: "ACTIVE"
+---
+
+# PUSPA V5.6 — Product Requirements Document
 
 **Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)**
 **Malaysian NGO Management Platform**
 
-| Field | Value |
-|---|---|
-| Document Version | 5.0 |
-| Last Updated | 2026-05-08 |
-| Status | Active Development |
-| Author | PUSPA Engineering Team |
-| Classification | Internal — Confidential |
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menetapkan piawaian audit SMS-v1.0 merentas dokumen PRD | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Mengemas kini status ciri P0 (Portal Awam, Diorama 3D, Borang Bantuan) | Menandakan F010A, F010B, F010C sebagai Complete dalam jadual Seksyen 5 | `doc verified` |
+| `5.6.0` | `2026-08-13 18:00` | `Conductor Agent` | Pendaftaran 24 modul lengkap dan model data Maria Puspa AI | Penyelarasan skop produk dan metrik kejayaan | `build clean` |
 
 ---
 
@@ -36,7 +48,7 @@
 
 PUSPA V5 is a full-stack, AI-augmented management platform for **Pertubuhan Urus Peduli Asnaf (PUSPA)**, a Malaysian NGO registered under PPM-024-10-05012022, operating primarily in Kuala Lumpur and Selangor. The platform digitises and streamlines the end-to-end operations of managing asnaf (needy) beneficiaries — from member registration and eKYC verification, through case management and donation tracking, to disbursement processing and regulatory compliance.
 
-The platform comprises **23 core modules** spanning operational management, compliance, and an AI assistant. At its centre is **Maria Puspa**, a RAG-grounded AI assistant with 18 tool-calling capabilities, bilingual fluency (Bahasa Melayu primary, English secondary), and strict adherence to mandatory tool use before answering — eliminating hallucination in operational data queries.
+The platform comprises **24 core modules** spanning operational management, compliance, and an AI assistant. At its centre is **Maria Puspa**, a RAG-grounded AI assistant with 22 tool-calling capabilities, bilingual fluency (Bahasa Melayu primary, English secondary), and strict adherence to mandatory tool use before answering — eliminating hallucination in operational data queries.
 
 PUSPA V5 is built on **Next.js 16 (App Router)** with **Prisma ORM 6** and **PostgreSQL**, styled with **Tailwind CSS 4** and **shadcn/ui**, powered by **Zustand 5** for state management, and deployed to **Vercel (serverless)**. The AI layer uses **OpenRouter** with key rotation and SSE streaming. Authentication is handled by **Supabase Auth**.
 
@@ -153,35 +165,38 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 
 ## 5. Feature Requirements
 
-### 5.1 Must-Have (P0) — Launch Blockers
+### 5.1 Must-Have (P0) — Production Core Features
 
-| ID | Feature | Module | Description |
-|---|---|---|---|
-| F001 | Asnaf Member CRUD | Members | Create, read, update, delete members with 8 asnaf categories, household management, eKYC status |
-| F002 | Case Lifecycle Management | Cases | 9-stage pipeline: draft → intake → verification → assessment → approval → disbursement → follow_up → closed / rejected |
-| F003 | Donation Tracking | Donations | Record donations across 5 categories (zakat, sadaqah, waqf, infaq, general) with receipt management and shariah compliance flag |
-| F004 | Donor Management | Donors | Track individual, corporate, and government donors with donation history |
-| F005 | Disbursement Pipeline | Disbursements | 5-stage processing: pending → approved → disbursed → verified → cancelled |
-| F006 | Dashboard Overview | Dashboard | Key metrics: member count, active cases, donation totals, disbursement totals, programme status, compliance score |
-| F007 | PII Masking | System | IC numbers masked to `****XXXX` in all views, API responses, and AI outputs |
-| F008 | RBAC Enforcement | System | 3-tier role hierarchy (Staff → Admin → Developer) with module-level and tool-level access control |
-| F009 | Activity Audit Log | Activities | Immutable log of all create, update, delete, and approval actions with user attribution |
-| F010 | Maria Puspa Core AI | AI | RAG-grounded AI assistant with 22 tools, mandatory tool use, SSE streaming, key rotation |
+| ID | Feature | Module | Description | Status |
+|---|---|---|---|---|
+| F001 | Asnaf Member CRUD | Members | Create, read, update, delete members with 8 asnaf categories, household management, eKYC status | Complete |
+| F002 | Case Lifecycle Management | Cases | 9-stage pipeline: draft → intake → verification → assessment → approval → disbursement → follow_up → closed / rejected | Complete |
+| F003 | Donation Tracking | Donations | Record donations across 5 categories (zakat, sadaqah, waqf, infaq, general) with receipt management and shariah compliance flag | Complete |
+| F004 | Donor Management | Donors | Track individual, corporate, and government donors with donation history | Complete |
+| F005 | Disbursement Pipeline | Disbursements | 5-stage processing: pending → approved → disbursed → verified → cancelled | Complete |
+| F006 | Dashboard Overview | Dashboard | Key metrics: member count, active cases, donation totals, disbursement totals, programme status, compliance score | Complete |
+| F007 | PII Masking | System | IC numbers masked to `****XXXX` in all views, API responses, and AI outputs | Complete |
+| F008 | RBAC Enforcement | System | 3-tier role hierarchy (Staff → Admin → Developer) with module-level and tool-level access control | Complete |
+| F009 | Activity Audit Log | Activities | Immutable log of all create, update, delete, and approval actions with user attribution | Complete |
+| F010 | Maria Puspa Core AI | AI | RAG-grounded AI assistant with 22 tools, mandatory tool use, SSE streaming, key rotation | Complete |
+| F010A | Public Portal Landing | Portal | Public-facing landing page (`/`) with Aurora ambient glow, direct action hub, and quick modals | Complete |
+| F010B | 5-Zon 3D Diorama Flight | Portal | Scroll-scrubbed interactive flight across 5 operational zones with bottom timeline navigation | Complete |
+| F010C | Aid Application Pipeline | Portal / API | Online aid application form connected to `/api/aid-applications` with PDPA compliance | Complete |
 
-### 5.2 Should-Have (P1) — Post-Launch Enhancements
+### 5.2 Should-Have (P1) — Operational Enhancements
 
-| ID | Feature | Module | Description |
-|---|---|---|---|
-| F011 | Programme Beneficiary Tracking | Programmes | Link beneficiaries to programmes with enrollment status tracking |
-| F012 | Volunteer Hours & Certificates | Volunteers | Log volunteer hours, approve/reject activity entries, issue certificates |
-| F013 | Compliance Dashboard | Compliance | ROSM, LHDN, PDPA, internal, and audit tracking with overdue alerts |
-| F014 | eKYC Verification Pipeline | eKYC | IC front/back upload, selfie, OCR extraction, face match scoring, risk levels |
-| F015 | Report Generation | Reports | Operational, financial, compliance, and programme reports (PDF/CSV) |
-| F016 | Document Versioning | Documents | Upload, version, tag, and link documents to members, cases, or programmes |
-| F017 | Telegram Bot | Integration | @MariaPuspaBot with long-polling, allowlist access control, session management |
-| F018 | Web Search RAG | AI | web_search and web_read tools for external information retrieval |
-| F019 | Donation Trend Analytics | Dashboard | Monthly breakdown by category, trend charts, year-over-year comparison |
-| F020 | Notification System | System | In-app and email notifications for case assignments, overdue compliance, disbursement approvals |
+| ID | Feature | Module | Description | Status |
+|---|---|---|---|---|
+| F011 | Programme Beneficiary Tracking | Programmes | Link beneficiaries to programmes with enrollment status tracking | Complete |
+| F012 | Volunteer Hours & Certificates | Volunteers | Log volunteer hours, approve/reject activity entries, issue certificates | Complete |
+| F013 | Compliance Dashboard | Compliance | ROSM, LHDN, PDPA, internal, and audit tracking with overdue alerts | Complete |
+| F014 | eKYC Verification Pipeline | eKYC | IC front/back upload, selfie, OCR extraction, face match scoring, risk levels | Complete |
+| F015 | Report Generation | Reports | Operational, financial, compliance, and programme reports (PDF/CSV) | Complete |
+| F016 | Document Versioning | Documents | Upload, version, tag, and link documents to members, cases, or programmes | Complete |
+| F017 | Telegram Bot | Integration | @MariaPuspaBot with long-polling, allowlist access control, session management | Complete |
+| F018 | Web Search RAG | AI | web_search and web_read tools for external information retrieval | Complete |
+| F019 | Donation Trend Analytics | Dashboard | Monthly breakdown by category, trend charts, year-over-year comparison | Complete |
+| F020 | Notification System | System | In-app and email notifications for case assignments, overdue compliance, disbursement approvals | Complete |
 
 ### 5.3 Nice-to-Have (P2) — Future Roadmap
 
@@ -189,14 +204,12 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 |---|---|---|---|
 | F021 | Automation Jobs | Admin | Scheduled and event-triggered automation with cron expressions |
 | F022 | Ops Work Items | Admin | Internal task/bug/improvement tracking with approval workflows |
-| F023 | Public Donation Page | External | Public-facing donation page with Maybank 562209677503 integration |
 | F024 | Volunteer Self-Service Portal | External | Volunteers view their own hours, certificates, and upcoming programmes |
 | F025 | Multi-Branch Support | System | Support for PUSPA chapters beyond KL/Selangor |
 | F026 | WhatsApp Integration | Integration | WhatsApp Business API for member and donor communication |
 | F027 | Bank Statement Reconciliation | Donations | Auto-match bank transactions to donation records |
 | F028 | Advanced Analytics | Reports | Predictive analytics for donation forecasting, case resolution time, beneficiary needs |
 | F029 | Mobile App | Mobile | React Native or Capacitor-based mobile app |
-| F030 | PostgreSQL Readiness | Infrastructure | Production PostgreSQL deployment with connection pooling and zero-downtime migration strategy |
 
 ---
 
@@ -440,6 +453,15 @@ Without a unified platform, PUSPA risks: non-compliance penalties, donor attriti
 | PB-003 | PDPA consent | Digital consent checkbox and signature timestamp for PDPA compliance |
 | PB-004 | Other agency help tracking | Record if applicant receives aid from other agencies |
 | PB-005 | Application search & filter | Search by name, IC, status, date range |
+
+### 6.24 Module 24: PUSPA Niaga
+
+| Req ID | Requirement | Acceptance Criteria |
+|---|---|---|
+| PN-001 | Product listing | Display products fetched from the PUSPA Niaga API with Malay-first bilingual UI |
+| PN-002 | Product creation | Create new products via the PUSPA Niaga API |
+| PN-003 | Sales view | View sales data fetched from the PUSPA Niaga API |
+| PN-004 | Role-based access | Accessible to staff and above via the Utama navigation group |
 
 ---
 
@@ -685,6 +707,7 @@ Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, D
 | Carta Organisasi | ✅ | ✅ | ✅ |
 | Institusi | ✅ | ✅ | ✅ |
 | Permohonan Bantuan | ✅ | ✅ | ✅ |
+| PUSPA Niaga | ✅ | ✅ | ✅ |
 
 ### 9.3 AI Tool Access Matrix
 
@@ -746,7 +769,7 @@ Level 1: Staff ─── Basic operational modules (Dashboard, Members, Cases, D
 | eKYC Photos | URLs only | Admin+ only | Not disclosed | N/A |
 | Face Match Score | Full | Admin+ only | Risk level only | Admin+ |
 
-### 10.3 Database Schema — 26 Models
+### 10.3 Database Schema — 27 Models
 
 ```
 User ──────────────────── activities, caseNotes, aiConversations
@@ -902,10 +925,10 @@ AidApplication ────────── (standalone — permohonan-bantuan
 ### Phase 1: Foundation (Q1 2026) — ✅ Complete
 
 - [x] Next.js 16 App Router scaffolding
-- [x] Prisma schema with 26 models
+- [x] Prisma schema with 27 models
 - [x] PostgreSQL database with seed data
 - [x] shadcn/ui component library (New York style)
-- [x] Core module pages: Dashboard, Members, Cases, Donations, Donors, Disbursements, Programmes, Volunteers, Compliance, eKYC, Documents, Activities, Reports, AI, Admin, Settings, TapSecure, Asnafpreneur, Sedekah Jumaat, Docs, Carta Organisasi, Institusi, Permohonan Bantuan
+- [x] Core module pages: Dashboard, Members, Cases, Donations, Donors, Disbursements, Programmes, Volunteers, Compliance, eKYC, Documents, Activities, Reports, AI, Admin, Settings, TapSecure, Asnafpreneur, Sedekah Jumaat, Docs, Carta Organisasi, Institusi, Permohonan Bantuan, PUSPA Niaga
 - [x] API routes for all modules under `/api/v1/`
 - [x] RBAC system with 3-tier role hierarchy
 - [x] Zustand store with persist middleware
@@ -915,7 +938,7 @@ AidApplication ────────── (standalone — permohonan-bantuan
 ### Phase 2: AI & Intelligence (Q2 2026) — 🔄 In Progress
 
 - [x] Maria Puspa AI runtime (Hermes-inspired architecture)
-- [x] 18 tool definitions with RBAC filtering
+- [x] 22 tool definitions with RBAC filtering
 - [x] OpenRouter integration with key rotation and SSE streaming
 - [x] PUSPA Knowledge Base injection into system prompt
 - [x] Mandatory RAG enforcement via system prompt

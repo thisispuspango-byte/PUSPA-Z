@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useState } from 'react'
-import { Search, FileSearch, CheckCircle2, Clock, AlertCircle, ShieldAlert, ArrowRight } from 'lucide-react'
+import { Search, FileSearch, CheckCircle2, Clock, ShieldAlert } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -20,11 +20,23 @@ interface CheckStatusModalProps {
   onOpenChange: (open: boolean) => void
 }
 
+interface CheckResult {
+  refNo: string
+  name: string
+  program: string
+  status: string
+  statusType: 'success' | 'in_progress' | 'rejected'
+  updatedAt: string
+  pegawai: string
+  steps: Array<{ title: string; done: boolean; date?: string; active?: boolean }>
+}
+
 export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) {
   const [icNumber, setIcNumber] = useState<string>('')
   const [isSearching, setIsSearching] = useState<boolean>(false)
-  const [result, setResult] = useState<any | null>(null)
   const [hasSearched, setHasSearched] = useState<boolean>(false)
+  const [result, setResult] = useState<CheckResult | null>(null)
+  const [refNo] = useState(() => `PZ-2026-${Math.floor(1000 + Math.random() * 9000)}`)
 
   const handleSearch = () => {
     if (!icNumber.trim()) return
@@ -121,7 +133,7 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
                   <div className="flex items-center justify-between border-b pb-2.5">
                     <div>
                       <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">No. Rujukan</span>
-                      <p className="font-mono text-sm font-bold text-foreground">{result.refNo}</p>
+                      <span className="font-mono text-sm font-bold text-foreground">{refNo}</span>
                     </div>
                     <Badge variant="outline" className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 text-xs">
                       <Clock className="h-3 w-3 mr-1" />

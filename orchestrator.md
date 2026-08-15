@@ -1,8 +1,27 @@
-# PUSPA-Z Orchestra Conductor Skill
+---
+title: "PUSPA-Z — Orchestra Conductor Sub-Agent Delegation Protocol"
+document_id: "PUSPA-DOC-ORCH-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "INTERNAL ORCHESTRATION"
+lifecycle_status: "ACTIVE"
+---
 
-> Hermes Agent v2 — Sub-Agent Delegation Protocol untuk PUSPA-Z V5
+# PUSPA-Z Orchestra Conductor Protocol
+
+> Hermes Agent v2 — Sub-Agent Delegation Protocol untuk PUSPA-Z V5.6
 > Stack: Next.js 16 / React 19 / TypeScript 5 / Prisma 6 / Bun / Tailwind 4
 > Location: `G:\PUSPA-Z\PUSPA-Z`
+
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi protokol orkestrasi | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.0` | `2026-08-13 18:00` | `Conductor Agent` | Penetapan jadual penetapan model dan peraturan delegasi sub-agent | Penstrukturan profil ejen (coder, reviewer, architect) | `verified` |
 
 ---
 

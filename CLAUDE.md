@@ -1,12 +1,35 @@
-# CLAUDE.md
+---
+title: "PUSPA-Z — Claude Code Developer Guide & System Instructions"
+document_id: "PUSPA-DOC-CLAUDE-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "INTERNAL DEVELOPER"
+lifecycle_status: "ACTIVE"
+---
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# CLAUDE.md — Claude Code Developer Instructions
+
+> This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi panduan Claude Code | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Menyelaras gambaran keseluruhan kepada PUSPA-Z V5.6 Dual-Layer | Mengemaskini bahagian Project Overview dan Frontend SPA Pattern | `doc verified` |
+
+---
 
 ## Project Overview
 
-**PUSPA V5** — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022). A Malaysian NGO management platform with 23 integrated modules and an AI assistant named **Maria Puspa**. Built with Next.js 16 (App Router), TypeScript 5, Tailwind CSS 4, Prisma ORM, Zustand, and OpenRouter AI.
+**PUSPA V5.6** — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022). A Malaysian NGO management platform with 24 integrated modules and an AI assistant named **Maria Puspa**. Built with Next.js 16 (App Router), TypeScript 5, Tailwind CSS 4, Prisma ORM, Zustand, and OpenRouter AI.
 
-The app is a **single-page application** — no Next.js page routing. All navigation is controlled by a Zustand store (`src/lib/store.ts`) with a `ViewRenderer` that lazy-loads modules via `next/dynamic`.
+The app uses a **Dual-Layer Architecture**:
+1. **Public Portal Landing (`/`)**: Public-facing landing page featuring Aurora ambient glow, 5-Zon Interactive 3D Diorama flight with bottom timeline scrubber, real-time metrics, and direct action modals (`QuickDonateModal`, `CheckStatusModal`, `PermohonanBantuanModal`).
+2. **Management Workspace (`/dashboard`)**: Authenticated SPA for Staff, Admin, and Developer with 24 lazy-loaded modules managed via Zustand store (`src/lib/store.ts`) and dynamic `ViewRenderer`.
 
 ## Commands
 
@@ -52,7 +75,7 @@ cd mini-services/telegram-bot && bun run dev
 ### Frontend SPA Pattern
 
 - Single route (`/`). `ViewRenderer` (`src/components/view-renderer.tsx`) maps `currentView` Zustand state to lazy-loaded modules.
-- 23 modules in `src/modules/*/page.tsx`. New modules must be added to the `moduleMap` in `view-renderer.tsx`.
+- 24 modules in `src/modules/*/page.tsx`. New modules must be added to the `moduleMap` in `view-renderer.tsx`.
 - State: `useAppStore` in `src/lib/store.ts` (persisted to localStorage). Stores `currentView`, `currentUser`, `aiChatOpen`.
 - RBAC: `src/lib/access-control.ts`. Three roles: `staff` (1) < `admin` (2) < `developer` (3). Higher inherits lower.
 
@@ -74,7 +97,7 @@ cd mini-services/telegram-bot && bun run dev
 
 ### Database
 
-- 26 Prisma models in `prisma/schema.prisma` (PostgreSQL provider). Key enum values:
+- 27 Prisma models in `prisma/schema.prisma` (PostgreSQL provider). Key enum values:
   - Member: `asnafCategory` ∈ {fakir, miskin, amil, muallaf, gharimin, riqab, ibnu_sabil, fisabilillah}
   - Case: `status` ∈ {draft → intake → verification → assessment → approval → disbursement → follow_up → closed/rejected}
   - Donation: `category` ∈ {zakat, sadaqah, waqf, infaq, general}
@@ -111,6 +134,11 @@ src/
 │   ├── api/v1/ai/route.ts            # SSE streaming AI endpoint
 │   ├── api/v1/ai/telegram/route.ts   # Telegram AI endpoint
 │   ├── api/v1/*/route.ts             # Module CRUD endpoints (13 routes)
+│   ├── api/organization/route.ts     # Organization chart API
+│   ├── api/institutions/route.ts     # Institutions CRUD
+│   ├── api/aid-applications/route.ts # Aid applications CRUD
+│   ├── api/health/route.ts           # Enhanced health check
+│   ├── auth/callback/route.ts        # Supabase OAuth callback (code exchange)
 │   ├── layout.tsx                    # Root layout
 │   └── page.tsx                      # SPA shell
 ├── components/
@@ -130,13 +158,13 @@ src/
 │   ├── rate-limit.ts                 # Rate limiting
 │   ├── audit.ts                      # Audit logging
 │   └── validation.ts                 # Zod schemas
-├── modules/*/page.tsx                # 23 lazy-loaded view pages
+├── modules/*/page.tsx                # 24 lazy-loaded view pages
 ├── stores/hermes-store.ts            # AI chat Zustand store (session-only)
 ├── tools/
 │   ├── index.ts                      # Tool registry (18 core tools)
 │   ├── donations.ts                  # Donation tool queries
 │   ├── cases.ts                      # Case tool queries
 │   └── web-tools.ts                  # Web search/read/delegate
-prisma/schema.prisma                  # 26-model database schema
+prisma/schema.prisma                  # 27-model database schema
 mini-services/telegram-bot/index.ts   # Long-polling Telegram bot
 ```

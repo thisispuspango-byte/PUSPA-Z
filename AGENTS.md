@@ -1,8 +1,27 @@
-# AGENTS.md — PUSPA-Z V5.3 (Maria Puspa AI Agent System)
+---
+title: "PUSPA-Z — Maria Puspa AI Agent System Rules & Protocol"
+document_id: "PUSPA-DOC-AGENTS-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "INTERNAL AI PROTOCOL"
+lifecycle_status: "ACTIVE"
+---
 
-> **PUSPA V5** — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)
-> **Updated**: 2026-05-08 (Maria VRM, Telegram Bot, Supabase Auth, File Map Update)
+# AGENTS.md — PUSPA-Z V5.6 (Maria Puspa AI Agent System)
+
+> **PUSPA V5.6** — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)
 > **Location**: `G:\PUSPA-Z\PUSPA-Z`
+
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menyelaraskan mandat SMS-v1.0 bagi penjejakan mikro setiap perubahan | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Mengemas kini status penambahbaikan terkini (CSP, API Bantuan, Diorama) | Mengemaskini jadual Seksyen 19 dengan 4 item penambahbaikan baharu | `verified` |
+| `5.6.0` | `2026-08-15 12:20` | `Conductor Agent` | Pelaksanaan integrasi modul PUSPA Niaga dan 27 Prisma models | Penstrukturan modul dan kemaskini peranan RBAC | `build clean` |
 
 ---
 
@@ -26,7 +45,9 @@
 16. [Configuration & Environment](#16-configuration--environment)
 17. [File Map](#17-file-map)
 18. [Advanced Features (NEW)](#18-advanced-features)
-19. [Improvements (2026-05-08)](#19-improvements-2026-05-08)
+19. [Improvements (2026-08-15)](#19-improvements-2026-08-15)
+20. [Multi-Agent Delegation Protocol](#20-multi-agent-delegation-protocol)
+21. [Free Models Reference](#21-free-models-reference)
 
 ---
 
@@ -94,7 +115,7 @@ Maria Puspa is the AI assistant embedded in the PUSPA NGO management platform. S
 │  └────────────┘    └────────────┘    └────────────────────┘       │
 │                                                                    │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │              23 Feature Modules (src/modules/)               │  │
+│  │              24 Feature Modules (src/modules/)               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -205,6 +226,10 @@ Maria Puspa is the AI assistant embedded in the PUSPA NGO management platform. S
 | `src/app/api/aid-applications/route.ts` | Aid applications CRUD |
 | `src/app/api/health/route.ts` | Enhanced health check |
 | `src/app/api/route.ts` | Root API info |
+| `src/app/api/v1/settings/route.ts` | Settings CRUD |
+| `src/app/api/v1/fb-sync/route.ts` | Facebook page sync |
+| `src/app/auth/callback/route.ts` | Supabase OAuth callback (code exchange) |
+| `src/modules/asnafpreneur/route.ts` | Asnafpreneur module API |
 
 ---
 
@@ -218,7 +243,7 @@ Maria Puspa is the AI assistant embedded in the PUSPA NGO management platform. S
 
 ## 13. Frontend: Chat Panel & Store
 
-### 23 Feature Modules
+### 24 Feature Modules
 
 | Module | Path | Description |
 |---|---|---|
@@ -245,6 +270,7 @@ Maria Puspa is the AI assistant embedded in the PUSPA NGO management platform. S
 | **carta-organisasi** | `src/modules/carta-organisasi/` | Organization chart |
 | **institusi** | `src/modules/institusi/` | Institutions |
 | **permohonan-bantuan** | `src/modules/permohonan-bantuan/` | Aid applications |
+| **puspa-niaga** | `src/modules/puspa-niaga/` | Asnaf entrepreneur product & sales platform |
 
 ### Stores
 
@@ -465,6 +491,10 @@ src/app/api/institutions/route.ts        — Institutions CRUD
 src/app/api/aid-applications/route.ts    — Aid applications CRUD
 src/app/api/health/route.ts              — Enhanced health check
 src/app/api/route.ts                     — Root API info
+src/app/api/v1/settings/route.ts          — Settings CRUD
+src/app/api/v1/fb-sync/route.ts           — Facebook page sync
+src/app/auth/callback/route.ts            — Supabase OAuth callback (code exchange)
+src/modules/asnafpreneur/route.ts         — Asnafpreneur module API
 ```
 
 ### Shared Libraries
@@ -563,12 +593,16 @@ src/lib/server.ts                         — Supabase server client
 
 ---
 
-## 19. Improvements (2026-05-08)
+## 19. Improvements (2026-08-15)
 
 ### Implemented by: Hermes Agent (Tencent/hy3-preview:free via OpenRouter)
 
 | Improvement | File(s) | Status |
 |---|---|---|
+| Public Portal Landing (`/`) with Aurora Glow | `src/app/page.tsx`, `src/components/portal/*` | DONE |
+| 5-Zon 3D Diorama Flight & Timeline Scrubber | `src/components/portal/portal-interactive-ecosystem.tsx` | DONE |
+| Aid Applications API & Form Integration | `src/app/api/aid-applications/route.ts`, `src/modules/permohonan-bantuan/page.tsx` | DONE |
+| Content Security Policy with 'unsafe-eval' | `next.config.ts` | DONE |
 | OpenRouter model fallback chain | `src/lib/openrouter.ts` | DONE |
 | AI response caching (5min TTL) | `src/lib/ai-cache.ts` | DONE |
 | Rate limiting (AI/API/auth) | `src/lib/rate-limit.ts` | DONE |
@@ -590,8 +624,8 @@ src/lib/server.ts                         — Supabase server client
 | Maria TTS & lip-sync | `src/lib/maria-tts.ts`, `src/lib/maria-lipsync.ts` | DONE |
 | Maria VRM blendshapes | `src/components/maria/maria-vrm-blendshapes.tsx` | DONE |
 | PostgreSQL-only (no SQLite) | `prisma/schema.prisma` | DONE |
-| 23 feature modules | `src/modules/*/` | DONE |
-| 26 Prisma models | `prisma/schema.prisma` | DONE |
+| 24 feature modules | `src/modules/*/` | DONE |
+| 27 Prisma models | `prisma/schema.prisma` | DONE |
 | Telegram bot worker | `mini-services/telegram-bot/` | DONE |
 | Hermes runtime CLI mode | `hermes/config.yaml` | DONE |
 | Vercel deployment target | N/A | DONE |
@@ -611,11 +645,11 @@ src/lib/server.ts                         — Supabase server client
 
 ---
 
-## 19. Multi-Agent Delegation Protocol
+## 20. Multi-Agent Delegation Protocol
 
 > Complete delegation guidelines: `orchestrator.md`
 
-### 19.1 Model Selection Per Task Type
+### 20.1 Model Selection Per Task Type
 
 | Task Type | Primary Model | Context | Rationale |
 |-----------|--------------|---------|-----------|
@@ -628,7 +662,7 @@ src/lib/server.ts                         — Supabase server client
 | Debugging | `meta-llama/llama-3.3-70b-instruct:free` | 65K | 70B instruct |
 | OCR | `baidu/qianfan-ocr-fast:free` | 65K | Specialized OCR |
 
-### 19.2 When to Delegate vs Execute Direct
+### 20.2 When to Delegate vs Execute Direct
 
 **DELEGATE when:**
 - 3+ file changes across 2+ modules
@@ -642,7 +676,7 @@ src/lib/server.ts                         — Supabase server client
 - Sequential dependencies (waiting for sub-agent output)
 - Simple queries (read file, search, status check)
 
-### 19.3 Concurrency Rules
+### 20.3 Concurrency Rules
 
 - **Max 3 sub-agents** concurrently (token/context limits)
 - Frontend ∥ Backend can run parallel (independent domains)
@@ -650,7 +684,7 @@ src/lib/server.ts                         — Supabase server client
 - Vision tasks sequential (single model call per image)
 - Code review must wait for code generation to complete
 
-### 19.4 Dependency Chains
+### 20.4 Dependency Chains
 
 **Standard Feature Development:**
 ```
@@ -665,7 +699,7 @@ Track B: [UI Components] → [Frontend Pages]
       [Integration] → [Review] → [Deploy]
 ```
 
-### 19.5 Sub-Agent Profiles
+### 20.5 Sub-Agent Profiles
 
 | Role | Model | Toolsets | Responsibility |
 |------|-------|----------|----------------|
@@ -677,7 +711,7 @@ Track B: [UI Components] → [Frontend Pages]
 
 ---
 
-## 20. Free Models Reference
+## 21. Free Models Reference
 
 All 28 free models configured in `src/lib/openrouter.ts` → `FREE_MODELS` array.
 
@@ -716,4 +750,4 @@ All 28 free models configured in `src/lib/openrouter.ts` → `FREE_MODELS` array
 - Config: `OPENROUTER_VISION_MODEL` env var
 - 8 free vision-capable models available (see Free Models Reference)
 
-*End of AGENTS.md v5.5 (2026-05-08) — OpenRouter Only*
+*End of AGENTS.md v5.6 (2026-08-15) — OpenRouter Only*

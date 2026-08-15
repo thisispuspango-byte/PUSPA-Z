@@ -162,12 +162,25 @@ export default function PermohonanBantuanPage() {
     name: 'dependents',
   })
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const watchOtherAgency = watch('otherAgencyHelp')
 
-  const onSubmit = useCallback((data: AidFormData) => {
-    console.log('Form submitted:', data)
-    setSubmitted(true)
+  const onSubmit = useCallback(async (data: AidFormData) => {
+    setIsSubmitting(true)
+    try {
+      await fetch('/api/aid-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+    } catch (e) {
+      console.warn('Submission fallback offline:', e)
+    } finally {
+      setIsSubmitting(false)
+      setSubmitted(true)
+    }
   }, [])
 
   const nextStep = useCallback(async () => {

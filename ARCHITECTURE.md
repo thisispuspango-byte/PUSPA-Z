@@ -1,8 +1,28 @@
-# PUSPA V5 — Architecture Document
+---
+title: "PUSPA-Z — System Architecture & Technical Specifications"
+document_id: "PUSPA-DOC-ARCH-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "INTERNAL TECHNICAL"
+lifecycle_status: "ACTIVE"
+---
+
+# PUSPA V5.6 — Architecture Document
 
 > **PERTUBUHAN URUS PEDULI ASNAF (PPM-024-10-05012022)**
 > Platform pengurusan NGO dengan AI Assistant Maria Puspa
 > Cerdas. Mesra. Sentiasa di sisi anda.
+
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi arkitektur sistem | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Memperbaiki dokumentasi frontend daripada SPA tunggal kepada Dual-Layer | Mengemaskini Seksyen 3 dengan hierarki Landing `/` dan Dashboard `/dashboard` | `doc verified` |
+| `5.6.0` | `2026-08-13 18:00` | `Conductor Agent` | Migrasi ke Supabase Auth & penyelarasan modul keusahawanan PUSPA Niaga | Penstrukturan semula modul dan model Prisma | `build clean` |
 
 ---
 
@@ -107,7 +127,7 @@ three                — 3D rendering (Maria VRM model)
 │  Maria Puspa     │ │    Prisma        │ │   OpenRouter     │
 │  Runtime         │ │    PostgreSQL DB │ │   API            │
 │                  │ │                  │ │                  │
-│  • Memory        │ │  • 26 Models     │ │  • hy3-preview   │
+│  • Memory        │ │  • 27 Models     │ │  • hy3-preview   │
 │  • Tools (22)    │ │  • PII Masking   │ │  • Key Rotation  │
 │  • RBAC          │ │  • Connection    │ │  • SSE Streaming  │
 │  • RAG           │ │    Pooling       │ │  • Tool Calling   │
@@ -125,48 +145,34 @@ three                — 3D rendering (Maria VRM model)
 
 ## Frontend Architecture
 
-### SPA Architecture
+### Dual-Layer Application Architecture
 
-PUSPA V5 uses a **single-page application** model with NO Next.js page routing. All navigation is controlled by the Zustand store — there is exactly one route (`/`) and the `ViewRenderer` component dynamically loads modules based on `currentView` state.
+PUSPA V5.6 employs a **Dual-Layer Architecture**:
+1. **Public Portal Landing Layer (`/`)**: A high-impact, public-facing portal designed for donors, volunteers, and aid applicants with dynamic Aurora ambient illumination, 5-Zon 3D Diorama Interactive Ecosystem flight, real-time metrics, and direct action modals.
+2. **Internal Management Dashboard (`/dashboard`)**: The authenticated management workspace for Staff, Admins, and Developers with 24 lazy-loaded modules, role-based navigation sidebar, and Maria Puspa AI assistant.
 
 ```
-layout.tsx (root — server component)
-└── page.tsx (SPA shell — client component)
+layout.tsx (root layout — server component)
+├── page.tsx (Public Portal Landing — client component)
+│   ├── Aurora (Dynamic Ambient Light Source)
+│   ├── PortalNavbar (Floating Glass Navigation)
+│   ├── PortalHero (Hero Banner & 3D Preview Widget)
+│   ├── PortalInteractiveEcosystem (5-Zon 3D Diorama Flight with Bottom Timeline Scrubber)
+│   ├── PortalMetrics (Live Glassmorphic Counters)
+│   ├── PortalAgihanGallery (Field Photo & Institutional Gallery)
+│   ├── PortalQuickActions (Direct Action Hub)
+│   ├── PortalProgrammes (Flagship Programme Showcase)
+│   ├── PortalMariaAssistant (Public AI Assistant & FAQ)
+│   ├── PortalFooter
+│   └── Interactive Modals (QuickDonateModal, CheckStatusModal, PermohonanBantuanModal)
+└── dashboard/page.tsx (Internal Management Workspace — client component)
     ├── QueryProvider (TanStack React Query)
     ├── SidebarProvider
-    │   ├── AppSidebar (navigation sidebar)
+    │   ├── AppSidebar (navigation with role-filtered links)
     │   └── SidebarInset
-    │       ├── AppHeader (top bar with search, user menu)
-    │       ├── ViewRenderer (dynamic module loader)
-    │       └── AiChatPanel (Maria Puspa slide-over panel)
-    └── ThemeProvider + Toaster (sonner)
-```
-
-### Component Tree Detail
-
-```
-<RootLayout>
-  <html lang="ms" suppressHydrationWarning>
-    <body>
-      <ThemeProvider>           ← dark/light/system themes
-        <Home />                ← SPA shell (client component)
-          <QueryProvider>      ← TanStack React Query context
-            <SidebarProvider>     ← shadcn sidebar context
-              <AppSidebar />      ← navigation with role-filtered links
-              <SidebarInset>     ← main content area
-                <AppHeader />     ← breadcrumb, search, user avatar
-                <main>
-                  <ViewRenderer />  ← lazy-loaded module renderer
-                </main>
-              </SidebarInset>
-              <AiChatPanel />    ← Maria Puspa chat (resizable)
-            </SidebarProvider>
-          </QueryProvider>
-        <Toaster />            ← sonner toast notifications
-      </ThemeProvider>
-    </body>
-  </html>
-</RootLayout>
+    │       ├── AppHeader (breadcrumb, search, user menu)
+    │       └── ViewRenderer (lazy-loaded 24-module renderer)
+    └── AiChatPanel (Maria Puspa internal assistant panel)
 ```
 
 ### State Management
@@ -177,7 +183,7 @@ Persisted to `localStorage` via `zustand/middleware/persist`. Key: `puspa-app-st
 
 | State Key | Type | Default | Persisted |
 |-----------|------|---------|-----------|
-| `currentView` | `ViewId` (23 options) | `'dashboard'` | Yes |
+| `currentView` | `ViewId` (24 options) | `'dashboard'` | Yes |
 | `aiChatOpen` | `boolean` | `false` | No |
 | `currentUser` | `{ id, name, email, role, imageUrl }` | Admin PUSPA (admin) | Yes |
 | `searchQuery` | `string` | `''` | No |
@@ -211,7 +217,7 @@ Shared live-character state for the global Maria widget, TTS, and lip-sync.
 
 ### Module Loading (`src/components/view-renderer.tsx`)
 
-The `ViewRenderer` dynamically imports **23 modules** based on `currentView` from the Zustand store. Each module is loaded with `next/dynamic` and `ssr: false`:
+The `ViewRenderer` dynamically imports **24 modules** based on `currentView` from the Zustand store. Each module is loaded with `next/dynamic` and `ssr: false`:
 
 | View ID | Module Path | Min Role |
 |---------|-------------|----------|
@@ -232,6 +238,7 @@ The `ViewRenderer` dynamically imports **23 modules** based on `currentView` fro
 | `carta-organisasi` | `@/modules/carta-organisasi/page` | staff |
 | `institusi` | `@/modules/institusi/page` | staff |
 | `permohonan-bantuan` | `@/modules/permohonan-bantuan/page` | staff |
+| `puspa-niaga` | `@/modules/puspa-niaga/page` | staff |
 | `compliance` | `@/modules/compliance/page` | admin |
 | `reports` | `@/modules/reports/page` | admin |
 | `ekyc` | `@/modules/ekyc/page` | admin |
@@ -261,7 +268,7 @@ This is a **cumulative permission model** — admin inherits all staff permissio
 
 ### API Route Structure
 
-All API routes live under `src/app/api/v1/` following Next.js App Router conventions:
+Versioned endpoints live under `src/app/api/v1/`, with additional non-versioned routes for organization, institutions, aid-applications, health, root API info, and the Supabase auth callback:
 
 ```
 src/app/api/v1/
@@ -280,7 +287,26 @@ src/app/api/v1/
 ├── documents/route.ts        # CRUD: Document management
 ├── activities/route.ts       # CRUD: Activity/audit log
 ├── dashboard/route.ts        # Aggregated dashboard metrics
-└── reports/route.ts          # Report generation
+├── reports/route.ts          # Report generation
+├── settings/route.ts         # CRUD: Platform settings
+└── fb-sync/route.ts          # Facebook page sync
+```
+
+Non-versioned routes:
+
+```
+src/app/api/
+├── route.ts                  # Root API info
+├── health/route.ts           # Enhanced health check
+├── organization/route.ts     # Organization chart
+├── institutions/route.ts     # CRUD: Institutions
+└── aid-applications/route.ts # CRUD: Aid applications
+
+src/app/auth/
+└── callback/route.ts         # Supabase OAuth callback (code exchange)
+
+src/modules/
+└── asnafpreneur/route.ts     # Asnafpreneur module API
 ```
 
 ### API Route Pattern
@@ -573,7 +599,7 @@ Production deployment uses PostgreSQL with connection pooling (via Supabase). Th
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 26 Prisma Models
+### 27 Prisma Models
 
 #### Core (3 models)
 | Model | Purpose | Key Fields |
@@ -582,13 +608,14 @@ Production deployment uses PostgreSQL with connection pooling (via Supabase). Th
 | `Member` | Asnaf members | icNumber (unique), asnafCategory, ekycStatus |
 | `HouseholdMember` | Member household | relationship, monthlyIncome |
 
-#### Operations (4 models)
+#### Operations (5 models)
 | Model | Purpose | Key Fields |
 |-------|---------|------------|
 | `Case` | Welfare cases | caseNumber (unique), type, priority, status, riskIndicator |
 | `CaseNote` | Case notes | type (note/action/decision/follow_up), authorId |
 | `CaseProgramme` | Case-programme link | Composite junction table |
 | `Programme` | Programmes | category, budget, spent, targetBeneficiaries |
+| `ProgrammeBeneficiary` | Programme enrolments | programmeId, memberId, status (enrolled/active/completed/withdrawn) |
 
 #### Finance (3 models)
 | Model | Purpose | Key Fields |
@@ -905,7 +932,7 @@ All AI error messages are in **Bahasa Melayu**:
 | Strategy | Implementation | Impact |
 |----------|---------------|--------|
 | **Standalone Output** | `output: "standalone"` in next.config.ts | Smaller deployment bundle, no node_modules needed |
-| **Lazy Module Loading** | `next/dynamic` with `ssr: false` for all 23 modules | Only loaded module's JS is fetched |
+| **Lazy Module Loading** | `next/dynamic` with `ssr: false` for all 24 modules | Only loaded module's JS is fetched |
 | **SSE Streaming** | Real-time content deltas via ReadableStream | Users see AI responses immediately, no wait for completion |
 | **Key Rotation** | OpenRouter key rotation on errors | Distributes API rate limits |
 | **Max History 50** | `MAX_HISTORY` in memory layer | Prevents token overflow in AI conversations |
@@ -930,7 +957,7 @@ All AI error messages are in **Bahasa Melayu**:
 ```
 my-project/
 ├── prisma/
-│   └── schema.prisma              # 26 Prisma models on PostgreSQL
+│   └── schema.prisma              # 27 Prisma models on PostgreSQL
 ├── public/                        # Static assets
 │   ├── puspa-logo*.png            # Brand logos (multiple variants)
 │   ├── maria-puspa-*.png          # Maria character images
@@ -1128,4 +1155,4 @@ my-project/
 ---
 
 *Document generated for PUSPA V5 — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)*
-*Last updated: 2026-05-08*
+*Last updated: 2026-08-15*

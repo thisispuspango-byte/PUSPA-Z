@@ -18,6 +18,7 @@ import { CheckStatusModal } from '@/components/portal/check-status-modal'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -100,6 +101,12 @@ export default function PublicPortalHome() {
       {/* Apply Aid Form Modal */}
       <Dialog open={applyModalOpen} onOpenChange={setApplyModalOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-2xl border-white/10 p-4 sm:p-6">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Borang Permohonan Bantuan Asnaf</DialogTitle>
+            <DialogDescription>
+              Borang permohonan bantuan Pertubuhan Urus Peduli Asnaf (PUSPA)
+            </DialogDescription>
+          </DialogHeader>
           <PermohonanBantuanPage />
         </DialogContent>
       </Dialog>

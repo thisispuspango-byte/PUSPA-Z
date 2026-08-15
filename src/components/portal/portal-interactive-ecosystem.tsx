@@ -1,13 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import {
   motion,
   AnimatePresence,
   useScroll,
   useTransform,
-  useReducedMotion,
   useMotionValueEvent,
   type MotionValue,
 } from 'framer-motion'
@@ -274,7 +273,6 @@ interface Props {
 
 export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
   const sectionRef = useRef<HTMLElement>(null)
-  const prefersReducedMotion = useReducedMotion()
   const [activeIdx, setActiveIdx] = useState(0)
   const [openHs, setOpenHs] = useState<string | null>(null)
 
@@ -310,59 +308,6 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
     },
     [],
   )
-
-  /* ── Reduced-motion fallback: static stacked zone list ── */
-  if (prefersReducedMotion) {
-    return (
-      <section id="agihan" className="scroll-mt-20 space-y-6">
-        {ZONES.map((z) => (
-          <article
-            key={z.id}
-            className="overflow-hidden rounded-3xl border border-white/10 bg-black/60 shadow-2xl backdrop-blur-xl"
-          >
-            <div className="relative h-56 sm:h-72">
-              <Image
-                src={z.diorama}
-                alt={z.name}
-                fill
-                priority={z.id === ZONES[0].id}
-                className="object-cover"
-                sizes="100vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-            </div>
-            <div className="space-y-3 p-5">
-              <div className="flex items-center gap-2">
-                <Badge className="border-0 text-white" style={{ backgroundColor: z.themeColor }}>
-                  Fasa {z.num} : {z.shortLabel}
-                </Badge>
-                <span className="text-[10px] uppercase tracking-wider text-white/50">{z.category}</span>
-              </div>
-              <h3 className="text-xl font-extrabold text-white">{z.name}</h3>
-              <p className="text-sm leading-relaxed text-white/70">{z.desc}</p>
-              <div className="grid grid-cols-2 gap-2">
-                {z.stats.map((s) => (
-                  <div key={s.label} className="rounded-xl border border-white/10 bg-white/5 p-3">
-                    <span className="block text-[10px] text-white/50">{s.label}</span>
-                    <span className="text-base font-bold text-white">{s.value}</span>
-                  </div>
-                ))}
-              </div>
-              <Button
-                onClick={onOpenDonate}
-                size="sm"
-                className="h-9 rounded-full border-0 text-xs font-semibold text-white"
-                style={{ backgroundColor: z.themeColor }}
-              >
-                <Heart className="h-3.5 w-3.5 fill-white" />
-                Infaq Sedekah Fasa Ini
-              </Button>
-            </div>
-          </article>
-        ))}
-      </section>
-    )
-  }
 
   /* ── Scroll-scrubbed fly-through stage ── */
   return (

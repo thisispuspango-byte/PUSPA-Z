@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Heart, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, QrCode, CreditCard, Building } from 'lucide-react'
 import {
   Dialog,
@@ -37,6 +37,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
   const [paymentMethod, setPaymentMethod] = useState<'fpx' | 'qr' | 'manual'>('fpx')
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [txnRef, setTxnRef] = useState(() => `INFAQ-${Math.floor(100000 + Math.random() * 900000)}`)
 
   const finalAmount = customAmount ? parseFloat(customAmount) || 0 : selectedAmount
 
@@ -54,6 +55,22 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
     setSelectedAmount(30)
     onOpenChange(false)
   }
+
+  // Reset semua state bila dialog ditutup supaya pembukaan seterusnya
+  // bermula dari selection state yang segar (bukan resit lama).
+  useEffect(() => {
+    if (!open) {
+      setIsSuccess(false)
+      setIsSubmitting(false)
+      setCustomAmount('')
+      setSelectedAmount(30)
+      setDonorName('')
+      setDonorEmail('')
+      setDonorPhone('')
+      setPaymentMethod('fpx')
+      setTxnRef(`INFAQ-${Math.floor(100000 + Math.random() * 900000)}`)
+    }
+  }, [open])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -205,6 +222,13 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
           ) : (
             /* Success State */
             <div className="py-6 text-center space-y-4">
+              {/* DialogTitle/Description diperlukan oleh Radix DialogContent untuk aksesibiliti */}
+              <DialogHeader className="sr-only">
+                <DialogTitle>Infaq Sedekah Jumaat Berjaya</DialogTitle>
+                <DialogDescription>
+                  Sumbangan anda telah berjaya direkodkan. Resit rasmi digital telah dihantar.
+                </DialogDescription>
+              </DialogHeader>
               <div className="w-16 h-16 rounded-full bg-green-500/10 text-green-500 border border-green-500/20 flex items-center justify-center mx-auto animate-bounce">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
@@ -217,7 +241,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
               <div className="p-3 bg-muted/40 rounded-xl border text-left text-xs space-y-1">
                 <div className="flex justify-between text-muted-foreground">
                   <span>No. Rujukan Infaq:</span>
-                  <span className="font-mono text-foreground font-semibold">INFAQ-{Math.floor(100000 + Math.random() * 900000)}</span>
+                  <span className="font-mono text-foreground font-semibold">{txnRef}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Penerima Agihan:</span>

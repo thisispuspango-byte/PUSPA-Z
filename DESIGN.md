@@ -1,7 +1,27 @@
-# PUSPA V5 — Design System & Visual Language
+---
+title: "PUSPA-Z — Design System & Visual Language Specification"
+document_id: "PUSPA-DOC-DESIGN-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "INTERNAL UI/UX"
+lifecycle_status: "ACTIVE"
+---
+
+# PUSPA V5.6 — Design System & Visual Language
 
 > **Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)**
 > Cerdas. Mesra. Sentiasa di sisi anda.
+
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan standard jejak audit SMS-v1.0 bagi spesifikasi reka bentuk UI/UX | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Menyelaraskan reka bentuk susun atur Portal Awam dan Diorama 3D Interaktif | Mengemaskini Seksyen 4 dengan seni bina layout Dual-Layer | `doc verified` |
+| `5.6.0` | `2026-08-13 18:00` | `Conductor Agent` | Pembaharuan sistem warna OKLCH dan reka bentuk Glassmorphism | Penyeragaman token warna di `src/app/globals.css` | `verified visually` |
 
 ---
 
@@ -201,40 +221,54 @@ Example from header:
 
 ## 4. Layout Architecture
 
-### 4.1 SPA Architecture
+### 4.1 Dual-Layer Layout Architecture
 
-PUSPA V5 is a **Single Page Application** built on Next.js but using **no page-level routing**. All navigation occurs through a Zustand store (`useAppStore`), and a `ViewRenderer` component dynamically imports the active module.
+PUSPA V5.6 is designed with a **Dual-Layer Layout Architecture**:
+
+1. **Public Portal Landing Layer (`/`)**:
+   - High-impact public landing surface with Aurora ambient glow light source.
+   - Glass floating navigation header (`PortalNavbar`).
+   - 7 flagship landing sections:
+     - `PortalHero`: Hero banner with 3D diorama preview widget.
+     - `PortalInteractiveEcosystem`: 5-Zon 3D Diorama scroll flight (`#agihan`) with persistent bottom timeline navigation scrubber.
+     - `PortalMetrics`: Real-time glassmorphic metric counters (`#metrik`).
+     - `PortalAgihanGallery`: Institutional & field distribution photo gallery.
+     - `PortalQuickActions`: Direct service action hub (`#tindakan`).
+     - `PortalProgrammes`: Flagship welfare programmes showcase (`#program`).
+     - `PortalMariaAssistant`: Public-facing Maria AI assistant & FAQ (`#maria`).
+   - Interactive modals: `QuickDonateModal`, `CheckStatusModal`, `PermohonanBantuanModal`.
+
+2. **Internal Management Dashboard Layer (`/dashboard`)**:
+   - Authenticated SPA workspace for Staff, Admins, and Developers.
+   - Navigation controlled via Zustand store (`useAppStore`), and `ViewRenderer` dynamically imports active module across 24 feature views.
+   - Persistent `AppSidebar`, `AppHeader`, and slide-over `AiChatPanel` for Maria Puspa.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  <html lang="ms">                                                   │
-│  ┌─────────────────────────────────────────────────────────────────┐│
-│  │ <body>                                                          ││
-│  │ ┌──────────────────────────────────────────────────────────────┐││
-│  │ │ <ThemeProvider attribute="class" defaultTheme="system">      │││
-│  │ │ ┌──────────────────────────────────────────────────────────┐ │││
-│  │ │ │ <SidebarProvider>                                        │ │││
-│  │ │ │                                                          │ │││
-│  │ │ │  ┌──────────┐  ┌────────────────────────────────────┐   │ │││
-│  │ │ │  │          │  │ <SidebarInset>                      │   │ │││
-│  │ │ │  │  App     │  │                                     │   │ │││
-│  │ │ │  │  Sidebar │  │  ┌──────────────────────────────┐  │   │ │││
-│  │ │ │  │          │  │  │ <AppHeader />                │  │   │ │││
-│  │ │ │  │          │  │  ├──────────────────────────────┤  │   │ │││
-│  │ │ │  │          │  │  │ <main>                       │  │   │ │││
-│  │ │ │  │          │  │  │   <ViewRenderer />           │  │   │ │││
-│  │ │ │  │          │  │  │                              │  │   │ │││
-│  │ │ │  │          │  │  └──────────────────────────────┘  │   │ │││
-│  │ │ │  │          │  │                                     │   │ │││
-│  │ │ │  └──────────┘  └────────────────────────────────────┘   │ │││
-│  │ │ │                                                          │ │││
-│  │ │ │  ┌─────────────┐                                        │ │││
-│  │ │ │  │ AiChatPanel │  (fixed right / bottom sheet)          │ │││
-│  │ │ │  └─────────────┘                                        │ │││
-│  │ │ └──────────────────────────────────────────────────────────┘ │││
-│  │ │ <Toaster />                                                  │││
-│  │ └──────────────────────────────────────────────────────────────┘││
-│  └─────────────────────────────────────────────────────────────────┘│
+│  PUBLIC PORTAL LAYER ( / )                                          │
+│  ┌────────────────────────────────────────────────────────────────┐│
+│  │ <PortalNavbar />                                               ││
+│  │ <PortalHero />                                                 ││
+│  │ <PortalInteractiveEcosystem /> (5-Zon 3D Diorama + Scrubber)   ││
+│  │ <PortalMetrics />                                              ││
+│  │ <PortalAgihanGallery />                                        ││
+│  │ <PortalQuickActions />                                         ││
+│  │ <PortalProgrammes />                                           ││
+│  │ <PortalMariaAssistant />                                       ││
+│  │ <PortalFooter />                                               ││
+│  └────────────────────────────────────────────────────────────────┘│
+├─────────────────────────────────────────────────────────────────────┤
+│  MANAGEMENT DASHBOARD LAYER ( /dashboard )                          │
+│  ┌────────────────────────────────────────────────────────────────┐│
+│  │ <SidebarProvider>                                              ││
+│  │  <AppSidebar />                                                ││
+│  │  <SidebarInset>                                                ││
+│  │    <AppHeader />                                               ││
+│  │    <main><ViewRenderer /></main>                               ││
+│  │  </SidebarInset>                                               ││
+│  │  <AiChatPanel />                                               ││
+│  │ </SidebarProvider>                                             ││
+│  └────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -344,6 +378,7 @@ In light mode this renders as a **pale lavender pill** on the deep purple sideba
 | Group            | Item                | ViewId                | Icon             | Bilingual Label                                | Min Role    |
 | ---------------- | ------------------- | --------------------- | ---------------- | ---------------------------------------------- | ----------- |
 | **Utama**        | Dashboard           | `dashboard`           | LayoutDashboard  | Dashboard / Papan Pemuka                       | staff       |
+|                  | PUSPA Niaga         | `puspa-niaga`         | Package          | PUSPA Niaga / PUSPA Niaga                      | staff       |
 |                  | Members             | `members`             | Users            | Members / Ahli Asnaf                           | staff       |
 |                  | Cases               | `cases`               | FileText         | Cases / Kes                                    | staff       |
 |                  | Activities          | `activities`          | Activity         | Activities / Aktiviti                          | staff       |
@@ -431,6 +466,7 @@ const viewTitles: Record<ViewId, { en: string; ms: string }> = {
   'carta-organisasi':   { en: 'Organization Chart',           ms: 'Carta Organisasi' },
   institusi:            { en: 'Institutions & Areas',          ms: 'Institusi & Kawasan Bantuan' },
   'permohonan-bantuan': { en: 'Aid Application',               ms: 'Borang Permohonan Bantuan' },
+  'puspa-niaga':         { en: 'PUSPA Niaga',                    ms: 'PUSPA Niaga' },
 }
 ```
 
@@ -581,7 +617,7 @@ The chat communicates with `/api/v1/ai` via Server-Sent Events:
 
 ### 8.1 View Renderer
 
-All 23 modules are lazy-loaded via `next/dynamic` with `{ ssr: false }`:
+All 24 modules are lazy-loaded via `next/dynamic` with `{ ssr: false }`:
 
 ```typescript
 const moduleMap: Record<ViewId, React.ComponentType> = {
@@ -608,6 +644,7 @@ const moduleMap: Record<ViewId, React.ComponentType> = {
   'carta-organisasi':   dynamic(() => import('@/modules/carta-organisasi/page'), { ssr: false }),
   institusi:            dynamic(() => import('@/modules/institusi/page'), { ssr: false }),
   'permohonan-bantuan': dynamic(() => import('@/modules/permohonan-bantuan/page'), { ssr: false }),
+  'puspa-niaga':        dynamic(() => import('@/modules/puspa-niaga/page'), { ssr: false }),
 }
 ```
 
@@ -637,7 +674,7 @@ When a user lacks permission for a module:
 
 ### 8.3 Dashboard Page Pattern
 
-The dashboard exemplifies the standard module page layout across all 23 modules:
+The dashboard exemplifies the standard module page layout across all 24 modules:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -1090,7 +1127,7 @@ export type ViewId =
   | 'disbursements' | 'volunteers' | 'compliance' | 'reports' | 'ekyc'
   | 'documents' | 'activities' | 'donors' | 'ai' | 'settings' 
   | 'tapsecure' | 'admin' | 'asnafpreneur' | 'sedekah-jumaat' | 'docs'
-  | 'carta-organisasi' | 'institusi' | 'permohonan-bantuan'
+  | 'carta-organisasi' | 'institusi' | 'permohonan-bantuan' | 'puspa-niaga'
 ```
 
 ---
@@ -1126,6 +1163,7 @@ export type ViewId =
 | carta-organisasi     | staff       | General        |
 | institusi            | staff       | General        |
 | permohonan-bantuan   | staff       | General        |
+| puspa-niaga          | staff       | General        |
 | compliance           | admin       | Governance     |
 | reports              | admin       | Governance     |
 | ekyc                 | admin       | Governance     |
@@ -1197,7 +1235,7 @@ src/
 │   │   ├── MariaAvatarUnified.tsx        ← Unified avatar component
 │   │   └── maria-vrm-blendshapes.tsx     ← VRM blendshape definitions
 │   └── ui/                      ← 46 shadcn/ui components
-├── modules/                     ← 23 module pages (one per ViewId)
+├── modules/                     ← 24 module pages (one per ViewId)
 │   ├── dashboard/page.tsx
 │   ├── members/page.tsx
 │   ├── cases/page.tsx
@@ -1220,7 +1258,8 @@ src/
 │   ├── settings/page.tsx
 │   ├── carta-organisasi/page.tsx
 │   ├── institusi/page.tsx
-│   └── permohonan-bantuan/page.tsx
+│   ├── permohonan-bantuan/page.tsx
+│   └── puspa-niaga/page.tsx
 ├── stores/
 │   ├── hermes-store.ts          ← Maria Puspa AI chat state
 │   └── maria-character-store.ts ← Maria emotion/presence/speech state
@@ -1293,5 +1332,5 @@ docs/
 ---
 
 *Document version: PUSPA V5 Design System*
-*Last updated: 2026-05-08*
+*Last updated: 2026-08-15*
 *Color space: oklch | Theme: Purple brand | Language: Bahasa Melayu + English*

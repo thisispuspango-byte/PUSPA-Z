@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Heart, ShieldCheck, Mail, Phone, MapPin, ExternalLink, Lock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +12,8 @@ interface PortalFooterProps {
 }
 
 export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterProps) {
+  const [currentYear] = useState(() => new Date().getFullYear())
+
   return (
     <footer className="border-t border-white/10 bg-background/90 backdrop-blur-2xl text-foreground pt-14 pb-8 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -113,7 +116,7 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
 
         {/* Bottom copyright & PDPA notice */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Pertubuhan Urus Peduli Asnaf (PUSPA). Hak Cipta Terpelihara.</p>
+          <p>© {currentYear} Pertubuhan Urus Peduli Asnaf (PUSPA). Hak Cipta Terpelihara.</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />

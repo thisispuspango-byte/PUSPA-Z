@@ -1,18 +1,47 @@
-# 📖 Panduan Pengguna PUSPA V5
-## *Pertubuhan Urus Peduli Asnaf (PUSPA)*
+---
+title: "PUSPA-Z — Panduan Pengguna & SOP Operasi Sistem"
+document_id: "PUSPA-DOC-GUIDE-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "PUBLIC & STAFF OPERATIONAL"
+lifecycle_status: "ACTIVE"
+---
 
-Selamat datang ke platform **PUSPA V5**, sistem pengurusan NGO yang diperkasakan oleh AI untuk memudahkan urusan pendaftaran Asnaf, pengurusan kes, dan ketelusan dana.
+# 📖 Panduan Pengguna PUSPA V5.6
+## *Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)*
+
+Selamat datang ke platform **PUSPA V5.6**, sistem pengurusan NGO yang diperkasakan oleh AI untuk memudahkan urusan pendaftaran Asnaf, pengurusan kes, dan ketelusan dana.
 
 ---
 
-## 🚀 1. Ringkasan Cepat (Quick Start)
+## 📜 Audit & Revision Ledger
 
-Platform ini direka untuk efisiensi tinggi. Berikut adalah perkara asas yang perlu anda tahu:
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi panduan pengguna | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Menambah penerangan perbezaan Portal Awam `/` dan Dashboard `/dashboard` | Menstrukturkan Seksyen 1 kepada Portal Awam dan Dashboard Pengurusan | `doc verified` |
 
-- **Sidebar Kiri**: Navigasi utama antara modul (Dashboard, Ahli, Kes, dll).
-- **Maria Puspa (AI)**: Pembantu AI yang sentiasa ada di bahagian bawah kanan. Anda boleh tanya apa-apa tentang data operasi.
-- **Top Bar**: Carian pantas, notifikasi, dan tetapan profil.
-- **Modul Gated**: Akses anda bergantung kepada peranan anda (Staff, Admin, atau Developer).
+---
+
+## 🚀 1. Struktur Platform (Portal Awam vs Dashboard Pengurusan)
+
+Platform PUSPA V5.6 dibahagikan kepada dua lapisan utama:
+
+### 1.1 Portal Awam (`/`) — Untuk Orang Awam, Penderma & Pemohon Bantuan
+- **Pendaratan Berimpak Tinggi**: Memaparkan statistik semasa, galeri agihan lapangan, dan program-program kebajikan utama.
+- **Ekosistem Agihan 5-Zon (Diorama 3D Interaktif)**: Penerbangan interaktif melalui 5 zon operasi (*01 Dapur Barakah*, *02 Gudang Ihsan*, *03 Konvoi Armada*, *04 8 Rumah Kebajikan & Tahfiz*, *05 Hab Transformasi & Maria AI*).
+- **Tindakan Pantas Awam**:
+  - **Infaq Sedekah Jumaat**: Modal sumbangan segera.
+  - **Semakan Status Permohonan**: Semak status kelulusan bantuan menggunakan No. Kad Pengenalan.
+  - **Borang Permohonan Bantuan**: Permohonan bantuan atas talian patuh PDPA secara terus.
+- **Akses Kakitangan**: Klik butang **"Sistem Staf"** di sudut atas kanan untuk masuk ke Dashboard Pengurusan (`/dashboard`).
+
+### 1.2 Dashboard Pengurusan (`/dashboard`) — Untuk Kakitangan & Pentadbir
+- **Sidebar Kiri**: Navigasi utama antara 24 modul operasi (Dashboard, Ahli, Kes, Derma, Agihan, dll).
+- **Maria Puspa (AI)**: Pembantu AI pintar yang sentiasa ada di bahagian bawah kanan untuk analisa data operasi secara *real-time*.
+- **Top Bar**: Carian pantas, breadcrumb, notifikasi, dan profil pengguna.
+- **Modul Gated**: Akses anda ditapis mengikut peranan anda (Staff, Admin, atau Developer).
 
 ---
 
@@ -118,7 +147,7 @@ Maria Puspa menggunakan teknologi **RAG (Retrieval-Augmented Generation)**. Ini 
 
 ## 🛠️ 4. Panduan Modul Lengkap (Complete Module Guide)
 
-PUSPA V5 mempunyai **23 modul** yang tersedia mengikut peranan anda. Berikut adalah panduan ringkas untuk setiap modul:
+PUSPA V5 mempunyai **24 modul** yang tersedia mengikut peranan anda. Berikut adalah panduan ringkas untuk setiap modul:
 
 ### Modul untuk Semua Peranan (Staff, Admin, Developer)
 
@@ -141,6 +170,7 @@ PUSPA V5 mempunyai **23 modul** yang tersedia mengikut peranan anda. Berikut ada
 | **Carta Organisasi** | Carta hierarki organisasi PUSPA -- struktur jawatan dan laporan. | Staff+ |
 | **Institusi** | Pengurusan senarai institusi rakan kongsi dan agensi kerjasama. | Staff+ |
 | **Permohonan Bantuan** | Portal digital untuk memproses dan menjejak permohonan bantuan baru daripada pemohon. | Staff+ |
+| **PUSPA Niaga** | Platform produk dan jualan untuk asnaf entrepreneur. (Baru) | Staff+ |
 
 ### Modul untuk Admin dan Developer Sahaja
 
@@ -381,5 +411,5 @@ Sistem ini mematuhi Akta Perlindungan Data Peribadi 2010 (PDPA):
 *J: Ini berlaku apabila pangkalan data tidak dapat dihubungi. Sistem memaparkan data contoh supaya anda boleh melihat format. Semak sambungan internet anda.*
 
 ---
-*Dokumen ini dikemaskini pada: 8 Mei 2026*
+*Dokumen ini dikemaskini pada: 15 Ogos 2026*
 *Oleh: PUSPA Engineering Team*

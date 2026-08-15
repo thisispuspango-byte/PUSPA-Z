@@ -1,13 +1,33 @@
+---
+title: "PUSPA-Z — Pertubuhan Urus Peduli Asnaf NGO Management Platform"
+document_id: "PUSPA-DOC-README-001"
+version: "5.6.2"
+last_updated: "2026-08-15T23:33:00+08:00"
+maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
+classification: "PUBLIC / OPEN REPO"
+lifecycle_status: "ACTIVE"
+---
+
 # PUSPA-Z
 
 ![PUSPA Logo](public/puspa-logo-official.png)
 
-**Pertubuhan Urus Peduli Asnaf**
+**Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)**
 *NGO Management Platform for Asnaf Welfare*
 
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript) ![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss) ![Prisma 6](https://img.shields.io/badge/Prisma-6-2D3748?logo=prisma) ![Bun](https://img.shields.io/badge/Bun-Runtime-000?logo=bun) ![OpenRouter AI](https://img.shields.io/badge/OpenRouter-AI-6366F1) ![Proprietary License](https://img.shields.io/badge/License-Proprietary-red)
 
 [Quick Start](#-quick-start) &bull; [Modules](#-modules) &bull; [Maria Puspa AI](#-maria-puspa-ai) &bull; [API](#-api-reference) &bull; [Database](#-database-schema)
+
+---
+
+## 📜 Audit & Revision Ledger
+
+| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
+| :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi setiap perubahan dokumentasi | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
+| `5.6.1` | `2026-08-15 23:18` | `Conductor Agent` | Membaiki isu butang 05 hilang pada diorama ekosistem portal awam | Membuang sekatan `prefersReducedMotion` dalam `portal-interactive-ecosystem.tsx` | `chrome-devtools verified` |
+| `5.6.0` | `2026-08-15 12:20` | `Conductor Agent` | Naik taraf Portal Awam bertaraf dunia & penyelarasan modul PUSPA Niaga | Penstrukturan semula landing page `/` dan pemindahan workspace ke `/dashboard` | `build clean` |
 
 ---
 
@@ -19,14 +39,17 @@ PUSPA V5 ialah platform pengurusan NGO sepenuhnya yang dibina untuk Pertubuhan U
 
 ### Key Highlights
 
-- **23 integrated modules** covering the full NGO operational workflow
+- **Dual-Layer Architecture**: High-impact **Public Portal Landing (`/`)** + Authenticated **Internal Management Workspace (`/dashboard`)**
+- **5-Zon Interactive 3D Diorama Flight**: Scroll-scrubbed interactive flight across 5 operational zones (`01 Dapur Barakah`, `02 Gudang Ihsan`, `03 Konvoi Armada`, `04 8 RK & Tahfiz`, `05 Hab Transformasi & Maria AI`) with bottom timeline navigation
+- **Direct Action Hub**: Integrated quick donate (`QuickDonateModal`), real-time status tracker (`CheckStatusModal`), and PDPA-compliant aid application (`/api/aid-applications`)
+- **24 integrated modules** covering the full NGO operational workflow in the management dashboard
 - **Maria Puspa AI** — an AI assistant with 22 tools, RAG-powered responses, and SSE streaming
 - **Live Maria Character Layer** — global floating widget, dynamic emotion state, TTS + lip-sync, 3D VRM model
 - **Telegram Bot** (@MariaPuspaBot) for mobile access to Maria Puspa
 - **Role-Based Access Control** (Staff, Admin, Developer) across all modules and AI tools
 - **eKYC Verification** pipeline with risk assessment
 - **Compliance Tracking** for ROSM, LHDN, PDPA, and internal audits
-- **26 Prisma models** with full relational data integrity
+- **27 Prisma models** with full relational data integrity
 - **Key rotation** for OpenRouter API with automatic failover (up to 4 keys)
 - **Supabase Auth** for authentication (SSR + browser client)
 - **PWA support** with service worker and web manifest
@@ -170,7 +193,7 @@ npm run smoke:maria
 
 ## Modules / Modul
 
-PUSPA V5 consists of **23 lazy-loaded modules**, each with its own view page and API routes:
+PUSPA V5 consists of **24 lazy-loaded modules**, each with its own lazy-loaded view page backed by the API layer:
 
 | #   | Module                 | Malay              | Access    | Description                                             |
 | --- | ---------------------- | ------------------ | --------- | ------------------------------------------------------- |
@@ -197,6 +220,7 @@ PUSPA V5 consists of **23 lazy-loaded modules**, each with its own view page and
 | 21  | **Carta Organisasi**   | Carta Organisasi   | Staff     | Organization chart management                           |
 | 22  | **Institusi**          | Institusi          | Staff     | Institution management (Rumah Kebajikan, Maahad Tahfiz) |
 | 23  | **Permohonan Bantuan** | Permohonan Bantuan | Staff     | Aid application form with PDPA compliance               |
+| 24  | **PUSPA Niaga**       | PUSPA Niaga        | Staff     | Asnaf entrepreneur product & sales platform (Baru)      |
 
 ---
 
@@ -271,7 +295,7 @@ User Prompt
 └─────────────────────────────┘
 ```
 
-### 18 AI Tools
+### 22 AI Tools
 
 #### Core / Teras (Staff+)
 
@@ -282,7 +306,11 @@ User Prompt
 | `get_donation_stats`       | Monthly donation statistics by category (zakat/sadaqah/waqf/infaq) |
 | `get_active_cases`         | List active cases with optional status filter                      |
 | `get_case_summary`         | Detailed case info with masked IC and notes                        |
+| `get_asnafpreneur_stats`   | Asnafpreneur programme statistics                                 |
 | `get_member_list`          | Asnaf member directory with category filter                        |
+| `get_volunteer_list`       | Volunteer directory with status filter                             |
+| `update_volunteer_status`  | Update volunteer active status                                     |
+| `get_sedekah_masjid_locations` | Sedekah Jumaat masjid locations (area filter)                  |
 | `get_member_stats`         | Member statistics by asnaf category and eKYC status                |
 | `get_active_programmes`    | Currently running programmes with dates                            |
 | `get_volunteer_stats`      | Volunteer count, active/inactive breakdown                         |
@@ -324,7 +352,7 @@ Maria Puspa follows strict RAG (Retrieval-Augmented Generation) rules:
 ### Health Check
 
 ```
-GET /api → { status: "ok", version: "5.0" }
+GET /api → { message: "Hello, world!" }
 ```
 
 ### AI Endpoints
@@ -351,6 +379,11 @@ All module endpoints support `GET` (list/detail) and `POST` (create) operations:
 | `/api/v1/ekyc`          | eKYC verification       |
 | `/api/v1/documents`     | Document management     |
 | `/api/v1/activities`    | Activity audit log      |
+| `/api/v1/settings`      | Platform configuration  |
+| `/api/v1/fb-sync`       | Facebook page sync      |
+| `/api/organization`     | Organization chart      |
+| `/api/institutions`     | Institutions CRUD       |
+| `/api/aid-applications` | Aid applications CRUD   |
 
 ### Analytics Endpoints
 
@@ -399,7 +432,7 @@ Higher roles inherit all permissions of lower roles. AI tools are also filtered 
 
 ## Database Schema / Skema Pangkalan Data
 
-PUSPA V5 uses **26 Prisma models** with full relational integrity:
+PUSPA V5 uses **27 Prisma models** with full relational integrity:
 
 ### Entity Overview
 
@@ -476,7 +509,7 @@ PUSPA-Z/
 ├── hermes/                     # Hermes agent skills directory
 │   └── skills/                 # Agent skills (apple, creative, etc.)
 ├── prisma/
-│   └── schema.prisma           # Database schema (26 models)
+│   └── schema.prisma           # Database schema (27 models)
 ├── public/
 │   ├── manifest.json           # PWA web manifest
 │   ├── sw.js                   # Service worker (PWA)
@@ -505,7 +538,13 @@ PUSPA-Z/
 │   │   │       ├── documents/
 │   │   │       ├── activities/
 │   │   │       ├── dashboard/
-│   │   │       └── reports/
+│   │   │       ├── reports/
+│   │   │       ├── settings/
+│   │   │       └── fb-sync/
+│   │   ├── organization/        # Organization chart API
+│   │   ├── institutions/        # Institutions CRUD
+│   │   ├── aid-applications/    # Aid applications CRUD
+│   │   ├── health/              # Enhanced health check
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   └── page.tsx
@@ -526,7 +565,7 @@ PUSPA-Z/
 │   │   ├── query-provider.tsx  # TanStack Query provider
 │   │   ├── puspa-logo.tsx      # Logo component
 │   │   ├── puspa-loading-spinner.tsx
-│   │   ├── view-renderer.tsx   # Lazy module renderer (23 modules)
+│   │   ├── view-renderer.tsx   # Lazy module renderer (24 modules)
 │   │   └── theme-provider.tsx
 │   ├── hooks/
 │   │   ├── use-toast.ts
@@ -560,7 +599,7 @@ PUSPA-Z/
 │   │   ├── store.ts            # App state (current view, role)
 │   │   ├── utils.ts            # Utility functions
 │   │   └── validation.ts       # Input validation
-│   ├── modules/                # 23 lazy-loaded view pages
+│   ├── modules/                # 24 lazy-loaded view pages
 │   │   ├── dashboard/page.tsx
 │   │   ├── members/page.tsx
 │   │   ├── cases/page.tsx
@@ -583,7 +622,8 @@ PUSPA-Z/
 │   │   ├── admin/page.tsx
 │   │   ├── carta-organisasi/page.tsx
 │   │   ├── institusi/page.tsx
-│   │   └── permohonan-bantuan/page.tsx
+│   │   ├── permohonan-bantuan/page.tsx
+│   │   └── puspa-niaga/page.tsx
 │   ├── stores/
 │   │   ├── hermes-store.ts     # Zustand AI chat state
 │   │   └── maria-character-store.ts # Maria character state
@@ -672,6 +712,12 @@ PUSPA V5 is production-ready with a **no-VPS architecture**:
 - **Telegram bot worker**: hosted worker (Render/Railway/Fly.io) with auto-restart
 
 You do **not** need to provision or maintain your own VPS.
+
+### Live Production
+
+- **URL**: <https://puspa.gangniaga.my>
+- **CI/CD**: GitHub Actions → Vercel (auto-deploy on `main`)
+- **Last verified build**: commit `28090e9` — `bun run typecheck` + `bun run build` green
 
 ### Step-by-Step (No VPS)
 
@@ -771,4 +817,4 @@ This is **proprietary software** developed exclusively for Pertubuhan Urus Pedul
 
 ---
 
-*Updated: 2026-05-08*
+*Updated: 2026-08-15*
