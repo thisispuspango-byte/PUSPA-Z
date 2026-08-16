@@ -49,6 +49,7 @@ interface ZoneInfo {
   desc: string
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>
   diorama: string
+  video: string
   themeColor: string
   stats: { label: string; value: string }[]
   hotspots: Hotspot[]
@@ -65,6 +66,7 @@ const ZONES: ZoneInfo[] = [
     desc: 'Dapur berpusat PUSPA beroperasi seawal jam 6 pagi memasak hidangan seimbang dan bernutrisi tinggi sebelum dimuatkan ke dalam armada penghantaran.',
     icon: Utensils,
     diorama: '/diorama-01.jpg',
+    video: '/videos/diorama-01.mp4',
     themeColor: '#9333EA',
     stats: [
       { label: 'Kapasiti Harian', value: '800 Pek' },
@@ -85,6 +87,7 @@ const ZONES: ZoneInfo[] = [
     desc: 'Gudang simpanan barangan asas (beras, minyak masak, tepung, makanan kering) yang dibungkus rapi dalam Kotak Ihsan bernilai RM150/keluarga.',
     icon: PackageCheck,
     diorama: '/diorama-02.jpg',
+    video: '/videos/diorama-02.mp4',
     themeColor: '#E11D48',
     stats: [
       { label: 'Stok Kotak', value: '1,200 Kotak' },
@@ -105,6 +108,7 @@ const ZONES: ZoneInfo[] = [
     desc: 'Pasukan sukarelawan berlepas serentak merentasi zon berjadual bagi memastikan makanan sampai panas ke institusi kebajikan sebelum solat Jumaat.',
     icon: Truck,
     diorama: '/diorama-03.jpg',
+    video: '/videos/diorama-03.mp4',
     themeColor: '#D97706',
     stats: [
       { label: 'Zon Liputan', value: '8 Zon Utama' },
@@ -125,6 +129,7 @@ const ZONES: ZoneInfo[] = [
     desc: 'Amanah infaq anda diraikan oleh lebih 600 penghuni rumah orang tua, anak yatim, dan pelajar tahfiz di seluruh Selangor & Lembah Klang.',
     icon: Building2,
     diorama: '/diorama-04.jpg',
+    video: '/videos/diorama-04.mp4',
     themeColor: '#059669',
     stats: [
       { label: 'Penerima Tetap', value: '8 RK + 1 MT' },
@@ -145,6 +150,7 @@ const ZONES: ZoneInfo[] = [
     desc: 'Kompleks operasi pintar PUSPA yang menempatkan bilik kawalan Maria AI dan studio bimbingan modal niaga asnaf.',
     icon: Rocket,
     diorama: '/diorama-05.jpg',
+    video: '/videos/diorama-05.mp4',
     themeColor: '#2563EB',
     stats: [
       { label: 'Usahawan Terbimbing', value: '124 Usahawan' },
@@ -189,18 +195,29 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
     [1.25, 1, 1, 1.04],
   )
 
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  // Ensure video plays continuously across active/scroll changes
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {})
+    }
+  }, [active])
+
   return (
     <div className="relative h-full w-screen shrink-0 overflow-hidden">
-      {/* ── Diorama (dolly-in) ── */}
+      {/* ── Moving Video Diorama (with Image Poster Fallback) ── */}
       <motion.div className="absolute inset-0" style={{ scale }}>
-        <Image
-          src={zone.diorama}
-          alt={zone.name}
-          fill
-          priority={index === 0}
-          className="object-cover object-center"
-          sizes="100vw"
-          quality={90}
+        <video
+          ref={videoRef}
+          src={zone.video}
+          poster={zone.diorama}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover object-center"
         />
       </motion.div>
 

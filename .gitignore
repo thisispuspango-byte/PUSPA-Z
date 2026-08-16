@@ -108,5 +108,6 @@ mini-services/telegram-bot/results_*/
 # Generated poster artifacts
 /poster-*.png
 
-# Generated video artifacts (e.g. emons-showcase.mp4 - 47.9MB demo reel)
+# Generated video artifacts (keep heavy demo reels out, allow web diorama loops)
 public/videos/
+!public/videos/diorama-*.mp4

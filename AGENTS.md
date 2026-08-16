@@ -1,8 +1,8 @@
 ---
 title: "PUSPA-Z — Maria Puspa AI Agent System Rules & Protocol"
 document_id: "PUSPA-DOC-AGENTS-001"
-version: "5.6.2"
-last_updated: "2026-08-15T23:33:00+08:00"
+version: "5.6.3"
+last_updated: "2026-08-16T08:15:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "INTERNAL AI PROTOCOL"
 lifecycle_status: "ACTIVE"
@@ -19,6 +19,7 @@ lifecycle_status: "ACTIVE"
 
 | Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
 | :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.3` | `2026-08-16 08:15` | `Conductor Agent` | Mengubah semua 5 imej diorama statik kepada video animasi bergerak 2.5D sinusoidal loop | Menjana 5 fail video H.264 di `public/videos/diorama-0X.mp4` via FFmpeg & mengemas kini `portal-interactive-ecosystem.tsx` | `chrome-devtools verified` |
 | `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menyelaraskan mandat SMS-v1.0 bagi penjejakan mikro setiap perubahan | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
 | `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Mengemas kini status penambahbaikan terkini (CSP, API Bantuan, Diorama) | Mengemaskini jadual Seksyen 19 dengan 4 item penambahbaikan baharu | `verified` |
 | `5.6.0` | `2026-08-15 12:20` | `Conductor Agent` | Pelaksanaan integrasi modul PUSPA Niaga dan 27 Prisma models | Penstrukturan modul dan kemaskini peranan RBAC | `build clean` |
