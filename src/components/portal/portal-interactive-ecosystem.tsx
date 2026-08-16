@@ -1,41 +1,34 @@
 'use client'
 
-import * as React from 'react'
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion'
 import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-  type MotionValue,
-} from 'framer-motion'
-import Image from 'next/image'
-import {
-  Utensils,
+  UtensilsCrossed,
   PackageCheck,
   Truck,
   Building2,
   Rocket,
   Plus,
-  Heart,
   ArrowRight,
+  Heart,
   ShieldCheck,
-  MousePointerClick,
+  ChevronLeft,
+  ChevronRight,
+  Compass,
 } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 /* ─────────────────────────────────────────────────────────── */
-/*  ZONE DATA                                                  */
+/*  DATA DEFINITIONS                                           */
 /* ─────────────────────────────────────────────────────────── */
 
 interface Hotspot {
   id: string
   title: string
   desc: string
-  x: number
-  y: number
+  x: number // percentage 0-100
+  y: number // percentage 0-100
   status: string
 }
 
@@ -44,114 +37,114 @@ interface ZoneInfo {
   num: string
   name: string
   shortLabel: string
-  category: string
   subtitle: string
   desc: string
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+  icon: typeof UtensilsCrossed
   diorama: string
   video: string
   themeColor: string
+  accentGlow: string
   stats: { label: string; value: string }[]
   hotspots: Hotspot[]
 }
 
 const ZONES: ZoneInfo[] = [
   {
-    id: 'dapur-pusat',
+    id: 'dapur',
     num: '01',
     name: 'Dapur Pusat & Juadah Barakah',
     shortLabel: 'Dapur Barakah',
-    category: 'Penyediaan Makanan',
     subtitle: '600+ Pek Makanan Panas Setiap Jumaat',
     desc: 'Dapur berpusat PUSPA beroperasi seawal jam 6 pagi memasak hidangan seimbang dan bernutrisi tinggi sebelum dimuatkan ke dalam armada penghantaran.',
-    icon: Utensils,
+    icon: UtensilsCrossed,
     diorama: '/diorama-01.jpg',
     video: '/videos/diorama-01.mp4',
-    themeColor: '#9333EA',
+    themeColor: '#7C3AED',
+    accentGlow: 'rgba(124, 58, 237, 0.4)',
     stats: [
       { label: 'Kapasiti Harian', value: '800 Pek' },
       { label: 'Kawalan Suhu', value: 'Min 65°C' },
     ],
     hotspots: [
-      { id: 'h1', title: 'Kawah Memasak Barakah', desc: 'Penyediaan nasi minyak, lauk ayam berempah dan sayur seimbang untuk 8 rumah kebajikan.', x: 28, y: 42, status: 'Memasak Aktif' },
-      { id: 'h2', title: 'Stesen Pembungkusan Haba', desc: 'Juadah dipateri dalam bekas kedap udara bagi mengekalkan kehangatan dan kebersihan.', x: 68, y: 50, status: 'Penyegelan Haba' },
+      { id: 'h1', title: 'Stesen Kuali Industri', desc: 'Memasak lauk berkhasiat secara pukal menggunakan standard kebersihan HALAL & MeSTI.', x: 26, y: 36, status: 'Penyediaan Aktif' },
+      { id: 'h2', title: 'Meja Pembungkusan Pantas', desc: 'Pembungkusan bekas mesra alam tahan haba untuk mengekalkan kesegaran makanan.', x: 58, y: 58, status: 'Standard Kebersihan 100%' },
     ],
   },
   {
-    id: 'gudang-ihsan',
+    id: 'gudang',
     num: '02',
-    name: 'Pusat Logistik & Kotak Dapur Ihsan',
+    name: 'Gudang Simpanan & Barangan Kering',
     shortLabel: 'Gudang Ihsan',
-    category: 'Bekalan Makanan Asas',
-    subtitle: 'Pengurusan Stok & Agihan Asnaf',
-    desc: 'Gudang simpanan barangan asas (beras, minyak masak, tepung, makanan kering) yang dibungkus rapi dalam Kotak Ihsan bernilai RM150/keluarga.',
+    subtitle: 'Pengurusan Inventori Barakah Bersistematik',
+    desc: 'Gudang simpanan beras, minyak, tepung, dan bekalan keperluan asas keluarga asnaf dengan sistem kod bar pintar bagi mengelakkan pembaziran.',
     icon: PackageCheck,
     diorama: '/diorama-02.jpg',
     video: '/videos/diorama-02.mp4',
-    themeColor: '#E11D48',
+    themeColor: '#0EA5E9',
+    accentGlow: 'rgba(14, 165, 233, 0.4)',
     stats: [
-      { label: 'Stok Kotak', value: '1,200 Kotak' },
-      { label: 'Ketepatan Agihan', value: '99.8%' },
+      { label: 'Kotak Keperluan', value: '1,200 Kotak/Bulan' },
+      { label: 'Kawalan Stok', value: 'Sistem FIFO Pintar' },
     ],
     hotspots: [
-      { id: 'h3', title: 'Rak Simpanan Beras & Makanan Kering', desc: 'Inventori makanan asas berputar mengikut kaedah FIFO untuk jaminan kesegaran.', x: 35, y: 38, status: 'Inventori Terkawal' },
-      { id: 'h4', title: 'Stesen Kotak RM150 Keluarga', desc: 'Sukarelawan menyusun pek makanan lengkap untuk 350+ keluarga fakir miskin setiap bulan.', x: 65, y: 58, status: 'Sedia Diedar' },
+      { id: 'h3', title: 'Rak Simpanan Bertingkat', desc: 'Penyusunan berasaskan tarikh luput (FIFO) untuk memastikan kualiti bekalan sentiasa segar.', x: 38, y: 34, status: 'Stok Terkawal' },
+      { id: 'h4', title: 'Zon Susun Kotak Kasih', desc: 'Sukarelawan membungkus kit makanan asas seberat 15kg bagi setiap keluarga penerima.', x: 64, y: 56, status: 'Agihan Mingguan' },
     ],
   },
   {
     id: 'armada',
     num: '03',
-    name: 'Armada Van & Konvoi Lapangan PUSPA',
+    name: 'Logistik & Armada Konvoi Agihan',
     shortLabel: 'Konvoi Armada',
-    category: 'Logistik & Penghantaran',
-    subtitle: '8 Zon Penghantaran Selangor & KL',
-    desc: 'Pasukan sukarelawan berlepas serentak merentasi zon berjadual bagi memastikan makanan sampai panas ke institusi kebajikan sebelum solat Jumaat.',
+    subtitle: 'Menembusi Lorong Sempit & Komuniti Pedalaman',
+    desc: 'Konvoi kenderaan pacuan empat roda dan motosikal sukarelawan menghantar makanan terus ke pintu rumah penerima tanpa perantara.',
     icon: Truck,
     diorama: '/diorama-03.jpg',
     video: '/videos/diorama-03.mp4',
-    themeColor: '#D97706',
+    themeColor: '#059669',
+    accentGlow: 'rgba(5, 150, 105, 0.4)',
     stats: [
-      { label: 'Zon Liputan', value: '8 Zon Utama' },
-      { label: 'Ketepatan Waktu', value: '100% On-Time' },
+      { label: 'Zon Liputan', value: 'Lembah Klang & Pedalaman' },
+      { label: 'Masa Sampai', value: '< 90 Minit' },
     ],
     hotspots: [
-      { id: 'h5', title: 'Dermaga Pelepasan Van PUSPA', desc: 'Pek juadah dimuatkan terus ke van berpenebat khas bagi menjaga suhu hidangan.', x: 30, y: 55, status: 'Berlepas 11:00 AM' },
-      { id: 'h6', title: 'Unit Mobiliti Bantuan Kilat', desc: 'Motosikal dan kenderaan ringan sukarelawan untuk laluan sempit dan perkampungan asnaf.', x: 72, y: 45, status: 'Siap Siaga' },
+      { id: 'h5', title: 'Pusat Pelepasan Konvoi', desc: 'Pemeriksaan keselamatan kenderaan dan penetapan laluan agihan melalui sistem navigasi GPS.', x: 32, y: 62, status: 'Laluan Dioptimumkan' },
+      { id: 'h6', title: 'Skuad Motosikal Cepat', desc: 'Menembusi kawasan flat bertingkat tinggi dan perumahan padat dengan pantas.', x: 62, y: 44, status: 'Sedia Gerak' },
     ],
   },
   {
-    id: 'institusi',
+    id: 'komuniti',
     num: '04',
-    name: 'Rangkaian 8 Rumah Kebajikan & Tahfiz',
+    name: '8 Rumah Kebajikan & Pusat Tahfiz',
     shortLabel: '8 RK & Tahfiz',
-    category: 'Santunan Warga Emas & Yatim',
-    subtitle: 'Penerima Rutin Mingguan PUSPA',
-    desc: 'Amanah infaq anda diraikan oleh lebih 600 penghuni rumah orang tua, anak yatim, dan pelajar tahfiz di seluruh Selangor & Lembah Klang.',
+    subtitle: 'Santunan Warga Emas, Anak Yatim & Penuntut Ilmu',
+    desc: 'Penerimaan agihan di lapan buah rumah kebajikan rakan kerjasama dan madrasah tahfiz terpilih setiap hari Jumaat secara berjadual.',
     icon: Building2,
     diorama: '/diorama-04.jpg',
     video: '/videos/diorama-04.mp4',
-    themeColor: '#059669',
+    themeColor: '#D97706',
+    accentGlow: 'rgba(217, 119, 6, 0.4)',
     stats: [
-      { label: 'Penerima Tetap', value: '8 RK + 1 MT' },
-      { label: 'Jumlah Jiwa', value: '620 Orang' },
+      { label: 'Penghuni Disantuni', value: '450+ Jiwa' },
+      { label: 'Kekerapan', value: 'Setiap Jumaat Berterusan' },
     ],
     hotspots: [
-      { id: 'h7', title: 'Dewan Selera Rumah Al-Mukhlisin', desc: 'Juadah tengahari diagihkan terus kepada 45 warga emas dan pesakit uzur.', x: 40, y: 42, status: 'Penyerahan 12:30 PM' },
-      { id: 'h8', title: 'Kompleks Mahad Tahfiz PUSPA', desc: '60 anak-anak tahfiz menerima sajian berkhasiat selepas tamat sesi hafazan Al-Quran.', x: 72, y: 55, status: 'Selesai Agih' },
+      { id: 'h7', title: 'Dewan Selera Rumah Warga Emas', desc: 'Makanan panas dihidangkan segar oleh sukarelawan bersama sesi ramah mesra.', x: 44, y: 48, status: 'Santunan Kasih' },
+      { id: 'h8', title: 'Pusat Tahfiz & Asrama', desc: 'Bekalan protein dan nutrisi mencukupi untuk menyokong pembelajaran anak-anak.', x: 66, y: 36, status: 'Penerima Tetap' },
     ],
   },
   {
     id: 'hab',
     num: '05',
-    name: 'Pusat Operasi Maria AI & Asnafpreneur',
+    name: 'Hab Transformasi & Pengurusan Asnaf',
     shortLabel: 'Hab Transformasi',
-    category: 'Tadbir Urus & Ekonomi Ummah',
-    subtitle: 'Inkubator Keusahawanan & Audit Telus',
+    subtitle: 'Pusat Data Maria AI & Studio Asnafpreneur',
     desc: 'Kompleks operasi pintar PUSPA yang menempatkan bilik kawalan Maria AI dan studio bimbingan modal niaga asnaf.',
     icon: Rocket,
     diorama: '/diorama-05.jpg',
     video: '/videos/diorama-05.mp4',
     themeColor: '#2563EB',
+    accentGlow: 'rgba(37, 99, 235, 0.4)',
     stats: [
       { label: 'Usahawan Terbimbing', value: '124 Usahawan' },
       { label: 'Verifikasi eKYC', value: 'Pantas & Patuh' },
@@ -167,12 +160,11 @@ const ZONES: ZoneInfo[] = [
 /*  FLIGHT CONSTANTS                                           */
 /* ─────────────────────────────────────────────────────────── */
 
-// Total scroll flight distance (5 zones × 120vh dwell each).
 const TRACK_HEIGHT_VH = 600
 const ZONE_COUNT = ZONES.length
 
 /* ─────────────────────────────────────────────────────────── */
-/*  ZONE PANEL  (one diorama on the horizontal flight track)   */
+/*  ZONE PANEL (one diorama on the horizontal flight track)    */
 /* ─────────────────────────────────────────────────────────── */
 
 interface ZonePanelProps {
@@ -185,19 +177,24 @@ interface ZonePanelProps {
 }
 
 function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePanelProps) {
-  // Dolly-in: approach 1.25→1 across the first third of the segment,
-  // hold for the dwell, then a subtle push-out (1→1.04) before the cut.
   const segStart = index / ZONE_COUNT
   const segEnd = (index + 1) / ZONE_COUNT
+
+  // Cinematic Emons-style dolly scale and slight 3D perspective shift
   const scale = useTransform(
     progress,
-    [segStart, segStart + 0.3, segEnd - 0.08, segEnd],
-    [1.25, 1, 1, 1.04],
+    [segStart - 0.05, segStart + 0.1, segEnd - 0.1, segEnd + 0.05],
+    [1.18, 1, 1, 1.08]
+  )
+
+  const opacity = useTransform(
+    progress,
+    [segStart - 0.08, segStart, segEnd, segEnd + 0.08],
+    [0.4, 1, 1, 0.4]
   )
 
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  // Ensure video plays continuously across active/scroll changes
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.play().catch(() => {})
@@ -205,9 +202,12 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
   }, [active])
 
   return (
-    <div className="relative h-full w-screen shrink-0 overflow-hidden">
-      {/* ── Moving Video Diorama (with Image Poster Fallback) ── */}
-      <motion.div className="absolute inset-0" style={{ scale }}>
+    <div className="relative h-full w-screen shrink-0 overflow-hidden select-none">
+      {/* ── Moving Video Diorama with Smooth Scale & Parallax ── */}
+      <motion.div
+        className="absolute inset-0 origin-center will-change-transform"
+        style={{ scale, opacity }}
+      >
         <video
           ref={videoRef}
           src={zone.video}
@@ -221,11 +221,19 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
         />
       </motion.div>
 
-      {/* ── Vignette & gradient overlays ── */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
+      {/* ── Cinematic Atmosphere & Vignette Overlays ── */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/45" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/30" />
+      
+      {/* Ambient Zone Color Glow */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-20 transition-opacity duration-1000 mix-blend-screen"
+        style={{
+          background: `radial-gradient(circle at 50% 60%, ${zone.accentGlow} 0%, transparent 70%)`,
+        }}
+      />
 
-      {/* ── Interactive pulsing hotspots (fly with the diorama) ── */}
+      {/* ── Emons-Grade Multi-Ring Radar Hotspots ── */}
       {zone.hotspots.map((hs) => {
         const open = active && openHs === hs.id
         return (
@@ -234,41 +242,55 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
             className="absolute z-30"
             style={{ left: `${hs.x}%`, top: `${hs.y}%`, transform: 'translate(-50%, -50%)' }}
           >
-            <button
-              type="button"
-              onClick={() => onToggleHs(hs.id)}
-              aria-label={hs.title}
-              className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 shadow-2xl transition-all duration-200 active:scale-[0.95] ${
-                open
-                  ? 'scale-110 border-white bg-white text-black ring-4 ring-white/30'
-                  : 'border-white/60 bg-black/60 text-white backdrop-blur-xl hover:scale-110 hover:bg-white hover:text-black'
-              } ${active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-            >
-              <Plus className={`h-5 w-5 transition-transform duration-200 ${open ? 'rotate-45' : ''}`} />
-              {!open && active && (
-                <span className="pointer-events-none absolute -inset-2 animate-ping rounded-full border-2 border-white/40" />
+            <div className="relative flex items-center justify-center">
+              {/* Sonar Ripple Rings when active */}
+              {active && !open && (
+                <>
+                  <span
+                    className="pointer-events-none absolute h-12 w-12 rounded-full border opacity-75 animate-ping"
+                    style={{ borderColor: zone.themeColor }}
+                  />
+                  <span
+                    className="pointer-events-none absolute h-16 w-16 rounded-full border border-white/30 opacity-40 animate-pulse"
+                  />
+                </>
               )}
-            </button>
+
+              <button
+                type="button"
+                onClick={() => onToggleHs(hs.id)}
+                aria-label={hs.title}
+                className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 shadow-2xl transition-all duration-300 active:scale-95 ${
+                  open
+                    ? 'scale-115 border-white bg-white text-black ring-4 ring-white/40'
+                    : 'border-white/80 bg-black/70 text-white backdrop-blur-xl hover:scale-110 hover:bg-white hover:text-black'
+                } ${active ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'}`}
+              >
+                <Plus className={`h-5 w-5 transition-transform duration-300 ${open ? 'rotate-45 text-black' : ''}`} />
+              </button>
+            </div>
 
             <AnimatePresence>
               {open && (
                 <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 12, scale: 0.92 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.95 }}
-                  transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-                  className="absolute bottom-full left-1/2 z-40 mb-4 w-72 -translate-x-1/2 space-y-2 rounded-2xl border border-white/20 bg-black/90 p-4 text-left shadow-2xl backdrop-blur-2xl"
+                  exit={{ opacity: 0, y: 8, scale: 0.92 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute bottom-full left-1/2 z-40 mb-4 w-80 -translate-x-1/2 space-y-2 rounded-2xl border border-white/20 bg-black/95 p-4 text-left shadow-2xl backdrop-blur-2xl"
                 >
                   <div className="flex items-center justify-between">
                     <Badge
-                      className="h-5 border-0 px-2 text-[10px] text-white"
+                      className="h-5 border-0 px-2.5 text-[10px] font-bold text-white shadow-md"
                       style={{ backgroundColor: zone.themeColor }}
                     >
                       {hs.status}
                     </Badge>
-                    <span className="font-mono text-[10px] text-white/50">Fasa {zone.num}</span>
+                    <span className="font-mono text-[10px] font-bold tracking-wider text-white/50">
+                      FASA {zone.num}
+                    </span>
                   </div>
-                  <h4 className="text-sm font-bold text-white">{hs.title}</h4>
+                  <h4 className="text-sm font-bold text-white tracking-tight">{hs.title}</h4>
                   <p className="text-xs leading-relaxed text-white/70">{hs.desc}</p>
                 </motion.div>
               )}
@@ -281,7 +303,7 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/*  COMPONENT                                                  */
+/*  MAIN COMPONENT (Emons-Style Scrolly Flight)                */
 /* ─────────────────────────────────────────────────────────── */
 
 interface Props {
@@ -292,6 +314,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeIdx, setActiveIdx] = useState(0)
   const [openHs, setOpenHs] = useState<string | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   const zone = ZONES[activeIdx]
 
@@ -300,33 +323,76 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
     offset: ['start start', 'end end'],
   })
 
-  // Camera flies horizontally across the 5-panel track:
-  // total travel = (ZONE_COUNT × 100vw) − viewport(100vw) = 400vw.
-  const cameraX = useTransform(scrollYProgress, [0, 1], ['0vw', `${-(ZONE_COUNT - 1) * 100}vw`])
+  // Buttery-smooth spring damping physics (emulates the Emons inertia flight)
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 26,
+    restDelta: 0.0005,
+  })
+
+  // Camera flies horizontally across the 5-panel track: total travel = 400vw
+  const cameraX = useTransform(smoothProgress, [0, 1], ['0vw', `${-(ZONE_COUNT - 1) * 100}vw`])
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const i = Math.min(ZONE_COUNT - 1, Math.floor(v * ZONE_COUNT))
-    setActiveIdx(i)
-    setOpenHs(null)
+    if (i !== activeIdx) {
+      setActiveIdx(i)
+      setOpenHs(null)
+      setIsTransitioning(true)
+      setTimeout(() => setIsTransitioning(false), 500)
+    }
   })
 
   const toggleHs = useCallback((id: string) => {
     setOpenHs((cur) => (cur === id ? null : id))
   }, [])
 
-  const scrollToZone = useCallback(
-    (i: number) => {
-      const el = sectionRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const scrollable = rect.height - window.innerHeight
-      const target = rect.top + window.scrollY + ((i + 0.5) / ZONE_COUNT) * scrollable
-      window.scrollTo({ top: target, behavior: 'smooth' })
-    },
-    [],
-  )
+  const scrollToZone = useCallback((i: number) => {
+    const el = sectionRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const scrollable = rect.height - window.innerHeight
+    const target = rect.top + window.scrollY + ((i + 0.5) / ZONE_COUNT) * scrollable
+    window.scrollTo({ top: target, behavior: 'smooth' })
+  }, [])
 
-  /* ── Scroll-scrubbed fly-through stage ── */
+  const nextZone = useCallback(() => {
+    if (activeIdx < ZONE_COUNT - 1) {
+      scrollToZone(activeIdx + 1)
+    }
+  }, [activeIdx, scrollToZone])
+
+  const prevZone = useCallback(() => {
+    if (activeIdx > 0) {
+      scrollToZone(activeIdx - 1)
+    }
+  }, [activeIdx, scrollToZone])
+
+  // Keyboard navigation support (Arrow keys)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        const el = sectionRef.current
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            nextZone()
+          }
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        const el = sectionRef.current
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            prevZone()
+          }
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [nextZone, prevZone])
+
   return (
     <section
       id="agihan"
@@ -335,15 +401,32 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
       style={{ height: `${TRACK_HEIGHT_VH}vh` }}
     >
       {/* Sticky full-viewport flight stage */}
-      <div className="sticky top-0 h-screen overflow-hidden bg-black">
+      <div className="sticky top-0 h-screen overflow-hidden bg-black select-none">
+        
+        {/* ── Cinematic Anamorphic Light Streak Transition ── */}
+        <AnimatePresence>
+          {isTransitioning && (
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 0.85, scaleX: 1 }}
+              exit={{ opacity: 0, scaleX: 1.5 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-none absolute inset-y-0 z-40 w-full"
+              style={{
+                background: `linear-gradient(90deg, transparent 0%, ${zone.accentGlow} 50%, transparent 100%)`,
+              }}
+            />
+          )}
+        </AnimatePresence>
+
         {/* ── Horizontal flight track (camera flies through) ── */}
-        <motion.div className="flex h-full" style={{ x: cameraX }}>
+        <motion.div className="flex h-full will-change-transform" style={{ x: cameraX }}>
           {ZONES.map((z, i) => (
             <ZonePanel
               key={z.id}
               zone={z}
               index={i}
-              progress={scrollYProgress}
+              progress={smoothProgress}
               active={i === activeIdx}
               openHs={openHs}
               onToggleHs={toggleHs}
@@ -351,81 +434,118 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
           ))}
         </motion.div>
 
-        {/* ── Top control bar ── */}
+        {/* ── Top Control HUD Bar ── */}
         <div className="absolute top-0 left-0 right-0 z-30 flex flex-wrap items-center justify-between gap-3 p-4 sm:p-6">
           <div className="flex items-center gap-2">
-            <Badge
-              className="border-0 px-4 py-1.5 text-xs font-bold text-white shadow-xl"
-              style={{ backgroundColor: zone.themeColor }}
+            <motion.div
+              key={`badge-${zone.id}`}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             >
-              Fasa {zone.num} : {zone.shortLabel}
-            </Badge>
+              <Badge
+                className="border-0 px-4 py-1.5 text-xs font-extrabold text-white shadow-2xl tracking-wide"
+                style={{ backgroundColor: zone.themeColor }}
+              >
+                Fasa {zone.num} : {zone.shortLabel}
+              </Badge>
+            </motion.div>
             <Badge
               variant="outline"
-              className="hidden border-emerald-500/40 bg-black/50 text-xs text-emerald-400 backdrop-blur-md sm:inline-flex"
+              className="hidden border-emerald-500/40 bg-black/60 text-xs font-medium text-emerald-400 backdrop-blur-xl sm:inline-flex"
             >
-              <ShieldCheck className="mr-1 h-3 w-3" />
+              <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
               SOP Pengurusan Asnaf Terkawal
             </Badge>
           </div>
-          <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3.5 py-1.5 text-xs font-semibold text-white/80 backdrop-blur-xl">
-            <MousePointerClick className="h-3.5 w-3.5 text-amber-400" />
-            Skrol untuk terbang
-          </span>
+
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/70 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-xl shadow-lg">
+              <Compass className="h-3.5 w-3.5 text-purple-400 animate-spin" style={{ animationDuration: '8s' }} />
+              <span className="hidden sm:inline">Skrol atau Tekan Anak Panah</span>
+              <span className="sm:hidden">Skrol Terbang</span>
+            </span>
+          </div>
         </div>
 
-        {/* ── Floating stats overlay (Armada zone) ── */}
-        <AnimatePresence>
-          {zone.id === 'armada' && (
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 40 }}
-              transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
-              className="absolute top-1/2 right-4 z-30 hidden -translate-y-1/2 flex-col gap-3 sm:right-8 md:flex"
-            >
-              {zone.stats.map((s) => (
-                <div
-                  key={s.label}
-                  className="min-w-40 rounded-2xl border border-white/15 bg-white/10 p-4 shadow-2xl backdrop-blur-2xl"
-                >
-                  <span className="block text-[10px] uppercase tracking-wider text-white/50">{s.label}</span>
-                  <span className="block text-2xl font-extrabold text-white">{s.value}</span>
-                </div>
-              ))}
-            </motion.div>
-          )}
+        {/* ── Quick Fly-Through Side Buttons (Emons Touch Control) ── */}
+        <div className="pointer-events-none absolute inset-y-0 left-4 right-4 z-30 flex items-center justify-between sm:left-6 sm:right-6">
+          <button
+            type="button"
+            onClick={prevZone}
+            disabled={activeIdx === 0}
+            aria-label="Zon Sebelumnya"
+            className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-2xl backdrop-blur-2xl transition-all duration-200 active:scale-90 hover:scale-110 hover:bg-white hover:text-black ${
+              activeIdx === 0 ? 'opacity-0 pointer-events-none' : 'opacity-80 hover:opacity-100'
+            }`}
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+
+          <button
+            type="button"
+            onClick={nextZone}
+            disabled={activeIdx === ZONE_COUNT - 1}
+            aria-label="Zon Seterusnya"
+            className={`pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white shadow-2xl backdrop-blur-2xl transition-all duration-200 active:scale-90 hover:scale-110 hover:bg-white hover:text-black ${
+              activeIdx === ZONE_COUNT - 1 ? 'opacity-0 pointer-events-none' : 'opacity-80 hover:opacity-100'
+            }`}
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        </div>
+
+        {/* ── Floating Stats Overlay (Desktop Right View) ── */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`stats-${zone.id}`}
+            initial={{ opacity: 0, x: 30, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.95 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-1/2 right-4 z-30 hidden -translate-y-1/2 flex-col gap-3 sm:right-8 md:flex"
+          >
+            {zone.stats.map((s) => (
+              <div
+                key={s.label}
+                className="min-w-44 rounded-2xl border border-white/20 bg-black/75 p-4 shadow-2xl backdrop-blur-2xl hover:border-white/40 transition-colors"
+              >
+                <span className="block text-[10px] uppercase font-bold tracking-widest text-white/50">{s.label}</span>
+                <span className="block text-2xl font-black text-white tracking-tight mt-0.5">{s.value}</span>
+              </div>
+            ))}
+          </motion.div>
         </AnimatePresence>
 
-        {/* ── Emons-style floating bottom-left card ── */}
+        {/* ── Emons-Style Floating Bottom-Left Card ── */}
         <div className="absolute bottom-24 left-4 z-30 max-w-md sm:bottom-28 sm:left-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={`card-${zone.id}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -16 }}
-              transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-              className="space-y-3 rounded-2xl border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur-2xl"
+              initial={{ opacity: 0, x: -30, scale: 0.96 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -20, scale: 0.96 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-3.5 rounded-3xl border border-white/20 bg-black/80 p-5 sm:p-6 shadow-2xl backdrop-blur-2xl"
             >
               <div className="space-y-1.5">
                 <span
-                  className="block text-[10px] font-extrabold uppercase tracking-wider"
+                  className="block text-[11px] font-black uppercase tracking-widest"
                   style={{ color: zone.themeColor }}
                 >
                   {zone.subtitle}
                 </span>
-                <h3 className="text-lg leading-tight font-extrabold tracking-tight text-white sm:text-xl">
+                <h3 className="text-xl leading-tight font-black tracking-tight text-white sm:text-2xl">
                   {zone.name}
                 </h3>
-                <p className="text-xs leading-relaxed text-white/70">{zone.desc}</p>
+                <p className="text-xs leading-relaxed text-white/80 font-normal">{zone.desc}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-1">
+              <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-2">
                 {zone.stats.map((s) => (
-                  <div key={s.label} className="rounded-xl border border-white/10 bg-white/5 p-2">
-                    <span className="block text-[10px] text-white/50">{s.label}</span>
-                    <span className="text-sm font-bold text-white">{s.value}</span>
+                  <div key={s.label} className="rounded-xl border border-white/10 bg-white/5 p-2.5">
+                    <span className="block text-[10px] font-medium text-white/50">{s.label}</span>
+                    <span className="text-sm font-black text-white">{s.value}</span>
                   </div>
                 ))}
               </div>
@@ -434,24 +554,30 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
                 <Button
                   onClick={onOpenDonate}
                   size="sm"
-                  className="flex-1 h-9 gap-2 rounded-full border-0 text-xs font-semibold text-white shadow-lg transition-transform active:scale-[0.97]"
+                  className="flex-1 h-10 gap-2 rounded-full border-0 text-xs font-bold text-white shadow-xl transition-all duration-200 active:scale-95 hover:brightness-110"
                   style={{ backgroundColor: zone.themeColor }}
                 >
-                  <Heart className="h-3.5 w-3.5 fill-white" />
+                  <Heart className="h-4 w-4 fill-white" />
                   Infaq Sedekah Fasa Ini
-                  <ArrowRight className="ml-auto h-3.5 w-3.5" />
+                  <ArrowRight className="ml-auto h-4 w-4" />
                 </Button>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* ── Bottom timeline scrubber ── */}
-        <div className="absolute right-0 bottom-0 left-0 z-30 border-t border-white/10 bg-black/70 px-4 py-3 backdrop-blur-2xl sm:px-6">
+        {/* ── Bottom Timeline Scrubber (Emons Interactive Scrubber) ── */}
+        <div className="absolute right-0 bottom-0 left-0 z-30 border-t border-white/15 bg-black/80 px-4 py-3.5 backdrop-blur-2xl sm:px-6">
+          {/* Progress bar line */}
           <div
-            className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-purple-500 via-pink-500 to-amber-500 transition-all duration-700"
-            style={{ width: `${((activeIdx + 1) / ZONE_COUNT) * 100}%` }}
+            className="absolute top-0 left-0 h-[2px] transition-all duration-500"
+            style={{
+              width: `${((activeIdx + 1) / ZONE_COUNT) * 100}%`,
+              backgroundColor: zone.themeColor,
+              boxShadow: `0 0 12px ${zone.themeColor}`,
+            }}
           />
+
           <div className="flex items-center justify-between gap-2 overflow-x-auto scrollbar-none">
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               {ZONES.map((z, i) => {
@@ -462,19 +588,19 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
                     key={z.id}
                     type="button"
                     onClick={() => scrollToZone(i)}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold whitespace-nowrap transition-all duration-200 active:scale-[0.97] sm:gap-2 sm:px-4 ${
+                    className={`flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold whitespace-nowrap transition-all duration-300 active:scale-95 sm:gap-2 sm:px-4 ${
                       active
-                        ? 'scale-105 text-white shadow-xl'
+                        ? 'scale-105 text-white shadow-2xl ring-2 ring-white/30'
                         : 'border border-white/10 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white'
                     }`}
                     style={
                       active
-                        ? { backgroundColor: z.themeColor, boxShadow: `0 4px 20px ${z.themeColor}60` }
+                        ? { backgroundColor: z.themeColor, boxShadow: `0 4px 24px ${z.accentGlow}` }
                         : undefined
                     }
                   >
                     <Icon className="h-3.5 w-3.5" />
-                    <span className="font-mono text-[11px] opacity-70">{z.num}</span>
+                    <span className="font-mono text-[11px] opacity-80">{z.num}</span>
                     <span className="hidden sm:inline">{z.shortLabel}</span>
                   </button>
                 )
@@ -484,13 +610,14 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
             <Button
               onClick={onOpenDonate}
               size="sm"
-              className="hidden h-9 shrink-0 gap-1.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-5 text-xs font-semibold text-white shadow-lg hover:from-purple-700 hover:to-pink-700 active:scale-[0.97] md:flex"
+              className="hidden h-9 shrink-0 gap-1.5 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-5 text-xs font-bold text-white shadow-xl hover:from-purple-700 hover:to-pink-700 active:scale-95 md:flex"
             >
               Infaq Sedekah Jumaat
               <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
+
       </div>
     </section>
   )
