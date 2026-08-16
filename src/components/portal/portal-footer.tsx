@@ -15,12 +15,12 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
   const [currentYear] = useState(() => new Date().getFullYear())
 
   return (
-    <footer className="border-t border-white/10 bg-background/90 backdrop-blur-2xl text-foreground pt-14 pb-8 relative">
+    <footer className="border-t border-border/50 bg-background/90 backdrop-blur-2xl text-foreground pt-14 pb-8 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+       
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-12 border-b border-border/50">
-          
+         
           {/* Brand & Organization Info */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
@@ -36,13 +36,13 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
                 <p className="text-xs text-muted-foreground">Pertubuhan Urus Peduli Asnaf</p>
               </div>
             </div>
-            
+           
             <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
               Pertubuhan kebajikan berdaftar yang komited menyalurkan bantuan telus, membasmi kemiskinan tegar, dan memperkasa ekonomi asnaf melalui teknologi digital pintar.
             </p>
 
-            <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 max-w-sm space-y-1 text-xs">
-              <span className="font-semibold text-purple-600 dark:text-purple-300 block">
+            <div className="p-3.5 rounded-2xl bg-primary/10 border border-primary/20 max-w-sm space-y-1 text-xs">
+              <span className="font-semibold text-primary block">
                 Akaun Rasmi Sumbangan:
               </span>
               <p className="font-mono text-foreground font-bold">Bank Islam: 1202-9010-0456-78</p>
@@ -57,27 +57,27 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#tindakan" className="text-muted-foreground hover:text-foreground transition-colors">
+                <a href="#tindakan" className="text-muted-foreground hover:text-primary transition-colors">
                   Borang Permohonan Bantuan
                 </a>
               </li>
               <li>
-                <button onClick={onOpenDonate} className="text-muted-foreground hover:text-foreground transition-colors text-left">
+                <button onClick={onOpenDonate} className="text-muted-foreground hover:text-primary transition-colors text-left">
                   Infaq Sedekah Jumaat Pantas
                 </button>
               </li>
               <li>
-                <button onClick={onOpenCheckStatus} className="text-muted-foreground hover:text-foreground transition-colors text-left">
+                <button onClick={onOpenCheckStatus} className="text-muted-foreground hover:text-primary transition-colors text-left">
                   Semakan Status eKYC Permohonan
                 </button>
               </li>
               <li>
-                <a href="#program" className="text-muted-foreground hover:text-foreground transition-colors">
+                <a href="#program" className="text-muted-foreground hover:text-primary transition-colors">
                   Program Asnafpreneur
                 </a>
               </li>
               <li>
-                <a href="#maria" className="text-muted-foreground hover:text-foreground transition-colors">
+                <a href="#maria" className="text-muted-foreground hover:text-primary transition-colors">
                   Maria AI Public FAQ
                 </a>
               </li>
@@ -87,25 +87,25 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
           {/* Hubungi & Lokasi */}
           <div className="lg:col-span-4 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Ibu Pejabat &amp; Hubungi Kami
+              Ibu Pejabat & Hubungi Kami
             </h4>
             <ul className="space-y-2.5 text-xs text-muted-foreground">
               <li className="flex items-start gap-2.5">
-                <MapPin className="h-4 w-4 text-purple-500 shrink-0 mt-0.5" />
+                <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <span>No. 1, Jalan Persiaran Ilmu, Bandar Baru Bangi, 43000 Bangi, Selangor</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 text-purple-500 shrink-0" />
+                <Phone className="h-4 w-4 text-primary shrink-0" />
                 <span>03-8920 1111 / 012-345 6789</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 text-purple-500 shrink-0" />
+                <Mail className="h-4 w-4 text-primary shrink-0" />
                 <span>info@puspa.org.my</span>
               </li>
               <li className="pt-2">
-                <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:underline">
+                <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
                   <Lock className="h-3.5 w-3.5" />
-                  Portal Pentadbiran &amp; Staf PUSPA-Z
+                  Portal Pentadbiran & Staf PUSPA-Z
                   <ExternalLink className="h-3 w-3" />
                 </Link>
               </li>
@@ -119,11 +119,11 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
           <p>© {currentYear} Pertubuhan Urus Peduli Asnaf (PUSPA). Hak Cipta Terpelihara.</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
               Pematuhan PDPA 2010
             </span>
             <span>•</span>
-            <Link href="/login" className="hover:text-foreground transition-colors">
+            <Link href="/login" className="hover:text-primary transition-colors">
               Log Masuk Staf
             </Link>
           </div>

@@ -27,7 +27,7 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-lg py-3'
+          ? 'bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-lg py-3'
           : 'bg-transparent py-5'
       }`}
     >
@@ -40,16 +40,16 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
               alt="PUSPA Logo"
               width={42}
               height={42}
-              className="h-10 w-10 object-contain rounded-full bg-white/90 p-0.5 shadow-md shadow-purple-900/20 group-hover:scale-105 transition-transform"
+              className="h-10 w-10 object-contain rounded-full bg-white/90 p-0.5 shadow-md shadow-primary/20 group-hover:scale-105 transition-transform"
             />
-            <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-emerald-500 rounded-full border-2 border-background" />
+            <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-primary rounded-full border-2 border-background" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-lg tracking-tight text-foreground bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-300 bg-clip-text text-transparent">
+              <span className="font-extrabold text-lg tracking-tight text-foreground bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 PUSPA-Z
               </span>
-              <Badge variant="outline" className="text-[10px] h-4 px-1.5 py-0 border-purple-500/30 text-purple-600 dark:text-purple-300 font-bold uppercase">
+              <Badge variant="outline" className="text-[10px] h-4 px-1.5 py-0 border-primary/30 text-primary dark:text-primary/80 font-bold uppercase">
                 Portal Awam
               </Badge>
             </div>
@@ -65,7 +65,7 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
             Bantuan & Tindakan
           </a>
           <a href="#agihan" className="hover:text-foreground transition-colors flex items-center gap-1">
-            <Heart className="h-3.5 w-3.5 text-pink-500" />
+            <Heart className="h-3.5 w-3.5 text-primary" />
             Ekosistem Agihan
           </a>
           <a href="#metrik" className="hover:text-foreground transition-colors">
@@ -75,12 +75,12 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
             Program Unggulan
           </a>
           <a href="#maria" className="hover:text-foreground transition-colors flex items-center gap-1">
-            <Sparkles className="h-3.5 w-3.5 text-purple-500" />
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
             Maria AI
           </a>
           <button
             onClick={onOpenCheckStatus}
-            className="hover:text-foreground transition-colors text-xs font-semibold text-purple-600 dark:text-purple-400"
+            className="hover:text-foreground transition-colors text-xs font-semibold text-primary"
           >
             Semak Status Permohonan
           </button>
@@ -91,9 +91,9 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
           <Button
             onClick={onOpenDonate}
             size="sm"
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-md shadow-purple-600/20 text-xs font-semibold gap-1.5 h-9"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 text-xs font-semibold gap-1.5 h-9"
           >
-            <Heart className="h-3.5 w-3.5 fill-white" />
+            <Heart className="h-3.5 w-3.5 fill-current" />
             Infaq Sedekah Jumaat
           </Button>
 
@@ -101,7 +101,7 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
             <Button
               variant="outline"
               size="sm"
-              className="text-xs h-9 gap-1.5 border-white/20 bg-background/50 hover:bg-background/80 backdrop-blur-md"
+              className="text-xs h-9 gap-1.5 border-border/50 bg-background/50 hover:bg-background/80 backdrop-blur-md"
             >
               <LogIn className="h-3.5 w-3.5" />
               Sistem Staf
@@ -114,9 +114,9 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
           <Button
             onClick={onOpenDonate}
             size="sm"
-            className="bg-purple-600 text-white text-xs h-8 px-2.5"
+            className="bg-primary text-primary-foreground text-xs h-8 px-2.5"
           >
-            <Heart className="h-3 w-3 fill-white mr-1" />
+            <Heart className="h-3 w-3 fill-current mr-1" />
             Infaq
           </Button>
           <button
@@ -142,9 +142,9 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
             <a
               href="#agihan"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 rounded-md hover:bg-muted flex items-center gap-1.5 text-purple-600 dark:text-purple-400"
+              className="px-2 py-1.5 rounded-md hover:bg-muted flex items-center gap-1.5 text-primary"
             >
-              <Heart className="h-4 w-4 text-pink-500" />
+              <Heart className="h-4 w-4 text-primary" />
               Ekosistem Agihan
             </a>
             <a
@@ -164,7 +164,7 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
             <a
               href="#maria"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 rounded-md hover:bg-muted flex items-center gap-1.5 text-purple-600 dark:text-purple-400"
+              className="px-2 py-1.5 rounded-md hover:bg-muted flex items-center gap-1.5 text-primary"
             >
               <Sparkles className="h-4 w-4" />
               Maria AI Assistant
@@ -174,7 +174,7 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
                 setMobileMenuOpen(false)
                 onOpenCheckStatus()
               }}
-              className="text-left px-2 py-1.5 rounded-md hover:bg-muted text-blue-600 dark:text-blue-400 font-semibold"
+              className="text-left px-2 py-1.5 rounded-md hover:bg-muted text-primary font-semibold"
             >
               Semak Status Permohonan
             </button>

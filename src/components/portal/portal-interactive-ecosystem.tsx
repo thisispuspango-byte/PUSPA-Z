@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, MotionValue, useReducedMotion } from 'framer-motion'
 import {
   UtensilsCrossed,
   PackageCheck,
@@ -77,8 +77,8 @@ const ZONES: ZoneInfo[] = [
         y: 36,
         status: 'Penyediaan Aktif',
         tags: [
-          { label: 'Standard HALAL', dotColor: 'bg-emerald-500' },
-          { label: 'Pematuhan MeSTI', dotColor: 'bg-amber-500' },
+          { label: 'Standard HALAL', dotColor: 'bg-primary' },
+          { label: 'Pematuhan MeSTI', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kadar Pukal', value: '350 pek / jam' },
@@ -94,8 +94,8 @@ const ZONES: ZoneInfo[] = [
         y: 58,
         status: 'Standard Kebersihan 100%',
         tags: [
-          { label: 'Bekas Bio-degradable', dotColor: 'bg-emerald-500' },
-          { label: 'Penebat Haba', dotColor: 'bg-blue-500' },
+          { label: 'Bekas Bio-degradable', dotColor: 'bg-primary' },
+          { label: 'Penebat Haba', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kekerapan', value: 'Setiap Jumaat' },
@@ -115,8 +115,8 @@ const ZONES: ZoneInfo[] = [
     icon: PackageCheck,
     diorama: '/diorama-02.jpg',
     video: '/videos/diorama-02.mp4',
-    themeColor: '#0EA5E9',
-    accentGlow: 'rgba(14, 165, 233, 0.4)',
+    themeColor: '#7C3AED',
+    accentGlow: 'rgba(124, 58, 237, 0.4)',
     stats: [
       { label: 'Kotak Keperluan', value: '1,200 Kotak/Bulan' },
       { label: 'Kawalan Stok', value: 'Sistem FIFO Pintar' },
@@ -130,8 +130,8 @@ const ZONES: ZoneInfo[] = [
         y: 34,
         status: 'Stok Terkawal',
         tags: [
-          { label: 'Kod Bar Pintar', dotColor: 'bg-emerald-500' },
-          { label: 'Sistem FIFO', dotColor: 'bg-cyan-500' },
+          { label: 'Kod Bar Pintar', dotColor: 'bg-primary' },
+          { label: 'Sistem FIFO', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kapasiti Rak', value: '25 Tan Metrik' },
@@ -147,8 +147,8 @@ const ZONES: ZoneInfo[] = [
         y: 56,
         status: 'Agihan Mingguan',
         tags: [
-          { label: 'Kit 15kg Asas', dotColor: 'bg-emerald-500' },
-          { label: 'Verifikasi eKYC', dotColor: 'bg-indigo-500' },
+          { label: 'Kit 15kg Asas', dotColor: 'bg-primary' },
+          { label: 'Verifikasi eKYC', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Berat Kit', value: '15 kg / kotak' },
@@ -168,8 +168,8 @@ const ZONES: ZoneInfo[] = [
     icon: Truck,
     diorama: '/diorama-03.jpg',
     video: '/videos/diorama-03.mp4',
-    themeColor: '#059669',
-    accentGlow: 'rgba(5, 150, 105, 0.4)',
+    themeColor: '#7C3AED',
+    accentGlow: 'rgba(124, 58, 237, 0.4)',
     stats: [
       { label: 'Zon Liputan', value: 'Lembah Klang & Pedalaman' },
       { label: 'Masa Sampai', value: '< 90 Minit' },
@@ -183,8 +183,8 @@ const ZONES: ZoneInfo[] = [
         y: 62,
         status: 'Laluan Dioptimumkan',
         tags: [
-          { label: 'Telemetri Live', dotColor: 'bg-emerald-500' },
-          { label: 'Pacuan 4x4', dotColor: 'bg-amber-500' },
+          { label: 'Telemetri Live', dotColor: 'bg-primary' },
+          { label: 'Pacuan 4x4', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Radius Operasi', value: '120 km' },
@@ -200,8 +200,8 @@ const ZONES: ZoneInfo[] = [
         y: 44,
         status: 'Sedia Gerak',
         tags: [
-          { label: 'Pintu ke Pintu', dotColor: 'bg-emerald-500' },
-          { label: 'Mobiliti Pantas', dotColor: 'bg-teal-500' },
+          { label: 'Pintu ke Pintu', dotColor: 'bg-primary' },
+          { label: 'Mobiliti Pantas', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Unit Motosikal', value: '18 Unit' },
@@ -221,8 +221,8 @@ const ZONES: ZoneInfo[] = [
     icon: Building2,
     diorama: '/diorama-04.jpg',
     video: '/videos/diorama-04.mp4',
-    themeColor: '#D97706',
-    accentGlow: 'rgba(217, 119, 6, 0.4)',
+    themeColor: '#7C3AED',
+    accentGlow: 'rgba(124, 58, 237, 0.4)',
     stats: [
       { label: 'Penghuni Disantuni', value: '450+ Jiwa' },
       { label: 'Kekerapan', value: 'Setiap Jumaat Berterusan' },
@@ -236,8 +236,8 @@ const ZONES: ZoneInfo[] = [
         y: 48,
         status: 'Santunan Kasih',
         tags: [
-          { label: 'Warga Emas', dotColor: 'bg-amber-500' },
-          { label: 'Menu Sihat', dotColor: 'bg-emerald-500' },
+          { label: 'Warga Emas', dotColor: 'bg-primary' },
+          { label: 'Menu Sihat', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Pusat Kerjasama', value: '8 Rumah Kebajikan' },
@@ -253,8 +253,8 @@ const ZONES: ZoneInfo[] = [
         y: 36,
         status: 'Penerima Tetap',
         tags: [
-          { label: 'Anak Yatim & Asnaf', dotColor: 'bg-emerald-500' },
-          { label: 'Bantuan Nutrisi', dotColor: 'bg-amber-500' },
+          { label: 'Anak Yatim & Asnaf', dotColor: 'bg-primary' },
+          { label: 'Bantuan Nutrisi', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Penuntut Disantuni', value: '280 Pelajar' },
@@ -274,8 +274,8 @@ const ZONES: ZoneInfo[] = [
     icon: Rocket,
     diorama: '/diorama-05.jpg',
     video: '/videos/diorama-05.mp4',
-    themeColor: '#2563EB',
-    accentGlow: 'rgba(37, 99, 235, 0.4)',
+    themeColor: '#7C3AED',
+    accentGlow: 'rgba(124, 58, 237, 0.4)',
     stats: [
       { label: 'Usahawan Terbimbing', value: '124 Usahawan' },
       { label: 'Verifikasi eKYC', value: 'Pantas & Patuh' },
@@ -289,8 +289,8 @@ const ZONES: ZoneInfo[] = [
         y: 40,
         status: 'Sistem Aktif 24/7',
         tags: [
-          { label: 'Maria AI Engine', dotColor: 'bg-indigo-500' },
-          { label: 'Had Kifayah Smart', dotColor: 'bg-emerald-500' },
+          { label: 'Maria AI Engine', dotColor: 'bg-primary' },
+          { label: 'Had Kifayah Smart', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kelajuan Semakan', value: '< 3 Saat' },
@@ -306,8 +306,8 @@ const ZONES: ZoneInfo[] = [
         y: 60,
         status: 'Sesi Bimbingan',
         tags: [
-          { label: 'Modal & Bimbingan', dotColor: 'bg-emerald-500' },
-          { label: 'Sijil Usahawan', dotColor: 'bg-blue-500' },
+          { label: 'Modal & Bimbingan', dotColor: 'bg-primary' },
+          { label: 'Sijil Usahawan', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Graduan Asnaf', value: '124 Usahawan' },
@@ -337,24 +337,30 @@ interface ZonePanelProps {
   active: boolean
   openHs: string | null
   onToggleHs: (id: string) => void
+  prefersReducedMotion: boolean
 }
 
-function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePanelProps) {
+function ZonePanel({ zone, index, progress, active, openHs, onToggleHs, prefersReducedMotion }: ZonePanelProps) {
   const segStart = index / ZONE_COUNT
   const segEnd = (index + 1) / ZONE_COUNT
 
   // Emons-style silky camera dolly scale and perspective
-  const scale = useTransform(
+  // Always call hooks unconditionally (Rules of Hooks), conditionally apply result
+  const scaleMotion = useTransform(
     progress,
     [segStart - 0.05, segStart + 0.1, segEnd - 0.1, segEnd + 0.05],
     [1.08, 1, 1, 1.04]
   )
 
-  const opacity = useTransform(
+  const opacityMotion = useTransform(
     progress,
     [segStart - 0.08, segStart, segEnd, segEnd + 0.08],
     [0.25, 1, 1, 0.25]
   )
+
+  // When prefersReducedMotion is true, use static values instead of scroll-driven transforms
+  const scale = prefersReducedMotion ? 1 : scaleMotion
+  const opacity = prefersReducedMotion ? 1 : opacityMotion
 
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -373,15 +379,17 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
       >
         <video
           ref={videoRef}
-          src={zone.video}
           poster={zone.diorama}
           autoPlay
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           className="h-full w-full object-cover object-center"
-        />
+        >
+          <source src={zone.video.replace('.mp4', '.webm')} type="video/webm" />
+          <source src={zone.video} type="video/mp4" />
+        </video>
       </motion.div>
 
       {/* ── Soft Studio Lighting & Subtle Vignette (Emons Bright Aesthetic) ── */}
@@ -428,7 +436,7 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
                 aria-label={hs.title}
                 className={`relative flex h-10 w-10 items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${
                   open
-                    ? 'scale-110 rounded-2xl bg-[#E11D48] text-white ring-4 ring-rose-500/30'
+                    ? 'scale-110 rounded-2xl bg-primary text-white ring-4 ring-primary/30'
                     : 'rounded-full border border-slate-200/80 bg-white/95 text-slate-900 hover:scale-110 hover:bg-white'
                 } ${active ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'}`}
               >
@@ -524,6 +532,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
   const [activeIdx, setActiveIdx] = useState(0)
   const [openHs, setOpenHs] = useState<string | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const prefersReducedMotion = useReducedMotion() ?? false
 
   const zone = ZONES[activeIdx]
 
@@ -533,11 +542,15 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
   })
 
   // Buttery-smooth spring damping physics (emulates the Emons inertia flight)
-  const smoothProgress = useSpring(scrollYProgress, {
+  // Always call useSpring unconditionally (Rules of Hooks), conditionally apply result
+  const springProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 26,
     restDelta: 0.0005,
   })
+
+  // When prefersReducedMotion is true, use raw scrollYProgress (no spring damping)
+  const smoothProgress = prefersReducedMotion ? scrollYProgress : springProgress
 
   // Camera flies horizontally across the 5-panel track: total travel = 400vw
   const cameraX = useTransform(smoothProgress, [0, 1], ['0vw', `${-(ZONE_COUNT - 1) * 100}vw`])
@@ -614,7 +627,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
         
         {/* ── Cinematic Anamorphic Light Streak Transition ── */}
         <AnimatePresence>
-          {isTransitioning && (
+          {!prefersReducedMotion && isTransitioning && (
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 0.85, scaleX: 1 }}
@@ -639,6 +652,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
               active={i === activeIdx}
               openHs={openHs}
               onToggleHs={toggleHs}
+              prefersReducedMotion={prefersReducedMotion}
             />
           ))}
         </motion.div>
@@ -661,7 +675,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
             </motion.div>
             <Badge
               variant="outline"
-              className="hidden border-emerald-500/40 bg-black/60 text-xs font-medium text-emerald-400 backdrop-blur-xl sm:inline-flex"
+              className="hidden border-primary/40 bg-black/60 text-xs font-medium text-primary backdrop-blur-xl sm:inline-flex"
             >
               <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
               SOP Pengurusan Asnaf Terkawal
@@ -670,7 +684,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
 
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/70 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-xl shadow-lg">
-              <Compass className="h-3.5 w-3.5 text-purple-400 animate-spin" style={{ animationDuration: '8s' }} />
+              <Compass className="h-3.5 w-3.5 text-primary animate-spin" style={{ animationDuration: '8s' }} />
               <span className="hidden sm:inline">Skrol untuk Terbang Meneroka</span>
               <span className="sm:hidden">Skrol Terbang</span>
             </span>
@@ -829,7 +843,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
             <Button
               onClick={onOpenDonate}
               size="default"
-              className="hidden h-10 shrink-0 gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 px-6 text-xs font-extrabold text-white shadow-xl hover:from-emerald-600 hover:to-teal-700 active:scale-95 sm:flex"
+              className="hidden h-10 shrink-0 gap-2 rounded-full bg-primary px-6 text-xs font-extrabold text-white shadow-xl active:scale-95 sm:flex"
             >
               Semua Fasa PUSPA
               <ArrowRight className="h-4 w-4" />

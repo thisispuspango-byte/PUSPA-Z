@@ -41,101 +41,99 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  /* PUSPA brand colors */
+  /* PUSPA brand colors — RESTRICTED PALETTE */
   --color-puspa-primary: #6A0DAD;
   --color-puspa-dark: #4B0082;
-  --color-puspa-light: #9370DB;
-  --color-puspa-pale: #E6E6FA;
 }
 
-/* ─── PUSPA V4 Light Theme (Purple Brand) ──────────────────────── */
+/* ─── PUSPA Light Theme — 1 Brand Color + Neutrals ─────────────── */
 
 :root {
   --radius: 0.625rem;
-  /* Core - PUSPA Purple as primary */
-  --background: oklch(0.985 0.002 295);
-  --foreground: oklch(0.145 0.015 295);
+  /* Core — near-white with purple whisper */
+  --background: oklch(0.99 0.001 295);
+  --foreground: oklch(0.13 0.01 295);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0.015 295);
+  --card-foreground: oklch(0.13 0.01 295);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0.015 295);
-  /* Primary = PUSPA Medium Purple #6A0DAD */
-  --primary: oklch(0.368 0.212 295);
-  --primary-foreground: oklch(0.985 0 0);
-  /* Secondary = Pale Lavender */
-  --secondary: oklch(0.918 0.034 291);
-  --secondary-foreground: oklch(0.368 0.212 295);
+  --popover-foreground: oklch(0.13 0.01 295);
+  /* Primary = PUSPA Purple #6A0DAD */
+  --primary: oklch(0.37 0.21 295);
+  --primary-foreground: oklch(0.99 0 0);
+  /* Secondary = Neutral */
+  --secondary: oklch(0.96 0.005 295);
+  --secondary-foreground: oklch(0.25 0.01 295);
   /* Muted */
-  --muted: oklch(0.952 0.015 295);
-  --muted-foreground: oklch(0.5 0.02 295);
-  /* Accent = Light Lavender */
-  --accent: oklch(0.918 0.034 291);
-  --accent-foreground: oklch(0.368 0.212 295);
-  /* Destructive */
+  --muted: oklch(0.95 0.005 295);
+  --muted-foreground: oklch(0.45 0.01 295);
+  /* Accent = Neutral */
+  --accent: oklch(0.96 0.005 295);
+  --accent-foreground: oklch(0.25 0.01 295);
+  /* Destructive = Red (kept for errors) */
   --destructive: oklch(0.577 0.245 27.325);
   /* Borders & Inputs */
-  --border: oklch(0.908 0.025 295);
-  --input: oklch(0.908 0.025 295);
-  --ring: oklch(0.368 0.212 295);
-  /* Charts - Purple-dominant palette matching PUSPA brand */
-  --chart-1: oklch(0.368 0.212 295);  /* PUSPA Purple */
-  --chart-2: oklch(0.581 0.154 291);  /* Lavender */
-  --chart-3: oklch(0.646 0.222 41.116); /* Amber accent */
-  --chart-4: oklch(0.6 0.118 184.704);  /* Teal accent */
-  --chart-5: oklch(0.769 0.188 70.08);  /* Gold accent */
-  /* Sidebar - Purple branded */
-  --sidebar: oklch(0.247 0.208 295);
-  --sidebar-foreground: oklch(0.965 0.01 295);
-  --sidebar-primary: oklch(0.918 0.034 291);
-  --sidebar-primary-foreground: oklch(0.247 0.208 295);
-  --sidebar-accent: oklch(0.32 0.18 295);
-  --sidebar-accent-foreground: oklch(0.965 0.01 295);
-  --sidebar-border: oklch(0.35 0.16 295);
-  --sidebar-ring: oklch(0.581 0.154 291);
+  --border: oklch(0.91 0.008 295);
+  --input: oklch(0.91 0.008 295);
+  --ring: oklch(0.37 0.21 295);
+  /* Charts — single brand color only */
+  --chart-1: oklch(0.37 0.21 295);
+  --chart-2: oklch(0.48 0.15 295);
+  --chart-3: oklch(0.58 0.12 295);
+  --chart-4: oklch(0.68 0.08 295);
+  --chart-5: oklch(0.78 0.05 295);
+  /* Sidebar */
+  --sidebar: oklch(0.2 0.03 295);
+  --sidebar-foreground: oklch(0.96 0.01 295);
+  --sidebar-primary: oklch(0.58 0.15 295);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.28 0.05 295);
+  --sidebar-accent-foreground: oklch(0.96 0.01 295);
+  --sidebar-border: oklch(0.32 0.04 295);
+  --sidebar-ring: oklch(0.58 0.15 295);
 }
 
-/* ─── PUSPA V4 Dark Theme ──────────────────────────────────────── */
+/* ─── PUSPA Dark Theme — 1 Brand Color + Neutrals ──────────────── */
 
 .dark {
-  --background: oklch(0.13 0.02 295);
-  --foreground: oklch(0.965 0.01 295);
-  --card: oklch(0.17 0.025 295);
-  --card-foreground: oklch(0.965 0.01 295);
-  --popover: oklch(0.17 0.025 295);
-  --popover-foreground: oklch(0.965 0.01 295);
+  --background: oklch(0.12 0.015 295);
+  --foreground: oklch(0.97 0.01 295);
+  --card: oklch(0.16 0.02 295);
+  --card-foreground: oklch(0.97 0.01 295);
+  --popover: oklch(0.16 0.02 295);
+  --popover-foreground: oklch(0.97 0.01 295);
   /* Primary = Lighter Purple for dark mode */
-  --primary: oklch(0.581 0.154 291);
-  --primary-foreground: oklch(0.247 0.208 295);
+  --primary: oklch(0.58 0.15 295);
+  --primary-foreground: oklch(0.15 0.02 295);
   /* Secondary */
-  --secondary: oklch(0.22 0.04 295);
-  --secondary-foreground: oklch(0.918 0.034 291);
+  --secondary: oklch(0.2 0.02 295);
+  --secondary-foreground: oklch(0.93 0.01 295);
   /* Muted */
-  --muted: oklch(0.22 0.04 295);
-  --muted-foreground: oklch(0.65 0.04 295);
+  --muted: oklch(0.2 0.02 295);
+  --muted-foreground: oklch(0.62 0.02 295);
   /* Accent */
-  --accent: oklch(0.22 0.04 295);
-  --accent-foreground: oklch(0.918 0.034 291);
+  --accent: oklch(0.2 0.02 295);
+  --accent-foreground: oklch(0.93 0.01 295);
   /* Destructive */
   --destructive: oklch(0.704 0.191 22.216);
   /* Borders */
-  --border: oklch(0.28 0.04 295);
-  --input: oklch(0.28 0.04 295);
-  --ring: oklch(0.581 0.154 291);
-  /* Charts */
-  --chart-1: oklch(0.581 0.154 291);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  /* Sidebar - Deep Purple */
-  --sidebar: oklch(0.17 0.06 295);
-  --sidebar-foreground: oklch(0.965 0.01 295);
-  --sidebar-primary: oklch(0.581 0.154 291);
-  --sidebar-primary-foreground: oklch(0.965 0.01 295);
-  --sidebar-accent: oklch(0.24 0.06 295);
-  --sidebar-accent-foreground: oklch(0.965 0.01 295);
-  --sidebar-border: oklch(0.30 0.05 295);
-  --sidebar-ring: oklch(0.581 0.154 291);
+  --border: oklch(0.26 0.03 295);
+  --input: oklch(0.26 0.03 295);
+  --ring: oklch(0.58 0.15 295);
+  /* Charts — single brand color only */
+  --chart-1: oklch(0.58 0.15 295);
+  --chart-2: oklch(0.68 0.12 295);
+  --chart-3: oklch(0.75 0.09 295);
+  --chart-4: oklch(0.6 0.15 295);
+  --chart-5: oklch(0.65 0.18 295);
+  /* Sidebar */
+  --sidebar: oklch(0.14 0.04 295);
+  --sidebar-foreground: oklch(0.96 0.01 295);
+  --sidebar-primary: oklch(0.58 0.15 295);
+  --sidebar-primary-foreground: oklch(0.96 0.01 295);
+  --sidebar-accent: oklch(0.22 0.05 295);
+  --sidebar-accent-foreground: oklch(0.96 0.01 295);
+  --sidebar-border: oklch(0.28 0.04 295);
+  --sidebar-ring: oklch(0.58 0.15 295);
 }
 
 @layer base {

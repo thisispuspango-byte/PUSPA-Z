@@ -13,9 +13,9 @@ const STATS = [
     sub: 'Sejak penubuhan PUSPA',
     change: '+18.4% tahun ini',
     icon: HandCoins,
-    gradient: 'from-purple-500/20 via-purple-500/5 to-transparent',
-    border: 'border-purple-500/30',
-    iconBg: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
+    gradient: 'from-primary/20 via-primary/5 to-transparent',
+    border: 'border-primary/30',
+    iconBg: 'bg-primary/10 text-primary dark:text-primary/80',
   },
   {
     id: 'asnaf',
@@ -24,9 +24,9 @@ const STATS = [
     sub: 'Menerima bantuan bulanan & sara hidup',
     change: 'Sifar tunggakan',
     icon: Users,
-    gradient: 'from-pink-500/20 via-pink-500/5 to-transparent',
-    border: 'border-pink-500/30',
-    iconBg: 'bg-pink-500/10 text-pink-600 dark:text-pink-400',
+    gradient: 'from-primary/20 via-primary/5 to-transparent',
+    border: 'border-primary/30',
+    iconBg: 'bg-primary/10 text-primary dark:text-primary/80',
   },
   {
     id: 'institusi',
@@ -35,9 +35,9 @@ const STATS = [
     sub: 'Agihan Sedekah Jumaat berterusan',
     change: '100% tepat masa',
     icon: Building2,
-    gradient: 'from-emerald-500/20 via-emerald-500/5 to-transparent',
-    border: 'border-emerald-500/30',
-    iconBg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    gradient: 'from-primary/20 via-primary/5 to-transparent',
+    border: 'border-primary/30',
+    iconBg: 'bg-primary/10 text-primary dark:text-primary/80',
   },
   {
     id: 'asnafpreneur',
@@ -46,9 +46,9 @@ const STATS = [
     sub: 'Transformasi keluar daripada garis kemiskinan',
     change: '86% kadar kelulusan modul',
     icon: Rocket,
-    gradient: 'from-amber-500/20 via-amber-500/5 to-transparent',
-    border: 'border-amber-500/30',
-    iconBg: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    gradient: 'from-primary/20 via-primary/5 to-transparent',
+    border: 'border-primary/30',
+    iconBg: 'bg-primary/10 text-primary dark:text-primary/80',
   },
 ]
 
@@ -56,12 +56,12 @@ export function PortalMetrics() {
   return (
     <section id="metrik" className="py-16 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+       
         {/* Section Header */}
         <div className="text-center space-y-3 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-purple-300 border border-purple-500/20">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary dark:text-primary/80 border border-primary/20">
             <TrendingUp className="h-3.5 w-3.5" />
-            Impak &amp; Ketelusan Masa Nyata
+            Impak & Ketelusan Masa Nyata
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
             Setiap Sen Anda Menyentuh Jiwa Asnaf
@@ -86,7 +86,7 @@ export function PortalMetrics() {
                 <Card className={`relative overflow-hidden border ${stat.border} bg-card/60 dark:bg-black/30 backdrop-blur-xl hover:shadow-xl hover:scale-[1.02] transition-all duration-300`}>
                   {/* Subtle top glow */}
                   <div className={`absolute inset-0 bg-gradient-to-b ${stat.gradient} pointer-events-none`} />
-                  
+                 
                   <CardContent className="p-6 relative space-y-4">
                     <div className="flex items-center justify-between">
                       <div className={`h-12 w-12 rounded-2xl ${stat.iconBg} flex items-center justify-center shadow-inner`}>

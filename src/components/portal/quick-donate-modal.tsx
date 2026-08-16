@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Heart, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, QrCode, CreditCard, Building } from 'lucide-react'
 import {
   Dialog,
@@ -51,15 +51,20 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
 
   const handleReset = () => {
     setIsSuccess(false)
+    setIsSubmitting(false)
     setCustomAmount('')
     setSelectedAmount(30)
+    setDonorName('')
+    setDonorEmail('')
+    setDonorPhone('')
+    setPaymentMethod('fpx')
+    setTxnRef(`INFAQ-${Math.floor(100000 + Math.random() * 900000)}`)
     onOpenChange(false)
   }
 
-  // Reset semua state bila dialog ditutup supaya pembukaan seterusnya
-  // bermula dari selection state yang segar (bukan resit lama).
-  useEffect(() => {
-    if (!open) {
+  // Handle modal open/close - reset state when closing
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
       setIsSuccess(false)
       setIsSubmitting(false)
       setCustomAmount('')
@@ -70,10 +75,11 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
       setPaymentMethod('fpx')
       setTxnRef(`INFAQ-${Math.floor(100000 + Math.random() * 900000)}`)
     }
-  }, [open])
+    onOpenChange(newOpen)
+  }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[540px] bg-background/95 backdrop-blur-2xl border-white/10 shadow-2xl p-0 overflow-hidden">
         {/* Top Gradient Banner */}
         <div className="h-2 bg-gradient-to-r from-purple-600 via-pink-500 to-amber-400" />

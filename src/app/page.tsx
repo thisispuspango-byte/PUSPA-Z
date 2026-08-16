@@ -12,6 +12,7 @@ import { PortalProgrammes } from '@/components/portal/portal-programmes'
 import { PortalMariaAssistant } from '@/components/portal/portal-maria-assistant'
 import { PortalInteractiveEcosystem } from '@/components/portal/portal-interactive-ecosystem'
 import { PortalAgihanGallery } from '@/components/portal/portal-agihan-gallery'
+import { PortalBeneficiaryStories } from '@/components/portal/portal-beneficiary-stories'
 import { PortalFooter } from '@/components/portal/portal-footer'
 import { QuickDonateModal } from '@/components/portal/quick-donate-modal'
 import { CheckStatusModal } from '@/components/portal/check-status-modal'
@@ -65,7 +66,10 @@ export default function PublicPortalHome() {
         {/* 4. Bukti: Real Field Photo & Institutional Distribution Gallery */}
         <PortalAgihanGallery onOpenDonate={handleOpenDonate} />
 
-        {/* 5. Tindakan: Direct Action Service Hub (#tindakan) */}
+        {/* 5. Kisah: Temui Penerima Manfaat — Lihat ke mana amanah anda pergi */}
+        <PortalBeneficiaryStories />
+
+        {/* 6. Tindakan: Direct Action Service Hub (#tindakan) */}
         <PortalQuickActions
           onOpenDonate={handleOpenDonate}
           onOpenCheckStatus={handleOpenCheckStatus}
