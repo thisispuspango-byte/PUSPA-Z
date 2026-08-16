@@ -77,12 +77,12 @@ const BENEFICIARY_INSTITUTIONS = [
 ]
 
 const GALLERY_PHOTOS = [
-  { src: '/photo_2026-05-06_10-47-15.jpg', title: 'Penyediaan Pek Barakah', subtitle: 'Dapur Pusat PUSPA' },
-  { src: '/photo_2026-05-06_10-47-40.jpg', title: 'Agihan Terus Kepada Asnaf', subtitle: 'Penghantaran Sukarelawan' },
-  { src: '/photo_2026-05-06_10-47-44.jpg', title: 'Kotak Bantuan Dapur Ihsan', subtitle: 'Bekalan Makanan Asas' },
-  { src: '/photo_2026-05-06_10-48-00.jpg', title: 'Santunan Warga Emas', subtitle: 'Rumah Kebajikan' },
-  { src: '/photo_2026-05-06_10-48-04.jpg', title: 'Juadah Makanan Tengahari', subtitle: 'Sedekah Jumaat' },
-  { src: '/photo_2026-05-06_10-48-08.jpg', title: 'Senyuman Anak Tahfiz', subtitle: 'Mahad Tahfiz PUSPA' },
+  { src: '/gallery-agihan-01.jpg', title: 'Penyediaan Pek Barakah', subtitle: 'Dapur Pusat & Sukarelawan PUSPA' },
+  { src: '/gallery-agihan-02.jpg', title: 'Agihan Terus Kepada Asnaf', subtitle: 'Penyerahan Pintu ke Pintu' },
+  { src: '/gallery-agihan-03.jpg', title: 'Kotak Bantuan Dapur Ihsan', subtitle: 'Pusat Logistik & Bekalan Asas' },
+  { src: '/gallery-agihan-04.jpg', title: 'Santunan Warga Emas', subtitle: 'Rumah Kebajikan & Kasih Sayang' },
+  { src: '/gallery-agihan-05.jpg', title: 'Juadah Makanan Sedekah Jumaat', subtitle: 'Set Makanan Bernutrisi Tinggi' },
+  { src: '/gallery-agihan-06.jpg', title: 'Senyuman Anak Tahfiz & Yatim', subtitle: 'Mahad Tahfiz & Asrama PUSPA' },
 ]
 
 export function PortalAgihanGallery({ onOpenDonate }: PortalAgihanGalleryProps) {
