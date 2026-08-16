@@ -30,6 +30,9 @@ interface Hotspot {
   x: number // percentage 0-100
   y: number // percentage 0-100
   status: string
+  tags?: { label: string; dotColor: string }[]
+  glance?: { label: string; value: string }[]
+  actionText?: string
 }
 
 interface ZoneInfo {
@@ -66,8 +69,40 @@ const ZONES: ZoneInfo[] = [
       { label: 'Kawalan Suhu', value: 'Min 65°C' },
     ],
     hotspots: [
-      { id: 'h1', title: 'Stesen Kuali Industri', desc: 'Memasak lauk berkhasiat secara pukal menggunakan standard kebersihan HALAL & MeSTI.', x: 26, y: 36, status: 'Penyediaan Aktif' },
-      { id: 'h2', title: 'Meja Pembungkusan Pantas', desc: 'Pembungkusan bekas mesra alam tahan haba untuk mengekalkan kesegaran makanan.', x: 58, y: 58, status: 'Standard Kebersihan 100%' },
+      {
+        id: 'h1',
+        title: 'Stesen Kuali Industri & Penyediaan',
+        desc: 'Memasak lauk berkhasiat secara pukal menggunakan standard kebersihan HALAL & MeSTI di bawah pemantauan chef sukarelawan terlatih.',
+        x: 26,
+        y: 36,
+        status: 'Penyediaan Aktif',
+        tags: [
+          { label: 'Standard HALAL', dotColor: 'bg-emerald-500' },
+          { label: 'Pematuhan MeSTI', dotColor: 'bg-amber-500' },
+        ],
+        glance: [
+          { label: 'Kadar Pukal', value: '350 pek / jam' },
+          { label: 'Kawalan Mutu', value: 'Suhu 65°C+' },
+        ],
+        actionText: 'Ketahui SOP Dapur →',
+      },
+      {
+        id: 'h2',
+        title: 'Meja Pembungkusan Pantas & Sealing',
+        desc: 'Pembungkusan bekas mesra alam tahan haba untuk mengekalkan kesegaran makanan sehingga tiba ke tangan keluarga penerima.',
+        x: 58,
+        y: 58,
+        status: 'Standard Kebersihan 100%',
+        tags: [
+          { label: 'Bekas Bio-degradable', dotColor: 'bg-emerald-500' },
+          { label: 'Penebat Haba', dotColor: 'bg-blue-500' },
+        ],
+        glance: [
+          { label: 'Kekerapan', value: 'Setiap Jumaat' },
+          { label: 'Integriti Pek', value: '100% Kedap Udara' },
+        ],
+        actionText: 'Lihat Proses Pembungkusan →',
+      },
     ],
   },
   {
@@ -87,8 +122,40 @@ const ZONES: ZoneInfo[] = [
       { label: 'Kawalan Stok', value: 'Sistem FIFO Pintar' },
     ],
     hotspots: [
-      { id: 'h3', title: 'Rak Simpanan Bertingkat', desc: 'Penyusunan berasaskan tarikh luput (FIFO) untuk memastikan kualiti bekalan sentiasa segar.', x: 38, y: 34, status: 'Stok Terkawal' },
-      { id: 'h4', title: 'Zon Susun Kotak Kasih', desc: 'Sukarelawan membungkus kit makanan asas seberat 15kg bagi setiap keluarga penerima.', x: 64, y: 56, status: 'Agihan Mingguan' },
+      {
+        id: 'h3',
+        title: 'Rak Simpanan Bertingkat & FIFO',
+        desc: 'Penyusunan berasaskan tarikh luput (FIFO) untuk memastikan kualiti bekalan sentiasa segar dan bekalan kecemasan sentiasa bersedia.',
+        x: 38,
+        y: 34,
+        status: 'Stok Terkawal',
+        tags: [
+          { label: 'Kod Bar Pintar', dotColor: 'bg-emerald-500' },
+          { label: 'Sistem FIFO', dotColor: 'bg-cyan-500' },
+        ],
+        glance: [
+          { label: 'Kapasiti Rak', value: '25 Tan Metrik' },
+          { label: 'Kitaran Audit', value: 'Mingguan' },
+        ],
+        actionText: 'Lihat Sistem Gudang →',
+      },
+      {
+        id: 'h4',
+        title: 'Zon Susun Kotak Kasih Asnaf',
+        desc: 'Sukarelawan membungkus kit makanan asas seberat 15kg yang lengkap dengan barangan dapur harian bagi setiap keluarga penerima.',
+        x: 64,
+        y: 56,
+        status: 'Agihan Mingguan',
+        tags: [
+          { label: 'Kit 15kg Asas', dotColor: 'bg-emerald-500' },
+          { label: 'Verifikasi eKYC', dotColor: 'bg-indigo-500' },
+        ],
+        glance: [
+          { label: 'Berat Kit', value: '15 kg / kotak' },
+          { label: 'Sasaran Bulanan', value: '1,200 Keluarga' },
+        ],
+        actionText: 'Sertai Skuad Sukarelawan →',
+      },
     ],
   },
   {
@@ -108,8 +175,40 @@ const ZONES: ZoneInfo[] = [
       { label: 'Masa Sampai', value: '< 90 Minit' },
     ],
     hotspots: [
-      { id: 'h5', title: 'Pusat Pelepasan Konvoi', desc: 'Pemeriksaan keselamatan kenderaan dan penetapan laluan agihan melalui sistem navigasi GPS.', x: 32, y: 62, status: 'Laluan Dioptimumkan' },
-      { id: 'h6', title: 'Skuad Motosikal Cepat', desc: 'Menembusi kawasan flat bertingkat tinggi dan perumahan padat dengan pantas.', x: 62, y: 44, status: 'Sedia Gerak' },
+      {
+        id: 'h5',
+        title: 'Pusat Pelepasan Konvoi & GPS Tracking',
+        desc: 'Pemeriksaan keselamatan kenderaan dan penetapan zon agihan melalui sistem navigasi GPS untuk memastikan kelajuan dan keselamatan.',
+        x: 32,
+        y: 62,
+        status: 'Laluan Dioptimumkan',
+        tags: [
+          { label: 'Telemetri Live', dotColor: 'bg-emerald-500' },
+          { label: 'Pacuan 4x4', dotColor: 'bg-amber-500' },
+        ],
+        glance: [
+          { label: 'Radius Operasi', value: '120 km' },
+          { label: 'Masa Ketibaan', value: '< 90 minit' },
+        ],
+        actionText: 'Pantau Laluan Armada →',
+      },
+      {
+        id: 'h6',
+        title: 'Skuad Motosikal Cepat Lorong Sempit',
+        desc: 'Menembusi kawasan flat bertingkat tinggi dan perumahan padat dengan pantas untuk penghantaran dari pintu ke pintu.',
+        x: 62,
+        y: 44,
+        status: 'Sedia Gerak',
+        tags: [
+          { label: 'Pintu ke Pintu', dotColor: 'bg-emerald-500' },
+          { label: 'Mobiliti Pantas', dotColor: 'bg-teal-500' },
+        ],
+        glance: [
+          { label: 'Unit Motosikal', value: '18 Unit' },
+          { label: 'Pek / Rider', value: '25 Pek' },
+        ],
+        actionText: 'Daftar Sukarelawan Rider →',
+      },
     ],
   },
   {
@@ -129,8 +228,40 @@ const ZONES: ZoneInfo[] = [
       { label: 'Kekerapan', value: 'Setiap Jumaat Berterusan' },
     ],
     hotspots: [
-      { id: 'h7', title: 'Dewan Selera Rumah Warga Emas', desc: 'Makanan panas dihidangkan segar oleh sukarelawan bersama sesi ramah mesra.', x: 44, y: 48, status: 'Santunan Kasih' },
-      { id: 'h8', title: 'Pusat Tahfiz & Asrama', desc: 'Bekalan protein dan nutrisi mencukupi untuk menyokong pembelajaran anak-anak.', x: 66, y: 36, status: 'Penerima Tetap' },
+      {
+        id: 'h7',
+        title: 'Dewan Selera Rumah Warga Emas',
+        desc: 'Makanan panas dihidangkan segar oleh sukarelawan bersama sesi ramah mesra dan semakan kesihatan kebajikan.',
+        x: 44,
+        y: 48,
+        status: 'Santunan Kasih',
+        tags: [
+          { label: 'Warga Emas', dotColor: 'bg-amber-500' },
+          { label: 'Menu Sihat', dotColor: 'bg-emerald-500' },
+        ],
+        glance: [
+          { label: 'Pusat Kerjasama', value: '8 Rumah Kebajikan' },
+          { label: 'Kekerapan', value: 'Mingguan Tetap' },
+        ],
+        actionText: 'Taja Rumah Kebajikan →',
+      },
+      {
+        id: 'h8',
+        title: 'Pusat Tahfiz & Asrama Asnaf',
+        desc: 'Bekalan makanan dan nutrisi mencukupi bagi menyokong pembelajaran dan hafazan al-Quran anak-anak penuntut ilmu.',
+        x: 66,
+        y: 36,
+        status: 'Penerima Tetap',
+        tags: [
+          { label: 'Anak Yatim & Asnaf', dotColor: 'bg-emerald-500' },
+          { label: 'Bantuan Nutrisi', dotColor: 'bg-amber-500' },
+        ],
+        glance: [
+          { label: 'Penuntut Disantuni', value: '280 Pelajar' },
+          { label: 'Pek Makanan', value: 'Setiap Hari Jumaat' },
+        ],
+        actionText: 'Taja Pelajar Tahfiz →',
+      },
     ],
   },
   {
@@ -150,8 +281,40 @@ const ZONES: ZoneInfo[] = [
       { label: 'Verifikasi eKYC', value: 'Pantas & Patuh' },
     ],
     hotspots: [
-      { id: 'h9', title: 'Bilik Komando Maria AI Engine', desc: 'Semakan integriti data pemohon, padanan had kifayah, dan pemantauan live kutipan infaq.', x: 42, y: 40, status: 'Sistem Aktif 24/7' },
-      { id: 'h10', title: 'Studio Inkubator Asnafpreneur', desc: 'Bimbingan perniagaan mikro agar keluarga asnaf mampu berdikari.', x: 68, y: 60, status: 'Sesi Bimbingan' },
+      {
+        id: 'h9',
+        title: 'Bilik Komando Maria AI Engine',
+        desc: 'Semakan integriti data pemohon secara automatik, padanan had kifayah, dan pemantauan masa nyata agihan infaq.',
+        x: 42,
+        y: 40,
+        status: 'Sistem Aktif 24/7',
+        tags: [
+          { label: 'Maria AI Engine', dotColor: 'bg-indigo-500' },
+          { label: 'Had Kifayah Smart', dotColor: 'bg-emerald-500' },
+        ],
+        glance: [
+          { label: 'Kelajuan Semakan', value: '< 3 Saat' },
+          { label: 'Ketepatan Data', value: '99.8%' },
+        ],
+        actionText: 'Terokai Sistem AI →',
+      },
+      {
+        id: 'h10',
+        title: 'Studio Inkubator Asnafpreneur',
+        desc: 'Bimbingan perniagaan mikro, penjenamaan, dan bantuan peralatan perniagaan agar keluarga asnaf mampu berdikari keluar dari garis kemiskinan.',
+        x: 68,
+        y: 60,
+        status: 'Sesi Bimbingan',
+        tags: [
+          { label: 'Modal & Bimbingan', dotColor: 'bg-emerald-500' },
+          { label: 'Sijil Usahawan', dotColor: 'bg-blue-500' },
+        ],
+        glance: [
+          { label: 'Graduan Asnaf', value: '124 Usahawan' },
+          { label: 'Peningkatan Pendapatan', value: '+140%' },
+        ],
+        actionText: 'Taja Modal Asnafpreneur →',
+      },
     ],
   },
 ]
@@ -233,9 +396,11 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
         }}
       />
 
-      {/* ── Emons-Grade White Circular Hotspots (+) ── */}
+      {/* ── Emons-Grade White Circular Hotspots (+) with Anchored Flyout Card ── */}
       {zone.hotspots.map((hs) => {
         const open = active && openHs === hs.id
+        const isRightSide = hs.x > 55
+
         return (
           <div
             key={hs.id}
@@ -256,44 +421,86 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs }: ZonePa
                 </>
               )}
 
-              {/* Exact Emons White Circle + Button */}
+              {/* Exact Emons Button (White Circle + transforms to Coral/Red X when open) */}
               <button
                 type="button"
                 onClick={() => onToggleHs(hs.id)}
                 aria-label={hs.title}
-                className={`relative flex h-10 w-10 items-center justify-center rounded-full shadow-2xl transition-all duration-300 active:scale-90 ${
+                className={`relative flex h-10 w-10 items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${
                   open
-                    ? 'scale-110 bg-slate-900 text-white ring-4 ring-white/60'
-                    : 'border border-slate-200/80 bg-white/95 text-slate-900 hover:scale-110 hover:bg-white'
+                    ? 'scale-110 rounded-2xl bg-[#E11D48] text-white ring-4 ring-rose-500/30'
+                    : 'rounded-full border border-slate-200/80 bg-white/95 text-slate-900 hover:scale-110 hover:bg-white'
                 } ${active ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'}`}
               >
                 <Plus className={`h-5 w-5 stroke-[2.5] transition-transform duration-300 ${open ? 'rotate-45 text-white' : 'text-slate-900'}`} />
               </button>
             </div>
 
-            {/* In-place Tooltip Card right above the Hotspot */}
+            {/* Exact Emons Anchored Flyout Card Modal (Right or Left of Hotspot) */}
             <AnimatePresence>
               {open && (
                 <motion.div
-                  initial={{ opacity: 0, y: 12, scale: 0.92 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.92 }}
-                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-full left-1/2 z-40 mb-3 w-80 -translate-x-1/2 space-y-2 rounded-2xl border border-slate-200/80 bg-white/95 p-4 text-left shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-2xl text-slate-900"
+                  initial={{ opacity: 0, scale: 0.94, x: isRightSide ? -10 : 10 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, x: isRightSide ? -10 : 10 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  className={`absolute z-40 top-1/2 -translate-y-1/2 w-80 sm:w-96 space-y-3 rounded-2xl border border-slate-100 bg-white/98 p-5 sm:p-6 text-left shadow-[0_25px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl text-slate-900 ${
+                    isRightSide ? 'right-full mr-3' : 'left-full ml-3'
+                  }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <Badge
-                      className="h-5 border-0 px-2.5 text-[10px] font-bold text-white shadow-md"
-                      style={{ backgroundColor: zone.themeColor }}
-                    >
-                      {hs.status}
-                    </Badge>
-                    <span className="font-mono text-[10px] font-bold tracking-wider text-slate-500">
-                      FASA {zone.num}
-                    </span>
+                  {/* Header Title */}
+                  <div className="space-y-1.5">
+                    <h4 className="text-base font-extrabold text-slate-900 tracking-tight leading-snug">
+                      {hs.title}
+                    </h4>
+
+                    {/* Tag Pills with colored dot markers */}
+                    {hs.tags && (
+                      <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                        {hs.tags.map((t) => (
+                          <span
+                            key={t.label}
+                            className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700"
+                          >
+                            <span className={`h-1.5 w-1.5 rounded-full ${t.dotColor}`} />
+                            {t.label}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900 tracking-tight">{hs.title}</h4>
-                  <p className="text-xs leading-relaxed text-slate-600">{hs.desc}</p>
+
+                  {/* Body Paragraph */}
+                  <p className="text-xs leading-relaxed text-slate-600 font-normal">{hs.desc}</p>
+
+                  {/* 'Sekilas Pandang' (At a glance) 2-column key-value list */}
+                  {hs.glance && (
+                    <div className="border-t border-slate-100 pt-3 space-y-1.5">
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Sekilas Pandang
+                      </span>
+                      <div className="space-y-1">
+                        {hs.glance.map((g) => (
+                          <div key={g.label} className="flex items-center justify-between text-xs py-0.5">
+                            <span className="text-slate-500 font-medium">{g.label}</span>
+                            <span className="font-bold text-slate-900">{g.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bottom Action Button */}
+                  <div className="pt-2 border-t border-slate-100">
+                    <button
+                      type="button"
+                      onClick={() => onToggleHs(hs.id)}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-800 transition-all hover:bg-slate-50 hover:border-slate-300 active:scale-95 shadow-sm"
+                    >
+                      {hs.actionText || 'Ketahui Fasa Ini'}
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
