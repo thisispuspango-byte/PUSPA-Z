@@ -1,8 +1,8 @@
 ---
-title: "PUSPA-Z — Panduan Pengguna & SOP Operasi Sistem"
+title: "PUSPA — Panduan Pengguna & SOP Operasi Sistem"
 document_id: "PUSPA-DOC-GUIDE-001"
-version: "5.6.2"
-last_updated: "2026-08-15T23:33:00+08:00"
+version: "5.8.0"
+last_updated: "2026-08-16T20:30:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "PUBLIC & STAFF OPERATIONAL"
 lifecycle_status: "ACTIVE"
@@ -19,6 +19,7 @@ Selamat datang ke platform **PUSPA V5.6**, sistem pengurusan NGO yang diperkasak
 
 | Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
 | :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.8.0` | `2026-08-16 20:30` | `Conductor Agent (GLM-5.2)` | Penyelarasan panduan pengguna dengan penambahbaikan visual kelas Emons, cerita penerima manfaat, dan reka bentuk mobile-first | Kemaskini Seksyen 1 dengan penerangan Emons-class landing, 'Perjalanan Ihsan' scroll narrative, 5-zon video diorama, dan aksesibiliti | `doc verified` |
 | `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi panduan pengguna | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
 | `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Menambah penerangan perbezaan Portal Awam `/` dan Dashboard `/dashboard` | Menstrukturkan Seksyen 1 kepada Portal Awam dan Dashboard Pengurusan | `doc verified` |
 

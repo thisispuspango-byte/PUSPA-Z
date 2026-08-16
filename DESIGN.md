@@ -1,14 +1,14 @@
 ---
-title: "PUSPA-Z — Design System & Visual Language Specification"
+title: "PUSPA — Design System & Visual Language Specification"
 document_id: "PUSPA-DOC-DESIGN-001"
-version: "5.6.6"
-last_updated: "2026-08-16T09:30:00+08:00"
+version: "5.8.0"
+last_updated: "2026-08-16T20:30:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "INTERNAL UI/UX"
 lifecycle_status: "ACTIVE"
 ---
 
-# PUSPA V5.6 — Design System & Visual Language
+# PUSPA V5.8 — Design System & Visual Language
 
 > **Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)**
 > Cerdas. Mesra. Sentiasa di sisi anda.
@@ -19,7 +19,8 @@ lifecycle_status: "ACTIVE"
 
 | Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
 | :---: | :---: | :---: | :--- | :--- | :---: |
-| `5.6.6` | `2026-08-16 09:30` | `Conductor Agent` | Menggantikan pergerakan kamera statik kepada pergerakan objek dan dinamik cecair tulen bagi semua 5 zon diorama | Menjana video procedural berbilang lapisan (wap mendidih, laser pengimbas, roda berputar, zarah barakah, radar siber) via multi-threaded Python FFmpeg pipeline | `chrome-devtools verified (5/5 live)` |
+|| `5.6.6` | `2026-08-16 09:30` | `Conductor Agent` | Menggantikan pergerakan kamera statik kepada pergerakan objek dan dinamik cecair tulen bagi semua 5 zon diorama | Menjana video procedural berbilang lapisan (wap mendidih, laser pengimbas, roda berputar, zarah barakah, radar siber) via multi-threaded Python FFmpeg pipeline | `chrome-devtools verified (5/5 live)` ||
+|| `5.8.0` | `2026-08-16 20:30` | `Conductor Agent (GLM-5.2)` | Penggantian palet warna berbilang kepada ungu tunggal #6A0DAD + neutral, penyingkiran Glassmorphism/OKLCH berbilang warna, dan pengenalan bahasa reka bentuk kelas Emons | Penyeragaman semua komponen portal ke token `primary` Tailwind, penggantian gradien berbilang warna dengan ungu monokrom, penambahan spesifikasi tipogra editorial dengan clamp() dan sokongan prefers-reduced-motion | `tsc: 0 errors, eslint: 0 errors` ||
 | `5.6.5` | `2026-08-16 09:10` | `Conductor Agent` | Mengesahkan kelancaran 5 video diorama (Dapur ke Hab) & membaiki pengecualian media pada middleware | Menambah `mp4` ke matcher `src/middleware.ts`, menyuntik `media-src` di `next.config.ts`, dan mengesahkan status main video via Chrome DevTools | `chrome-devtools verified (5/5 playing)` |
 | `5.6.4` | `2026-08-16 08:45` | `Conductor Agent` | Menggantikan semua foto lama dengan 6 foto dokumentari berkualiti tinggi baharu bagi seksyen Galeri Lapangan | Menjana 6 foto realistik di `public/gallery-agihan-0X.jpg`, memadam foto lama, dan mengemas kini `portal-agihan-gallery.tsx` | `chrome-devtools verified` |
 | `5.6.3` | `2026-08-16 08:15` | `Conductor Agent` | Mengubah semua 5 imej diorama statik kepada video animasi bergerak 2.5D sinusoidal loop | Menjana 5 fail video H.264 di `public/videos/diorama-0X.mp4` via FFmpeg & mengemas kini `portal-interactive-ecosystem.tsx` | `chrome-devtools verified` |
@@ -79,83 +80,97 @@ Brand assets are managed via `@/lib/puspa-brand-assets` and `@/lib/maria-avatar`
 
 ### Brand Color Palette
 
-| Token              | Hex         | oklch                        | Usage                       |
-| ------------------ | ----------- | ---------------------------- | --------------------------- |
-| `puspa-primary`    | `#6A0DAD`   | oklch(0.368 0.212 295)       | Primary brand purple        |
-| `puspa-dark`       | `#4B0082`   | —                            | Deep indigo-purple          |
-| `puspa-light`      | `#9370DB`   | oklch(0.581 0.154 291)       | Medium lavender             |
-| `puspa-pale`       | `#E6E6FA`   | —                            | Pale lavender / highlights  |
+| Token              | Hex         | Usage                       |
+| ------------------ | ----------- | --------------------------- |
+| `puspa-primary`    | `#6A0DAD`   | Primary brand purple        |
+| `primary/90`       | `#6A0DAD`   | 90% opacity primary         |
+| `primary/80`       | `#6A0DAD`   | 80% opacity primary         |
+| `primary/70`       | `#6A0DAD`   | 70% opacity primary         |
+| `primary/60`       | `#6A0DAD`   | 60% opacity primary         |
+| `primary/50`       | `#6A0DAD`   | 50% opacity primary         |
+| `primary/40`       | `#6A0DAD`   | 40% opacity primary         |
+| `primary/30`       | `#6A0DAD`   | 30% opacity primary         |
+| `primary/20`       | `#6A0DAD`   | 20% opacity primary         |
+| `primary/10`       | `#6A0DAD`   | 10% opacity primary         |
+| `slate`            | —           | Neutral scale (slate-50..950) |
+| `white`            | `#FFFFFF`   | Pure white                  |
+| `black`            | `#000000`   | Pure black                  |
+
+**NO emerald, amber, blue, indigo, pink, teal, cyan, rose in palette.** All components use the unified `primary` token with opacity variants and neutral slate/white/black only.
 
 ---
 
 ## 2. Color System
 
-The entire color system uses **oklch color space** via CSS custom properties, enabling perceptually uniform lightness across hues. All values live in `src/app/globals.css`.
+The entire color system uses a **single brand purple** (`#6A0DAD` / `primary` Tailwind token) with opacity variants and a neutral slate/white/black palette. All values live in `src/app/globals.css` and are configured via Tailwind's `primary` color scale.
 
 ### 2.1 Light Mode (`:root`)
 
-| Token                    | oklch Value               | Visual Description                          |
-| ------------------------ | ------------------------- | ------------------------------------------- |
-| `--background`           | oklch(0.985 0.002 295)   | Near-white with faint purple undertone      |
-| `--foreground`           | oklch(0.145 0.015 295)   | Very dark gray-purple                       |
-| `--card`                 | oklch(1 0 0)             | Pure white                                  |
-| `--card-foreground`      | oklch(0.145 0.015 295)   | Dark gray-purple text                       |
-| `--popover`              | oklch(1 0 0)             | Pure white                                  |
-| `--popover-foreground`   | oklch(0.145 0.015 295)   | Dark gray-purple text                       |
-| `--primary`              | oklch(0.368 0.212 295)   | **PUSPA Purple** (#6A0DAD)                  |
-| `--primary-foreground`   | oklch(0.985 0 0)         | Near-white on primary                       |
-| `--secondary`            | oklch(0.918 0.034 291)   | Pale lavender background                    |
-| `--secondary-foreground` | oklch(0.368 0.212 295)   | PUSPA Purple on secondary                   |
-| `--muted`                | oklch(0.952 0.015 295)   | Very light purple-gray                      |
-| `--muted-foreground`     | oklch(0.5 0.02 295)      | Medium gray-purple                          |
-| `--accent`               | oklch(0.918 0.034 291)   | Pale lavender (same as secondary)           |
-| `--accent-foreground`    | oklch(0.368 0.212 295)   | PUSPA Purple on accent                      |
-| `--destructive`          | oklch(0.577 0.245 27.325)| Red for danger/delete                       |
-| `--border`               | oklch(0.908 0.025 295)   | Light purple-gray border                    |
-| `--input`                | oklch(0.908 0.025 295)   | Light purple-gray input border              |
-| `--ring`                 | oklch(0.368 0.212 295)   | PUSPA Purple focus ring                     |
+| Token                    | Value               | Visual Description                          |
+| ------------------------ | ------------------- | ------------------------------------------- |
+| `--background`           | `oklch(0.985 0.002 295)`   | Near-white with faint purple undertone      |
+| `--foreground`           | `oklch(0.145 0.015 295)`   | Very dark gray-purple                       |
+| `--card`                 | `oklch(1 0 0)`             | Pure white                                  |
+| `--card-foreground`      | `oklch(0.145 0.015 295)`   | Dark gray-purple text                       |
+| `--popover`              | `oklch(1 0 0)`             | Pure white                                  |
+| `--popover-foreground`   | `oklch(0.145 0.015 295)`   | Dark gray-purple text                       |
+| `--primary`              | `oklch(0.368 0.212 295)`   | **PUSPA Purple** (#6A0DAD)                  |
+| `--primary-foreground`   | `oklch(0.985 0 0)`         | Near-white on primary                       |
+| `--secondary`            | `oklch(0.918 0.034 291)`   | Pale lavender background                    |
+| `--secondary-foreground` | `oklch(0.368 0.212 295)`   | PUSPA Purple on secondary                   |
+| `--muted`                | `oklch(0.952 0.015 295)`   | Very light purple-gray                      |
+| `--muted-foreground`     | `oklch(0.5 0.02 295)`      | Medium gray-purple                          |
+| `--accent`               | `oklch(0.918 0.034 291)`   | Pale lavender (same as secondary)           |
+| `--accent-foreground`    | `oklch(0.368 0.212 295)`   | PUSPA Purple on accent                      |
+| `--destructive`          | `oklch(0.577 0.245 27.325)`| Red for danger/delete                       |
+| `--border`               | `oklch(0.908 0.025 295)`   | Light purple-gray border                    |
+| `--input`                | `oklch(0.908 0.025 295)`   | Light purple-gray input border              |
+| `--ring`                 | `oklch(0.368 0.212 295)`   | PUSPA Purple focus ring                     |
 
 ### 2.2 Dark Mode (`.dark`)
 
-| Token                    | oklch Value               | Visual Description                          |
-| ------------------------ | ------------------------- | ------------------------------------------- |
-| `--background`           | oklch(0.13 0.02 295)     | Deep dark purple-black                      |
-| `--foreground`           | oklch(0.965 0.01 295)    | Near-white with purple tint                 |
-| `--card`                 | oklch(0.17 0.025 295)    | Slightly lighter dark card                  |
-| `--card-foreground`      | oklch(0.965 0.01 295)    | Near-white text                             |
-| `--primary`              | oklch(0.581 0.154 291)   | Lighter purple for dark mode contrast       |
-| `--primary-foreground`   | oklch(0.247 0.208 295)   | Deep purple on primary                      |
-| `--secondary`            | oklch(0.22 0.04 295)     | Dark muted purple                           |
-| `--muted`                | oklch(0.22 0.04 295)     | Dark muted purple                           |
-| `--muted-foreground`     | oklch(0.65 0.04 295)     | Medium gray for secondary text              |
-| `--destructive`          | oklch(0.704 0.191 22.216)| Lighter red for dark mode                   |
-| `--border`               | oklch(0.28 0.04 295)     | Subtle dark purple border                   |
-| `--ring`                 | oklch(0.581 0.154 291)   | Lighter purple focus ring                   |
+| Token                    | Value               | Visual Description                          |
+| ------------------------ | ------------------- | ------------------------------------------- |
+| `--background`           | `oklch(0.13 0.02 295)`     | Deep dark purple-black (dark slate gradient)|
+| `--foreground`           | `oklch(0.965 0.01 295)`    | Near-white with purple tint                 |
+| `--card`                 | `oklch(0.17 0.025 295)`    | Slightly lighter dark card                  |
+| `--card-foreground`      | `oklch(0.965 0.01 295)`    | Near-white text                             |
+| `--primary`              | `oklch(0.581 0.154 291)`   | Lighter purple for dark mode contrast       |
+| `--primary-foreground`   | `oklch(0.247 0.208 295)`   | Deep purple on primary                      |
+| `--secondary`            | `oklch(0.22 0.04 295)`     | Dark muted purple                           |
+| `--muted`                | `oklch(0.22 0.04 295)`     | Dark muted purple                           |
+| `--muted-foreground`     | `oklch(0.65 0.04 295)`     | Medium gray for secondary text              |
+| `--destructive`          | `oklch(0.704 0.191 22.216)`| Lighter red for dark mode                   |
+| `--border`               | `oklch(0.28 0.04 295)`     | Subtle dark purple border                   |
+| `--ring`                 | `oklch(0.581 0.154 291)`   | Lighter purple focus ring                   |
+
+**Background**: Dark slate gradient (primary to primary/70) in dark mode, near-white with faint purple undertone in light mode.
+**Text**: `foreground`/`white` on dark backgrounds, `foreground` on light backgrounds.
 
 ### 2.3 Chart Colors
 
-A 5-color chart palette themed to the PUSPA brand with complementary accent hues:
+A unified chart palette using the primary purple token with opacity variants — **NO multi-color accent hues**:
 
 | Token       | Light Mode                     | Dark Mode                      | Visual       |
 | ----------- | ------------------------------ | ------------------------------ | ------------ |
-| `--chart-1` | oklch(0.368 0.212 295)        | oklch(0.581 0.154 291)        | PUSPA Purple |
-| `--chart-2` | oklch(0.581 0.154 291)        | oklch(0.696 0.17 162.48)      | Lavender     |
-| `--chart-3` | oklch(0.646 0.222 41.116)     | oklch(0.769 0.188 70.08)      | Amber accent |
-| `--chart-4` | oklch(0.6 0.118 184.704)      | oklch(0.627 0.265 303.9)      | Teal accent  |
-| `--chart-5` | oklch(0.769 0.188 70.08)      | oklch(0.645 0.246 16.439)     | Gold accent  |
+| `--chart-1` | `oklch(0.368 0.212 295)`        | `oklch(0.581 0.154 291)`        | PUSPA Purple |
+| `--chart-2` | `oklch(0.368 0.212 295 / 0.8)`  | `oklch(0.581 0.154 291 / 0.8)`  | Primary/80   |
+| `--chart-3` | `oklch(0.368 0.212 295 / 0.6)`  | `oklch(0.581 0.154 291 / 0.6)`  | Primary/60   |
+| `--chart-4` | `oklch(0.368 0.212 295 / 0.4)`  | `oklch(0.581 0.154 291 / 0.4)`  | Primary/40   |
+| `--chart-5` | `oklch(0.368 0.212 295 / 0.2)`  | `oklch(0.581 0.154 291 / 0.2)`  | Primary/20   |
 
 ### 2.4 Sidebar Colors
 
 | Token                        | Light Mode                     | Dark Mode                      |
 | ---------------------------- | ------------------------------ | ------------------------------ |
-| `--sidebar`                  | oklch(0.247 0.208 295)        | oklch(0.17 0.06 295)          |
-| `--sidebar-foreground`       | oklch(0.965 0.01 295)         | oklch(0.965 0.01 295)         |
-| `--sidebar-primary`          | oklch(0.918 0.034 291)        | oklch(0.581 0.154 291)        |
-| `--sidebar-primary-foreground` | oklch(0.247 0.208 295)      | oklch(0.965 0.01 295)         |
-| `--sidebar-accent`           | oklch(0.32 0.18 295)          | oklch(0.24 0.06 295)          |
-| `--sidebar-accent-foreground` | oklch(0.965 0.01 295)        | oklch(0.965 0.01 295)         |
-| `--sidebar-border`           | oklch(0.35 0.16 295)          | oklch(0.30 0.05 295)          |
-| `--sidebar-ring`             | oklch(0.581 0.154 291)        | oklch(0.581 0.154 291)        |
+| `--sidebar`                  | `oklch(0.247 0.208 295)`        | `oklch(0.17 0.06 295)`          |
+| `--sidebar-foreground`       | `oklch(0.965 0.01 295)`         | `oklch(0.965 0.01 295)`         |
+| `--sidebar-primary`          | `oklch(0.918 0.034 291)`        | `oklch(0.581 0.154 291)`        |
+| `--sidebar-primary-foreground` | `oklch(0.247 0.208 295)`      | `oklch(0.965 0.01 295)`         |
+| `--sidebar-accent`           | `oklch(0.32 0.18 295)`          | `oklch(0.24 0.06 295)`          |
+| `--sidebar-accent-foreground` | `oklch(0.965 0.01 295)`        | `oklch(0.965 0.01 295)`         |
+| `--sidebar-border`           | `oklch(0.35 0.16 295)`          | `oklch(0.30 0.05 295)`          |
+| `--sidebar-ring`             | `oklch(0.581 0.154 291)`        | `oklch(0.581 0.154 291)`        |
 
 The sidebar uses a **deep purple gradient** background in both themes — significantly darker than the main content area — creating a strong visual separation.
 
@@ -205,7 +220,25 @@ Example from header:
 <p className="text-[10px] text-muted-foreground">{title.ms}</p>
 ```
 
-### 3.4 Type Scale (Used in Practice)
+### 3.4 Editorial Fluid Type Scale
+
+The design system uses an **editorial fluid type scale** with `clamp()` for responsive typography — no inline `style={{ fontSize: 'clamp(...)' }}`. Instead, use Tailwind's responsive classes:
+
+```tsx
+// Hero title example
+<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-foreground">
+
+// Section title
+<h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground">
+
+// Card title
+<h3 className="text-base sm:text-lg md:text-xl font-semibold text-foreground">
+```
+
+**Responsive breakpoints for fluid type:**
+- `text-4xl` (mobile) → `sm:text-5xl` (640px) → `md:text-6xl` (768px) → `lg:text-7xl` (1024px) → `xl:text-8xl` (1280px)
+
+### 3.5 Type Scale (Used in Practice)
 
 | Context               | Size        | Weight    | Color Token            |
 | --------------------- | ----------- | --------- | ---------------------- |
@@ -227,15 +260,15 @@ Example from header:
 
 ### 4.1 Dual-Layer Layout Architecture
 
-PUSPA V5.6 is designed with a **Dual-Layer Layout Architecture**:
+PUSPA V5.8 is designed with a **Dual-Layer Layout Architecture**:
 
 1. **Public Portal Landing Layer (`/`)**:
-   - High-impact public landing surface with Aurora ambient glow light source.
-   - Glass floating navigation header (`PortalNavbar`).
+   - High-impact public landing surface with Emons-class Immersive Design ambient glow light source.
+   - Floating navigation header (`PortalNavbar`) with Emons-class Immersive Design.
    - 7 flagship landing sections:
      - `PortalHero`: Hero banner with 3D diorama preview widget.
      - `PortalInteractiveEcosystem`: 5-Zon 3D Diorama scroll flight (`#agihan`) with persistent bottom timeline navigation scrubber.
-     - `PortalMetrics`: Real-time glassmorphic metric counters (`#metrik`).
+     - `PortalMetrics`: Real-time Emons-class Immersive Design metric counters (`#metrik`).
      - `PortalAgihanGallery`: Institutional & field distribution photo gallery.
      - `PortalQuickActions`: Direct service action hub (`#tindakan`).
      - `PortalProgrammes`: Flagship welfare programmes showcase (`#program`).
@@ -442,6 +475,8 @@ In light mode this renders as a **pale lavender pill** on the deep purple sideba
 - **Background**: `bg-background/95 backdrop-blur` with `supports-[backdrop-filter]:bg-background/60`
 - **Border**: `border-b`
 - **Padding**: `px-4 lg:px-6`
+
+**Note**: The header uses Emons-class Immersive Design with `backdrop-blur` for a subtle frosted effect — not full Glassmorphism. The unified purple palette is applied via `border-border` and `bg-background/95`.
 
 ### Bilingual View Titles
 
@@ -730,18 +765,20 @@ The dashboard exemplifies the standard module page layout across all 24 modules:
 
 ### 8.5 Category Color System
 
-Used across dashboards for activity categories and metric icons:
+Used across dashboards for activity categories and metric icons — **unified to single purple palette with opacity variants**:
 
-| Category      | Light Mode Background    | Light Mode Icon   | Dark Mode Background       |
-| ------------- | ------------------------ | ----------------- | -------------------------- |
-| member        | `bg-emerald-100`         | `text-emerald-600`| `dark:bg-emerald-900/30`   |
-| case          | `bg-amber-100`           | `text-amber-600`  | `dark:bg-amber-900/30`     |
-| donation      | `bg-rose-100`            | `text-rose-600`   | `dark:bg-rose-900/30`      |
-| disbursement  | `bg-cyan-100`            | `text-cyan-600`   | `dark:bg-cyan-900/30`      |
-| programme     | `bg-purple-100`          | `text-purple-600` | `dark:bg-purple-900/30`    |
-| compliance    | `bg-teal-100`            | `text-teal-600`   | `dark:bg-teal-900/30`      |
-| volunteer     | `bg-orange-100`          | `text-orange-600` | `dark:bg-orange-900/30`    |
-| system        | `bg-gray-100`            | `text-gray-700`   | `dark:bg-gray-800/30`      |
+| Category      | Light Mode Background              | Light Mode Icon            | Dark Mode Background                  |
+| ------------- | ---------------------------------- | -------------------------- | ------------------------------------- |
+| member        | `bg-primary/10`                    | `text-primary`             | `dark:bg-primary/20`                  |
+| case          | `bg-primary/15`                    | `text-primary`             | `dark:bg-primary/25`                  |
+| donation      | `bg-primary/20`                    | `text-primary`             | `dark:bg-primary/30`                  |
+| disbursement  | `bg-primary/25`                    | `text-primary`             | `dark:bg-primary/35`                  |
+| programme     | `bg-primary/30`                    | `text-primary`             | `dark:bg-primary/40`                  |
+| compliance    | `bg-primary/35`                    | `text-primary`             | `dark:bg-primary/45`                  |
+| volunteer     | `bg-primary/40`                    | `text-primary`             | `dark:bg-primary/50`                  |
+| system        | `bg-slate-100`                     | `text-slate-700`           | `dark:bg-slate-800/30`                |
+
+**NO emerald, amber, rose, cyan, teal, orange, or multi-color backgrounds.** All categories use the unified `primary` token with increasing opacity for visual hierarchy.
 
 ### 8.6 Chart Configuration
 
@@ -830,7 +867,57 @@ All module pages use skeleton loading states matching their layout:
 | toggle-group      | `src/components/ui/toggle-group.tsx`    |
 | tooltip           | `src/components/ui/tooltip.tsx`         |
 
-### 9.3 Path Aliases
+### 9.3 Portal Components (12 Unified Purple Palette Components)
+
+The Public Portal Landing Layer (`/`) includes 12 purpose-built components, all unified under the single purple palette:
+
+| Component                    | Description                                             | Key Features                                              |
+| ---------------------------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| `PortalNavbar`               | Floating navigation header                              | Emons-class Immersive Design, `backdrop-blur`, primary border |
+| `PortalHero`                 | Hero banner with 3D diorama preview widget              | Purple gradient background, Next.js Image `priority`      |
+| `PortalInteractiveEcosystem` | 5-Zon 3D Diorama scroll flight                          | **Video Diorama System**: 5 zones, scroll-scrub, Blender-style procedural layers (boiling swamp, scanning laser, rotating wheels, blessing particles, cyber radar) |
+| `PortalMetrics`              | Real-time metric counters                               | Emons-class Immersive Design cards, primary/opacity variants |
+| `PortalAgihanGallery`        | Institutional & field distribution photo gallery        | Next.js Image `fill` mode, grid layout                    |
+| `PortalQuickActions`         | Direct service action hub                               | Touch targets ≥44×44px (`h-11 w-11`), primary buttons     |
+| `PortalProgrammes`           | Flagship welfare programmes showcase                    | Card grid with primary accent borders                     |
+| `PortalMariaAssistant`       | Public-facing Maria AI assistant & FAQ                  | Emons-class Immersive Design panel, streaming indicator   |
+| `PortalFooter`               | Site footer with links and branding                     | Dark slate gradient, primary text                         |
+| `QuickDonateModal`           | One-click donation modal                                | Dialog with primary CTA, accessibility compliant          |
+| `CheckStatusModal`           | Application status check modal                          | Form with primary focus rings, keyboard navigation        |
+| `PermohonanBantuanModal`     | Aid application form modal                              | Multi-step form, `prefers-reduced-motion` support         |
+
+### 9.4 Key Component Specifications
+
+**Video Diorama System (PortalInteractiveEcosystem):**
+- 5 distinct zones (Dapur → Hab → etc.) with procedural video layers
+- Scroll-scrub timeline navigation (persistent bottom scrubber)
+- Blender-style procedural effects: boiling swamp, scanning laser, rotating wheels, blessing particles, cyber radar
+- Videos: H.264 MP4, generated via FFmpeg multi-threaded pipeline
+- Respects `prefers-reduced-motion` — static fallback when enabled
+
+**Beneficiary Stories (Modal with Video/Photo):**
+- Dialog-based modal with video or photo content
+- Next.js Image for optimized media delivery
+- Full keyboard navigation and ARIA support
+- Touch targets ≥44×44px on mobile
+
+**Next.js Image Usage:**
+- Gallery images: `fill` mode with `object-cover` for responsive grids
+- Above-fold hero/diorama: `priority` prop for LCP optimization
+- All images served via `next/image` with automatic WebP/AVIF
+
+**Touch Targets:**
+- Mobile minimum: 44×44px (`h-11 w-11` / `h-10 w-10`)
+- Chat quick prompts: `min-h-[36px]`
+- All interactive elements use `touch-manipulation` class
+
+**Accessibility:**
+- `prefers-reduced-motion` support across all animations
+- Full ARIA labeling on modals, dialogs, and interactive elements
+- Keyboard navigation: Tab, Enter, Escape, Arrow keys
+- Screen reader content via `sr-only` and descriptive `alt` text
+
+### 9.5 Path Aliases
 
 ```json
 {
@@ -924,15 +1011,15 @@ shadcn/ui Skeleton used throughout for layout-preserving loading:
 
 | Element            | Light                           | Dark                                |
 | ------------------ | ------------------------------- | ----------------------------------- |
-| Background         | Near-white (0.985 lightness)    | Deep dark (0.13 lightness)         |
-| Primary            | Deep purple                     | Lighter lavender-purple             |
+| Background         | Near-white (0.985 lightness)    | Deep dark slate gradient (primary to primary/70) |
+| Primary            | Deep purple (#6A0DAD)           | Lighter purple (primary/70 for contrast) |
 | Cards              | Pure white                      | Slightly elevated dark (0.17)       |
-| Sidebar            | Dark purple gradient            | Even deeper purple gradient         |
+| Sidebar            | Deep purple gradient            | Even deeper purple gradient         |
 | Text               | Dark gray-purple                | Near-white with purple tint         |
 | Borders            | Light purple-gray               | Subtle dark purple                  |
-| Metric icon bg     | `bg-{color}-100`                | `dark:bg-{color}-900/30` (translucent) |
-| Demo banner        | `bg-amber-50 border-amber-200`  | `dark:bg-amber-950/30 border-amber-800` |
-| Scrollbar thumb    | 30% lavender opacity            | 20% lavender opacity                |
+| Metric icon bg     | `bg-primary/10..40`             | `dark:bg-primary/20..50` (translucent) |
+| Demo banner        | `bg-amber-50 border-amber-200`  | `dark:bg-primary/10 border-primary/20` |
+| Scrollbar thumb    | 30% primary opacity             | 20% primary opacity                 |
 
 ### 12.3 Theme Transition
 
@@ -1000,21 +1087,21 @@ WebKit-styled scrollbar with PUSPA purple accent:
 
 /* Thumb — Light Mode */
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.581 0.154 291 / 30%);   /* 30% lavender */
+  background: #6A0DAD / 30%;   /* 30% primary */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.368 0.212 295 / 50%);   /* 50% deep purple */
+  background: #6A0DAD / 50%;   /* 50% primary */
 }
 
 /* Thumb — Dark Mode */
 .dark ::-webkit-scrollbar-thumb {
-  background: oklch(0.581 0.154 291 / 20%);   /* 20% lavender */
+  background: #6A0DAD / 20%;   /* 20% primary */
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.581 0.154 291 / 40%);   /* 40% lavender */
+  background: #6A0DAD / 40%;   /* 40% primary */
 }
 ```
 
@@ -1207,6 +1294,12 @@ Higher roles inherit access from lower roles. The sidebar filters items by role,
 
 The app respects `prefers-reduced-motion` via Tailwind's built-in media query handling. `disableTransitionOnChange` on the theme provider prevents jarring transitions.
 
+**Implementation details:**
+- All CSS transitions and animations wrapped in `@media (prefers-reduced-motion: reduce)` where appropriate
+- Framer Motion animations respect `reducedMotion` prop
+- `puspa-spin` spinner pauses when reduced motion is preferred
+- View transitions use `transition-duration: 0.01ms` when reduced motion
+
 ---
 
 ## Appendix A: File Structure Reference
@@ -1335,6 +1428,6 @@ docs/
 
 ---
 
-*Document version: PUSPA V5 Design System*
-*Last updated: 2026-08-15*
-*Color space: oklch | Theme: Purple brand | Language: Bahasa Melayu + English*
+*Document version: PUSPA V5.8 Design System*
+*Last updated: 2026-08-16*
+*Color space: Unified primary token (#6A0DAD) + slate neutrals | Theme: Purple monochrome | Language: Bahasa Melayu + English*

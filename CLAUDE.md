@@ -1,8 +1,8 @@
 ---
-title: "PUSPA-Z — Claude Code Developer Guide & System Instructions"
+title: "PUSPA — Claude Code Developer Guide & System Instructions"
 document_id: "PUSPA-DOC-CLAUDE-001"
-version: "5.6.2"
-last_updated: "2026-08-15T23:33:00+08:00"
+version: "5.8.0"
+last_updated: "2026-08-16T20:30:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "INTERNAL DEVELOPER"
 lifecycle_status: "ACTIVE"
@@ -18,6 +18,7 @@ lifecycle_status: "ACTIVE"
 
 | Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
 | :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.8.0` | `2026-08-16 20:30` | `Conductor Agent (GLM-5.2)` | Penyelarasan dokumentasi pembangun dengan penambahbaikan visual kelas Emons dan komponen baharu | Kemaskini Project Overview, File Map, dan Key Conventions untuk komponen portal baharu, data layer, dan penjenamaan PUSPA | `doc verified` |
 | `5.6.2` | `2026-08-15 23:33` | `Conductor Agent` | Menguatkuasakan format standard jejak audit SMS-v1.0 bagi panduan Claude Code | Menambah blok YAML Frontmatter dan Audit Ledger lengkap | `typecheck: 0 errors` |
 | `5.6.1` | `2026-08-15 23:25` | `Conductor Agent` | Menyelaras gambaran keseluruhan kepada PUSPA-Z V5.6 Dual-Layer | Mengemaskini bahagian Project Overview dan Frontend SPA Pattern | `doc verified` |
 

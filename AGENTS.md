@@ -1,25 +1,26 @@
 ---
-title: "PUSPA-Z — Maria Puspa AI Agent System Rules & Protocol"
+title: "PUSPA — Maria Puspa AI Agent System Rules & Protocol"
 document_id: "PUSPA-DOC-AGENTS-001"
-version: "5.6.6"
-last_updated: "2026-08-16T09:30:00+08:00"
+version: "5.8.0"
+last_updated: "2026-08-16T20:30:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "INTERNAL AI PROTOCOL"
 lifecycle_status: "ACTIVE"
 ---
 
-# AGENTS.md — PUSPA-Z V5.6 (Maria Puspa AI Agent System)
+# AGENTS.md — PUSPA V5.8 (Maria Puspa AI Agent System)
 
-> **PUSPA V5.6** — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)
-> **Location**: `G:\PUSPA-Z\PUSPA-Z`
+> **PUSPA V5.8** — Pertubuhan Urus Peduli Asnaf (PPM-024-10-05012022)
+> **Location**: `G:\\PUSPA\\PUSPA`
 
 ---
 
 ## 📜 Audit & Revision Ledger
 
-| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
-| :---: | :---: | :---: | :--- | :--- | :---: |
-| `5.7.1` | `2026-08-16 10:44` | `Conductor Agent` | Mengundurkan panel sisi kiri/kanan dan memulihkan kad popup hotspot tepat di atas butang `+` / `×` bersama 5 video diorama hidup berasingan | Mengembalikan `portal-interactive-ecosystem.tsx` kepada kad popup mikro setempat (`bottom-full`), redaman spring inersia 5-panel, dan 5 fail video berkualiti tinggi `diorama-01.mp4` ke `05.mp4` | `typecheck: 0 errors, git pushed` |
+|| Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan ||
+|| :---: | :---: | :---: | :--- | :--- | :---: ||
+|| `5.8.0` | `2026-08-16 20:30` | `Conductor Agent (GLM-5.2)` | Penambahbaikan visual kelas Emons, palet ungu tunggal, penghijrahan Next.js Image, aksesibiliti mobile-first, dan metadata SEO | Penyeragaman palet warna ke ungu #6A0DAD + neutral, penggantian semua `<img>` ke `<Image />`, penambahan aria/keyboard/touch targets, OpenGraph/Twitter metadata, sla etika reka bentuk mobile-first, komponen cerita penerima manfaat baru' | `tsc: 0 errors, eslint: 0 errors, git pushed cf61be5` ||
+|| `5.7.1` | `2026-08-16 10:44` | `Conductor Agent` | Mengundurkan panel sisi kiri/kanan dan memulihkan kad popup hotspot tepat di atas butang `+` / `×` bersama 5 video diorama hidup berasingan | Mengembalikan `portal-interactive-ecosystem.tsx` kepada kad popup mikro setempat (`bottom-full`), redaman spring inersia 5-panel, dan 5 fail video berkualiti tinggi `diorama-01.mp4` ke `05.mp4` | `typecheck: 0 errors, git pushed` ||
 | `5.7.0` | `2026-08-16 10:28` | `Conductor Agent` | Mengintegrasikan satu video sinematik berterusan 28s menghubungkan semua 5 zon dengan frame-accurate scrubbing & flyout detail drawer tepat seperti Emons | Menjana `public/videos/puspa-continuous-ecosystem.mp4` via Python FFmpeg, membina `PortalInteractiveEcosystem` dengan single video scroll-scrubber, hotspot sonar 3D (+ / ×), flyout detail drawer kanan & bottom timeline scrubber | `typecheck clean, server 200 OK` |
 | `5.6.9` | `2026-08-16 10:07` | `Conductor Agent` | Menjana secara autonomi 100% semua 5 video diorama hidup (watak bergerak, forklift, van, warga emas makan, radar hologram 3D) tanpa penglibatan manual | Membina dan menjalankan `render_living_dioramas.py` untuk menghasilkan video HD 720p H.264 di `public/videos/diorama-01.mp4` hingga `05.mp4` dengan web faststart | `chrome-devtools verified (5/5 live)` |
 | `5.6.8` | `2026-08-16 10:00` | `Conductor Agent` | Menaik taraf transisi scrollytelling diorama ke standard EMONS (spring inertia, 3D perspective glide, anamorphic light sweep, sonar radar hotspots) | Mengemas kini `portal-interactive-ecosystem.tsx` dengan `useSpring` inertia damping, efek jalur cahaya sinematik (`AnimatePresence`), butang navigasi pantas (< >) & sokongan papan kekunci | `chrome-devtools verified` |

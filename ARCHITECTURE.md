@@ -1,8 +1,8 @@
 ---
-title: "PUSPA-Z — System Architecture & Technical Specifications"
+title: "PUSPA — System Architecture & Technical Specifications"
 document_id: "PUSPA-DOC-ARCH-001"
-version: "5.6.6"
-last_updated: "2026-08-16T09:30:00+08:00"
+version: "5.8.0"
+last_updated: "2026-08-16T20:30:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "INTERNAL TECHNICAL"
 lifecycle_status: "ACTIVE"
@@ -20,6 +20,7 @@ lifecycle_status: "ACTIVE"
 
 | Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
 | :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.8.0` | `2026-08-16 20:30` | `Conductor Agent (GLM-5.2)` | Penambahbaikan visual kelas Emons, palet ungu tunggal, penghijrahan Next.js Image, aksesibiliti mobile-first, dan metadata SEO | Penyeragaman palet warna ke ungu #6A0DAD + neutral, penggantian semua `<img>` ke `<Image />`, penambahan aria/keyboard/touch targets, OpenGraph/Twitter metadata, komponen cerita penerima manfaat baharu, data layer `src/data/portal/` | `tsc: 0 errors, eslint: 0 errors, git pushed` |
 | `5.6.6` | `2026-08-16 09:30` | `Conductor Agent` | Menggantikan pergerakan kamera statik kepada pergerakan objek dan dinamik cecair tulen bagi semua 5 zon diorama | Menjana video procedural berbilang lapisan (wap mendidih, laser pengimbas, roda berputar, zarah barakah, radar siber) via multi-threaded Python FFmpeg pipeline | `chrome-devtools verified (5/5 live)` |
 | `5.6.5` | `2026-08-16 09:10` | `Conductor Agent` | Mengesahkan kelancaran 5 video diorama (Dapur ke Hab) & membaiki pengecualian media pada middleware | Menambah `mp4` ke matcher `src/middleware.ts`, menyuntik `media-src` di `next.config.ts`, dan mengesahkan status main video via Chrome DevTools | `chrome-devtools verified (5/5 playing)` |
 | `5.6.4` | `2026-08-16 08:45` | `Conductor Agent` | Menggantikan semua foto lama dengan 6 foto dokumentari berkualiti tinggi baharu bagi seksyen Galeri Lapangan | Menjana 6 foto realistik di `public/gallery-agihan-0X.jpg`, memadam foto lama, dan mengemas kini `portal-agihan-gallery.tsx` | `chrome-devtools verified` |

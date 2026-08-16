@@ -22,7 +22,7 @@ export function PortalHero({ onOpenDonate, onNavigateToApply }: PortalHeroProps)
           className="text-center max-w-4xl mx-auto space-y-8"
         >
           {/* Main Headline */}
-          <h1 className="font-black tracking-tight text-foreground leading-[1.05]" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}>
+          <h1 className="font-black tracking-tight text-foreground leading-[1.05] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
             Mengurus Amanah,{' '}
             <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
               Membela Asnaf
@@ -31,7 +31,7 @@ export function PortalHero({ onOpenDonate, onNavigateToApply }: PortalHeroProps)
           </h1>
 
           {/* Subtitle */}
-          <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed" style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}>
+          <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed text-base sm:text-lg md:text-xl">
             Portal perkhidmatan digital PUSPA menghubungkan penderma, pemohon bantuan, dan institusi kebajikan.
           </p>
 

@@ -122,6 +122,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                           setSelectedAmount(preset.amount)
                           setCustomAmount('')
                         }}
+                        aria-label={`Pilih amaun RM ${preset.amount} - ${preset.label}`}
                         className={`p-3 rounded-xl border text-left transition-all duration-200 ${
                           isSelected
                             ? 'bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]'
@@ -140,10 +141,14 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                 {/* Custom Amount Input */}
                 <div className="mt-2">
                   <div className="relative">
+                    <Label htmlFor="custom-amount" className="sr-only">
+                      Amaun Sumbangan Khusus (RM)
+                    </Label>
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-muted-foreground">
                       RM
                     </span>
                     <Input
+                      id="custom-amount"
                       type="number"
                       placeholder="Atau masukkan amaun pilihan anda..."
                       value={customAmount}
@@ -157,8 +162,11 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
               {/* Donor Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-medium">Nama Penderma (Hamba Allah jika kosong)</Label>
+                  <Label htmlFor="donor-name" className="text-xs font-medium">
+                    Nama Penderma (Hamba Allah jika kosong)
+                  </Label>
                   <Input
+                    id="donor-name"
                     placeholder="Nama / Syarikat"
                     value={donorName}
                     onChange={(e) => setDonorName(e.target.value)}
@@ -166,8 +174,11 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-medium">No Telefon / Emel (Untuk Resit)</Label>
+                  <Label htmlFor="donor-contact" className="text-xs font-medium">
+                    No Telefon / Emel (Untuk Resit)
+                  </Label>
                   <Input
+                    id="donor-contact"
                     placeholder="012-3456789 / emel@domain.com"
                     value={donorPhone}
                     onChange={(e) => setDonorPhone(e.target.value)}

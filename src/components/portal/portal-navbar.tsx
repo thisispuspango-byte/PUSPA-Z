@@ -51,11 +51,11 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
               <span className="font-extrabold text-lg tracking-tight text-foreground bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 PUSPA
               </span>
-              <Badge variant="outline" className="text-[10px] h-4 px-1.5 py-0 border-primary/30 text-primary dark:text-primary/80 font-bold uppercase">
+              <Badge variant="outline" className="text-[11px] h-5 px-2 py-0.5 border-primary/30 text-primary dark:text-primary/80 font-bold uppercase">
                 Portal Awam
               </Badge>
             </div>
-            <span className="text-[10px] text-muted-foreground font-medium hidden sm:inline">
+            <span className="text-sm text-muted-foreground font-medium hidden sm:inline">
               Pertubuhan Urus Peduli Asnaf
             </span>
           </div>
@@ -116,14 +116,14 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
           <Button
             onClick={onOpenDonate}
             size="sm"
-            className="bg-primary text-primary-foreground text-xs h-8 px-2.5"
+            className="bg-primary text-primary-foreground text-xs h-10 px-3"
           >
-            <Heart className="h-3 w-3 fill-current mr-1" />
+            <Heart className="h-3.5 w-3.5 fill-current mr-1" />
             Infaq
           </Button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-lg border bg-background/70 text-foreground"
+            className="h-11 w-11 rounded-lg border bg-background/70 text-foreground flex items-center justify-center"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -132,7 +132,10 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden border-b border-border bg-background/95 backdrop-blur-2xl px-4 py-4 space-y-3 shadow-xl">
+        <div
+          id="mobile-menu"
+          className="sm:hidden border-b border-border bg-background/95 backdrop-blur-2xl px-4 py-4 space-y-3 shadow-xl"
+        >
           <nav className="flex flex-col gap-2.5 text-sm font-medium">
             <a
               href="#tindakan"

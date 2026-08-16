@@ -20,6 +20,8 @@ interface CheckStatusModalProps {
   onOpenChange: (open: boolean) => void
 }
 
+type StatusStep = 'search' | 'result' | 'not-found'
+
 interface CheckResult {
   refNo: string
   name: string
@@ -46,8 +48,11 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
     setTimeout(() => {
       setIsSearching(false)
       setHasSearched(true)
-      // Mock data logic for demonstration
-      if (icNumber.includes('9') || icNumber.includes('8') || icNumber.length >= 10) {
+      // Mock data logic for demonstration - realistic async simulation
+      // IC validation: 12 digits for Malaysian IC
+      const isValidIC = icNumber.replace(/\s/g, '').length === 12 && /^\d{12}$/.test(icNumber.replace(/\s/g, ''))
+      
+      if (isValidIC) {
         setResult({
           refNo: `PZ-2026-${Math.floor(1000 + Math.random() * 9000)}`,
           name: 'Pemohon Berdaftar',
@@ -66,7 +71,7 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
       } else {
         setResult(null)
       }
-    }, 900)
+    }, 1500)
   }
 
   const handleReset = () => {
