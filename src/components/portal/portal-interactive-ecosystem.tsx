@@ -19,7 +19,9 @@ import {
   CheckCircle2,
   Info,
   Clock,
-  Sparkles
+  Sparkles,
+  Play,
+  Pause,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -318,10 +320,13 @@ interface PortalInteractiveEcosystemProps {
 export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEcosystemProps = {}) {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isUserScrollingRef = useRef<boolean>(false)
 
   const [activeZoneIndex, setActiveZoneIndex] = useState<number>(0)
   const [selectedHotspot, setSelectedHotspot] = useState<HotspotDetail | null>(null)
   const [videoLoaded, setVideoLoaded] = useState<boolean>(false)
+  const [isPlayingTour, setIsPlayingTour] = useState<boolean>(false)
 
   // Scroll tracking across 500vh
   const { scrollYProgress } = useScroll({
@@ -336,14 +341,73 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEc
     restDelta: 0.001,
   })
 
+  // Ambient living motion & auto-tour engine: keep video continuously moving
+  useEffect(() => {
+    const vid = videoRef.current
+    if (!vid) return
+
+    // Ensure muted video plays automatically
+    vid.muted = true
+    const playPromise = vid.play()
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Handled silently if browser delays autoplay
+      })
+    }
+
+    const handleTimeUpdate = () => {
+      if (isUserScrollingRef.current) return
+
+      if (isPlayingTour) {
+        // Continuous tour mode: smoothly scroll page along with video playback
+        const currentSec = vid.currentTime
+        if (containerRef.current) {
+          const containerTop = containerRef.current.offsetTop
+          const totalScrollableHeight = containerRef.current.scrollHeight - window.innerHeight
+          const targetY = containerTop + totalScrollableHeight * (currentSec / TOTAL_VIDEO_DURATION)
+          window.scrollTo({ top: targetY, behavior: 'auto' })
+        }
+
+        // Determine active zone dynamically during tour
+        for (let i = 0; i < ZONES.length; i++) {
+          const [start, end] = ZONES[i].timeRange
+          if (currentSec >= start && currentSec <= end) {
+            if (activeZoneIndex !== i) setActiveZoneIndex(i)
+            break
+          }
+        }
+        return
+      }
+
+      // Ambient Zone Loop: loop within active zone's steady time window
+      const currentZone = ZONES[activeZoneIndex]
+      const [start, end] = currentZone.timeRange
+      if (vid.currentTime >= end - 0.3 || vid.currentTime < start) {
+        vid.currentTime = start + 0.1
+      }
+    }
+
+    vid.addEventListener('timeupdate', handleTimeUpdate)
+    return () => vid.removeEventListener('timeupdate', handleTimeUpdate)
+  }, [activeZoneIndex, isPlayingTour])
+
   // Synchronize master video time frame-accurately with scroll progress
   useMotionValueEvent(smoothProgress, 'change', (latestProgress) => {
+    isUserScrollingRef.current = true
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+    scrollTimeoutRef.current = setTimeout(() => {
+      isUserScrollingRef.current = false
+      if (videoRef.current && !isPlayingTour) {
+        videoRef.current.play().catch(() => {})
+      }
+    }, 600)
+
     const clamped = Math.max(0, Math.min(1, latestProgress))
     const targetSeconds = clamped * TOTAL_VIDEO_DURATION
 
     // Scrub video currentTime frame-by-frame
     if (videoRef.current && videoLoaded) {
-      if (Math.abs(videoRef.current.currentTime - targetSeconds) > 0.05) {
+      if (Math.abs(videoRef.current.currentTime - targetSeconds) > 0.08) {
         videoRef.current.currentTime = targetSeconds
       }
     }
@@ -378,6 +442,9 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEc
     const targetZone = ZONES[index]
     if (!targetZone) return
 
+    // Turn off continuous tour mode when user clicks specific tab
+    setIsPlayingTour(false)
+
     // Calculate scroll offset within container
     const containerTop = containerRef.current.offsetTop
     const totalScrollableHeight = containerRef.current.scrollHeight - window.innerHeight
@@ -389,12 +456,24 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEc
       behavior: 'smooth',
     })
 
-    // Also update video directly for instant responsiveness
+    // Update video position and resume ambient motion
     if (videoRef.current) {
       videoRef.current.currentTime = targetZone.targetTime
+      videoRef.current.play().catch(() => {})
     }
     setActiveZoneIndex(index)
     setSelectedHotspot(null)
+  }, [])
+
+  // Toggle Auto-Tour continuous flight
+  const toggleTour = useCallback(() => {
+    setIsPlayingTour((prev) => {
+      const next = !prev
+      if (next && videoRef.current) {
+        videoRef.current.play().catch(() => {})
+      }
+      return next
+    })
   }, [])
 
   // Keyboard arrow navigation
@@ -410,12 +489,14 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEc
         }
       } else if (e.key === 'Escape') {
         setSelectedHotspot(null)
+      } else if (e.key === ' ') {
+        toggleTour()
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeZoneIndex, navigateToZone])
+  }, [activeZoneIndex, navigateToZone, toggleTour])
 
   const activeZone = ZONES[activeZoneIndex]
 
@@ -435,10 +516,15 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEc
             ref={videoRef}
             src="/videos/puspa-continuous-ecosystem.mp4"
             poster="/diorama-01.jpg"
+            autoPlay
             muted
+            loop
             playsInline
             preload="auto"
-            onLoadedData={() => setVideoLoaded(true)}
+            onLoadedData={() => {
+              setVideoLoaded(true)
+              if (videoRef.current) videoRef.current.play().catch(() => {})
+            }}
             className="h-full w-full object-cover object-center will-change-transform"
           />
 
@@ -753,6 +839,25 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: PortalInteractiveEc
               title="Fasa Seterusnya"
             >
               <ChevronRight className="h-4 w-4" />
+            </button>
+
+            {/* Auto Tour Play/Pause Toggle */}
+            <button
+              onClick={toggleTour}
+              className="flex h-9 shrink-0 items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-2.5 sm:px-3 text-xs font-semibold text-white transition-all hover:bg-white/20"
+              title={isPlayingTour ? 'Jeda Pandu Lalu' : 'Main Pandu Lalu Automatik'}
+            >
+              {isPlayingTour ? (
+                <>
+                  <Pause className="h-3.5 w-3.5 fill-white" />
+                  <span className="hidden sm:inline">Jeda</span>
+                </>
+              ) : (
+                <>
+                  <Play className="h-3.5 w-3.5 fill-white" />
+                  <span className="hidden sm:inline">Auto Tour</span>
+                </>
+              )}
             </button>
 
             {/* Quick Infaq Action CTA */}
