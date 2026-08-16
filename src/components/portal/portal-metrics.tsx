@@ -67,7 +67,7 @@ export function PortalMetrics() {
             Setiap Sen Anda Menyentuh Jiwa Asnaf
           </h2>
           <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            Statistik agihan dan impak sebenar yang direkodkan secara langsung dalam ekosistem sistem pengurusan PUSPA-Z.
+            Statistik agihan dan impak sebenar yang direkodkan secara langsung dalam ekosistem sistem pengurusan PUSPA.
           </p>
         </div>
 

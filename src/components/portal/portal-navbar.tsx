@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Heart, Sparkles, LogIn, Menu, X, ArrowRight, ShieldCheck, Compass } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -35,11 +36,12 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
         {/* Brand Logo & Name */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative">
-            <img
+            <Image
               src="/puspa-logo-official.png"
-              alt="PUSPA Logo"
+              alt="Pertubuhan Urus Peduli Asnaf official logo"
               width={42}
               height={42}
+              priority
               className="h-10 w-10 object-contain rounded-full bg-white/90 p-0.5 shadow-md shadow-primary/20 group-hover:scale-105 transition-transform"
             />
             <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-primary rounded-full border-2 border-background" />
@@ -47,7 +49,7 @@ export function PortalNavbar({ onOpenDonate, onOpenCheckStatus }: PortalNavbarPr
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-lg tracking-tight text-foreground bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                PUSPA-Z
+                PUSPA
               </span>
               <Badge variant="outline" className="text-[10px] h-4 px-1.5 py-0 border-primary/30 text-primary dark:text-primary/80 font-bold uppercase">
                 Portal Awam

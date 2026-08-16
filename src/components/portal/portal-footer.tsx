@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Heart, ShieldCheck, Mail, Phone, MapPin, ExternalLink, Lock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
@@ -24,15 +25,16 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
           {/* Brand & Organization Info */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <img
+              <Image
                 src="/puspa-logo-official.png"
-                alt="PUSPA Logo"
+                alt="Pertubuhan Urus Peduli Asnaf official logo"
                 width={48}
                 height={48}
+                priority
                 className="h-12 w-12 object-contain rounded-full bg-white p-1 shadow-md"
               />
               <div>
-                <h3 className="font-extrabold text-lg text-foreground">PUSPA-Z</h3>
+                <h3 className="font-extrabold text-lg text-foreground">PUSPA</h3>
                 <p className="text-xs text-muted-foreground">Pertubuhan Urus Peduli Asnaf</p>
               </div>
             </div>
@@ -105,7 +107,7 @@ export function PortalFooter({ onOpenDonate, onOpenCheckStatus }: PortalFooterPr
               <li className="pt-2">
                 <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
                   <Lock className="h-3.5 w-3.5" />
-                  Portal Pentadbiran & Staf PUSPA-Z
+                  Portal Pentadbiran & Staf PUSPA
                   <ExternalLink className="h-3 w-3" />
                 </Link>
               </li>

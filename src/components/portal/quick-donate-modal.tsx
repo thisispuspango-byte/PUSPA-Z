@@ -82,18 +82,18 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[540px] bg-background/95 backdrop-blur-2xl border-white/10 shadow-2xl p-0 overflow-hidden">
         {/* Top Gradient Banner */}
-        <div className="h-2 bg-gradient-to-r from-purple-600 via-pink-500 to-amber-400" />
+        <div className="h-2 bg-gradient-to-r from-primary via-primary/80 to-primary/60" />
 
         <div className="p-6">
           {!isSuccess ? (
             <div className="space-y-5">
               <DialogHeader>
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="outline" className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20 text-xs">
+                  <Badge variant="outline" className="bg-primary/10 text-primary dark:text-primary/80 border-primary/20 text-xs">
                     <Sparkles className="h-3 w-3 mr-1" />
                     Sedekah Jumaat Pantas
                   </Badge>
-                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 text-xs">
+                  <Badge variant="outline" className="bg-primary/10 text-primary dark:text-primary/80 border-primary/20 text-xs">
                     <ShieldCheck className="h-3 w-3 mr-1" />
                     100% Telus
                   </Badge>
@@ -124,12 +124,12 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                         }}
                         className={`p-3 rounded-xl border text-left transition-all duration-200 ${
                           isSelected
-                            ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/20 scale-[1.02]'
-                            : 'bg-card/60 hover:bg-card border-border hover:border-purple-500/40 text-foreground'
+                            ? 'bg-primary text-white border-primary shadow-md shadow-primary/20 scale-[1.02]'
+                            : 'bg-card/60 hover:bg-card border-border hover:border-primary/40 text-foreground'
                         }`}
                       >
                         <div className="font-bold text-base">RM {preset.amount}</div>
-                        <div className={`text-[11px] leading-tight mt-0.5 ${isSelected ? 'text-purple-100' : 'text-muted-foreground'}`}>
+                        <div className={`text-[11px] leading-tight mt-0.5 ${isSelected ? 'text-primary/90' : 'text-muted-foreground'}`}>
                           {preset.label}
                         </div>
                       </button>
@@ -148,7 +148,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                       placeholder="Atau masukkan amaun pilihan anda..."
                       value={customAmount}
                       onChange={(e) => setCustomAmount(e.target.value)}
-                      className="pl-11 h-10 text-sm bg-muted/40 border-border focus-visible:ring-purple-500"
+                      className="pl-11 h-10 text-sm bg-muted/40 border-border focus-visible:ring-primary"
                     />
                   </div>
                 </div>
@@ -162,7 +162,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                     placeholder="Nama / Syarikat"
                     value={donorName}
                     onChange={(e) => setDonorName(e.target.value)}
-                    className="h-9 text-xs"
+                    className="h-11 text-xs"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -171,7 +171,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                     placeholder="012-3456789 / emel@domain.com"
                     value={donorPhone}
                     onChange={(e) => setDonorPhone(e.target.value)}
-                    className="h-9 text-xs"
+                    className="h-11 text-xs"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                 <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Kaedah Pembayaran Pantas
                 </Label>
-                <Tabs value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as any)}>
+                <Tabs value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as 'fpx' | 'qr' | 'manual')}>
                   <TabsList className="grid grid-cols-3 w-full h-9">
                     <TabsTrigger value="fpx" className="text-xs gap-1.5">
                       <Building className="h-3.5 w-3.5" />
@@ -212,7 +212,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
               <Button
                 onClick={handleDonate}
                 disabled={isSubmitting || finalAmount <= 0}
-                className="w-full h-11 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg shadow-purple-600/25 transition-all text-sm gap-2"
+                className="w-full h-11 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-semibold shadow-lg shadow-primary/25 transition-all text-sm gap-2"
               >
                 {isSubmitting ? (
                   <>Memproses Transaksi Selamat…</>
@@ -235,7 +235,7 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                   Sumbangan anda telah berjaya direkodkan. Resit rasmi digital telah dihantar.
                 </DialogDescription>
               </DialogHeader>
-              <div className="w-16 h-16 rounded-full bg-green-500/10 text-green-500 border border-green-500/20 flex items-center justify-center mx-auto animate-bounce">
+              <div className="w-16 h-16 rounded-full bg-primary/10 text-primary border border-primary/20 flex items-center justify-center mx-auto animate-bounce">
                 <CheckCircle2 className="h-8 w-8" />
               </div>
               <div className="space-y-1.5">
@@ -255,12 +255,12 @@ export function QuickDonateModal({ open, onOpenChange }: QuickDonateModalProps) 
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Status:</span>
-                  <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px]">
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-[10px]">
                     Selesai & Disahkan
                   </Badge>
                 </div>
               </div>
-              <Button onClick={handleReset} className="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs">
+              <Button onClick={handleReset} className="w-full bg-primary hover:bg-primary/90 text-white text-xs">
                 Tutup & Kembali ke Portal
               </Button>
             </div>

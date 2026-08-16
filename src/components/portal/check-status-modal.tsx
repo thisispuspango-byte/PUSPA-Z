@@ -79,12 +79,12 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] bg-background/95 backdrop-blur-2xl border-white/10 shadow-2xl p-0 overflow-hidden">
-        <div className="h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600" />
+        <div className="h-1.5 bg-gradient-to-r from-primary via-primary/80 to-primary/60" />
         
         <div className="p-6 space-y-5">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-1">
-              <Badge variant="outline" className="bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20 text-xs">
+              <Badge variant="outline" className="bg-primary/10 text-primary dark:text-primary/80 border-primary/20 text-xs">
                 <FileSearch className="h-3 w-3 mr-1" />
                 Semakan Status Permohonan
               </Badge>
@@ -114,7 +114,7 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
               <Button
                 onClick={handleSearch}
                 disabled={isSearching || !icNumber.trim()}
-                className="h-10 px-4 bg-purple-600 hover:bg-purple-700 text-white shrink-0"
+                className="h-11 px-4 bg-primary hover:bg-primary/90 text-white shrink-0"
               >
                 {isSearching ? (
                   <Clock className="h-4 w-4 animate-spin" />
@@ -135,7 +135,7 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
                       <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">No. Rujukan</span>
                       <span className="font-mono text-sm font-bold text-foreground">{refNo}</span>
                     </div>
-                    <Badge variant="outline" className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 text-xs">
+                    <Badge variant="outline" className="bg-primary/10 text-primary dark:text-primary/80 border-primary/20 text-xs">
                       <Clock className="h-3 w-3 mr-1" />
                       {result.status}
                     </Badge>
@@ -156,18 +156,18 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
                   <div className="pt-2 border-t space-y-2">
                     <span className="text-[11px] font-semibold text-muted-foreground">Peringkat Proses:</span>
                     <div className="space-y-2">
-                      {result.steps.map((step: any, idx: number) => (
+                      {result.steps.map((step: { title: string; done: boolean; date?: string; active?: boolean }, idx: number) => (
                         <div key={idx} className="flex items-center gap-2.5 text-xs">
                           {step.done ? (
-                            <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                           ) : step.active ? (
-                            <div className="h-4 w-4 rounded-full border-2 border-purple-600 flex items-center justify-center shrink-0 animate-pulse">
-                              <div className="h-1.5 w-1.5 rounded-full bg-purple-600" />
+                            <div className="h-4 w-4 rounded-full border-2 border-primary flex items-center justify-center shrink-0 animate-pulse">
+                              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                             </div>
                           ) : (
                             <div className="h-4 w-4 rounded-full border border-muted-foreground/40 shrink-0" />
                           )}
-                          <span className={`font-medium ${step.done ? 'text-foreground' : step.active ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-muted-foreground'}`}>
+                          <span className={`font-medium ${step.done ? 'text-foreground' : step.active ? 'text-primary dark:text-primary/80 font-semibold' : 'text-muted-foreground'}`}>
                             {step.title}
                           </span>
                           {step.date && <span className="text-[10px] text-muted-foreground ml-auto">{step.date}</span>}
@@ -178,7 +178,7 @@ export function CheckStatusModal({ open, onOpenChange }: CheckStatusModalProps) 
                 </div>
               ) : (
                 <div className="p-4 rounded-xl border border-dashed text-center space-y-2 bg-muted/20">
-                  <ShieldAlert className="h-8 w-8 text-amber-500 mx-auto" />
+                  <ShieldAlert className="h-8 w-8 text-primary mx-auto" />
                   <h4 className="text-sm font-semibold text-foreground">Tiada Rekod Permohonan Dijumpai</h4>
                   <p className="text-xs text-muted-foreground max-w-xs mx-auto">
                     No. IC yang dimasukkan tiada dalam pangkalan data aktif. Sila pastikan nombor tepat atau hantar permohonan baru.

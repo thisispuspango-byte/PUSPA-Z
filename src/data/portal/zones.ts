@@ -52,8 +52,8 @@ export const ZONES: ZoneInfo[] = [
         y: 36,
         status: 'Penyediaan Aktif',
         tags: [
-          { label: 'Standard HALAL', dotColor: 'bg-emerald-500' },
-          { label: 'Pematuhan MeSTI', dotColor: 'bg-amber-500' },
+          { label: 'Standard HALAL', dotColor: 'bg-primary' },
+          { label: 'Pematuhan MeSTI', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kadar Pukal', value: '350 pek / jam' },
@@ -69,8 +69,8 @@ export const ZONES: ZoneInfo[] = [
         y: 58,
         status: 'Standard Kebersihan 100%',
         tags: [
-          { label: 'Bekas Bio-degradable', dotColor: 'bg-emerald-500' },
-          { label: 'Penebat Haba', dotColor: 'bg-blue-500' },
+          { label: 'Bekas Bio-degradable', dotColor: 'bg-primary' },
+          { label: 'Penebat Haba', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kekerapan', value: 'Setiap Jumaat' },
@@ -105,8 +105,8 @@ export const ZONES: ZoneInfo[] = [
         y: 34,
         status: 'Stok Terkawal',
         tags: [
-          { label: 'Kod Bar Pintar', dotColor: 'bg-emerald-500' },
-          { label: 'Sistem FIFO', dotColor: 'bg-cyan-500' },
+          { label: 'Kod Bar Pintar', dotColor: 'bg-primary' },
+          { label: 'Sistem FIFO', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kapasiti Rak', value: '25 Tan Metrik' },
@@ -122,8 +122,8 @@ export const ZONES: ZoneInfo[] = [
         y: 56,
         status: 'Agihan Mingguan',
         tags: [
-          { label: 'Kit 15kg Asas', dotColor: 'bg-emerald-500' },
-          { label: 'Verifikasi eKYC', dotColor: 'bg-indigo-500' },
+          { label: 'Kit 15kg Asas', dotColor: 'bg-primary' },
+          { label: 'Verifikasi eKYC', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Berat Kit', value: '15 kg / kotak' },
@@ -158,8 +158,8 @@ export const ZONES: ZoneInfo[] = [
         y: 62,
         status: 'Laluan Dioptimumkan',
         tags: [
-          { label: 'Telemetri Live', dotColor: 'bg-emerald-500' },
-          { label: 'Pacuan 4x4', dotColor: 'bg-amber-500' },
+          { label: 'Telemetri Live', dotColor: 'bg-primary' },
+          { label: 'Pacuan 4x4', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Radius Operasi', value: '120 km' },
@@ -175,8 +175,8 @@ export const ZONES: ZoneInfo[] = [
         y: 44,
         status: 'Sedia Gerak',
         tags: [
-          { label: 'Pintu ke Pintu', dotColor: 'bg-emerald-500' },
-          { label: 'Mobiliti Pantas', dotColor: 'bg-teal-500' },
+          { label: 'Pintu ke Pintu', dotColor: 'bg-primary' },
+          { label: 'Mobiliti Pantas', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Unit Motosikal', value: '18 Unit' },
@@ -211,8 +211,8 @@ export const ZONES: ZoneInfo[] = [
         y: 48,
         status: 'Santunan Kasih',
         tags: [
-          { label: 'Warga Emas', dotColor: 'bg-amber-500' },
-          { label: 'Menu Sihat', dotColor: 'bg-emerald-500' },
+          { label: 'Warga Emas', dotColor: 'bg-primary' },
+          { label: 'Menu Sihat', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Pusat Kerjasama', value: '8 Rumah Kebajikan' },
@@ -228,8 +228,8 @@ export const ZONES: ZoneInfo[] = [
         y: 36,
         status: 'Penerima Tetap',
         tags: [
-          { label: 'Anak Yatim & Asnaf', dotColor: 'bg-emerald-500' },
-          { label: 'Bantuan Nutrisi', dotColor: 'bg-amber-500' },
+          { label: 'Anak Yatim & Asnaf', dotColor: 'bg-primary' },
+          { label: 'Bantuan Nutrisi', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Penuntut Disantuni', value: '280 Pelajar' },
@@ -264,8 +264,8 @@ export const ZONES: ZoneInfo[] = [
         y: 40,
         status: 'Sistem Aktif 24/7',
         tags: [
-          { label: 'Maria AI Engine', dotColor: 'bg-indigo-500' },
-          { label: 'Had Kifayah Smart', dotColor: 'bg-emerald-500' },
+          { label: 'Maria AI Engine', dotColor: 'bg-primary' },
+          { label: 'Had Kifayah Smart', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Kelajuan Semakan', value: '< 3 Saat' },
@@ -281,8 +281,8 @@ export const ZONES: ZoneInfo[] = [
         y: 60,
         status: 'Sesi Bimbingan',
         tags: [
-          { label: 'Modal & Bimbingan', dotColor: 'bg-emerald-500' },
-          { label: 'Sijil Usahawan', dotColor: 'bg-blue-500' },
+          { label: 'Modal & Bimbingan', dotColor: 'bg-primary' },
+          { label: 'Sijil Usahawan', dotColor: 'bg-primary' },
         ],
         glance: [
           { label: 'Graduan Asnaf', value: '124 Usahawan' },

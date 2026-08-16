@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
   Heart,
@@ -112,10 +113,13 @@ export function PortalBeneficiaryStories() {
             >
               {/* Photo */}
               <div className="absolute inset-0">
-                <img
+                <Image
                   src={featuredStory.photo}
                   alt={`${featuredStory.name}, ${featuredStory.age} tahun, ${featuredStory.location}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
@@ -192,10 +196,12 @@ export function PortalBeneficiaryStories() {
                   }}
                   aria-label={`Baca cerita ${story.name}`}
                 >
-                  <img
+                  <Image
                     src={story.photo}
                     alt={`${story.name}, ${story.age} tahun, ${story.location}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 40vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/10 to-transparent p-4 flex flex-col justify-end">
                     <div className="flex items-center gap-2 text-xs text-white/70 mb-2">
@@ -283,11 +289,15 @@ export function PortalBeneficiaryStories() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent pointer-events-none" />
                   </>
                 ) : (
-                  <img
+                  <div className="relative w-full h-full">
+                  <Image
                     src={selectedStory.photo}
                     alt={`${selectedStory.name}, ${selectedStory.age} tahun, ${selectedStory.location}`}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover"
                   />
+                  </div>
                 )}
               </div>
 

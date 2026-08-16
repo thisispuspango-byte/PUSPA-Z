@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, MessageSquare, Send, Bot, HelpCircle, ArrowRight, ShieldCheck, Heart } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
@@ -78,9 +79,9 @@ export function PortalMariaAssistant() {
             <div className="lg:col-span-5 space-y-5 text-center lg:text-left">
               <div className="flex items-center justify-center lg:justify-start gap-3">
                 <div className="relative">
-                  <img
+                  <Image
                     src="/maria-face-clean.png"
-                    alt="Maria AI"
+                    alt="Maria AI PUSPA"
                     width={64}
                     height={64}
                     className="h-16 w-16 rounded-2xl object-cover border-2 border-primary shadow-xl bg-primary/10 p-0.5"

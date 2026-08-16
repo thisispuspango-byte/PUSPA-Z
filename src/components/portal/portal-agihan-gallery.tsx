@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Utensils, 
@@ -177,10 +178,12 @@ export function PortalAgihanGallery({ onOpenDonate }: PortalAgihanGalleryProps) 
                 onClick={() => setSelectedPhoto(photo.src)}
                 className="group relative rounded-2xl overflow-hidden border border-white/10 shadow-md bg-muted/40 aspect-[4/3] cursor-pointer"
               >
-                <img
+                <Image
                   src={photo.src}
                   alt={photo.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  fill
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2.5 flex flex-col justify-end">
                   <p className="text-[11px] font-bold text-white leading-tight">{photo.title}</p>
@@ -260,11 +263,15 @@ export function PortalAgihanGallery({ onOpenDonate }: PortalAgihanGalleryProps) 
               onClick={(e) => e.stopPropagation()}
               className="relative max-w-3xl w-full"
             >
-              <img
+              <div className="relative w-full max-h-[75vh] aspect-video">
+              <Image
                 src={selectedPhoto}
                 alt={GALLERY_PHOTOS.find((p) => p.src === selectedPhoto)?.title ?? 'Foto Agihan'}
-                className="w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-contain rounded-2xl shadow-2xl"
               />
+              </div>
               <div className="mt-3 flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-white leading-tight">

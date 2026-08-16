@@ -323,7 +323,7 @@ const ZONES: ZoneInfo[] = [
 /*  FLIGHT CONSTANTS                                           */
 /* ─────────────────────────────────────────────────────────── */
 
-const TRACK_HEIGHT_VH = 600
+const TRACK_HEIGHT_VH = 300
 const ZONE_COUNT = ZONES.length
 
 /* ─────────────────────────────────────────────────────────── */
@@ -365,8 +365,13 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs, prefersR
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
-    if (videoRef.current) {
+    if (videoRef.current && active) {
       videoRef.current.play().catch(() => {})
+    }
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause()
+      }
     }
   }, [active])
 
@@ -398,10 +403,7 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs, prefersR
 
       {/* Ambient Zone Glow */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-25 transition-opacity duration-1000 mix-blend-screen"
-        style={{
-          background: `radial-gradient(circle at 50% 50%, ${zone.accentGlow} 0%, transparent 65%)`,
-        }}
+        className="pointer-events-none absolute inset-0 opacity-25 transition-opacity duration-1000 mix-blend-screen bg-[radial-gradient(circle_at_50%_50%,rgba(124,58,237,0.4)_0%,transparent_65%)]"
       />
 
       {/* ── Emons-Grade White Circular Hotspots (+) with Anchored Flyout Card ── */}
@@ -420,8 +422,7 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs, prefersR
               {active && !open && (
                 <>
                   <span
-                    className="pointer-events-none absolute h-12 w-12 rounded-full border-2 opacity-75 animate-ping"
-                    style={{ borderColor: zone.themeColor }}
+                    className="pointer-events-none absolute h-12 w-12 rounded-full border-2 opacity-75 animate-ping border-primary"
                   />
                   <span
                     className="pointer-events-none absolute h-14 w-14 rounded-full border border-white/50 opacity-40 animate-pulse"
@@ -430,16 +431,16 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs, prefersR
               )}
 
               {/* Exact Emons Button (White Circle + transforms to Coral/Red X when open) */}
-              <button
-                type="button"
-                onClick={() => onToggleHs(hs.id)}
-                aria-label={hs.title}
-                className={`relative flex h-10 w-10 items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${
-                  open
-                    ? 'scale-110 rounded-2xl bg-primary text-white ring-4 ring-primary/30'
-                    : 'rounded-full border border-slate-200/80 bg-white/95 text-slate-900 hover:scale-110 hover:bg-white'
-                } ${active ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'}`}
-              >
+                            <button
+                              type="button"
+                              onClick={() => onToggleHs(hs.id)}
+                              aria-label={hs.title}
+                              className={`relative flex h-10 w-10 items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${
+                                open
+                                  ? 'scale-110 rounded-2xl bg-primary text-white ring-4 ring-primary/30'
+                                  : 'rounded-full border border-slate-200/80 bg-white/95 text-slate-900 hover:scale-110 hover:bg-white'
+                              } ${active ? 'opacity-100 pointer-events-auto' : 'pointer-events-none opacity-0'}`}
+                            >
                 <Plus className={`h-5 w-5 stroke-[2.5] transition-transform duration-300 ${open ? 'rotate-45 text-white' : 'text-slate-900'}`} />
               </button>
             </div>
@@ -452,7 +453,7 @@ function ZonePanel({ zone, index, progress, active, openHs, onToggleHs, prefersR
                   animate={{ opacity: 1, scale: 1, x: 0 }}
                   exit={{ opacity: 0, scale: 0.94, x: isRightSide ? -10 : 10 }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                  className={`absolute z-40 top-1/2 -translate-y-1/2 w-80 sm:w-96 space-y-3 rounded-2xl border border-slate-100 bg-white/98 p-5 sm:p-6 text-left shadow-[0_25px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl text-slate-900 ${
+                  className={`absolute z-40 top-1/2 -translate-y-1/2 w-[90vw] max-w-96 sm:w-96 space-y-3 rounded-2xl border border-slate-100 bg-white/98 p-5 sm:p-6 text-left shadow-[0_25px_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl text-slate-900 ${
                     isRightSide ? 'right-full mr-3' : 'left-full ml-3'
                   }`}
                 >
@@ -626,20 +627,17 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
       <div className="sticky top-0 h-screen overflow-hidden bg-slate-950 select-none">
         
         {/* ── Cinematic Anamorphic Light Streak Transition ── */}
-        <AnimatePresence>
-          {!prefersReducedMotion && isTransitioning && (
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 0.85, scaleX: 1 }}
-              exit={{ opacity: 0, scaleX: 1.5 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-none absolute inset-y-0 z-40 w-full"
-              style={{
-                background: `linear-gradient(90deg, transparent 0%, ${zone.accentGlow} 50%, transparent 100%)`,
-              }}
-            />
-          )}
-        </AnimatePresence>
+                <AnimatePresence>
+                  {isTransitioning && (
+                    <motion.div
+                      initial={{ opacity: 0, scaleX: 0 }}
+                      animate={{ opacity: 0.85, scaleX: 1 }}
+                      exit={{ opacity: 0, scaleX: 1.5 }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] as const }}
+                      className="pointer-events-none absolute inset-y-0 z-40 w-full bg-[linear-gradient(90deg,transparent_0%,rgba(124,58,237,0.4)_50%,transparent_100%)]"
+                    />
+                  )}
+                </AnimatePresence>
 
         {/* ── Horizontal flight track (camera flies through) ── */}
         <motion.div className="flex h-full will-change-transform" style={{ x: cameraX }}>
@@ -657,34 +655,26 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
           ))}
         </motion.div>
 
-        {/* ── Top Control HUD Bar ── */}
-        <div className="absolute top-0 left-0 right-0 z-30 flex flex-wrap items-center justify-between gap-3 p-4 sm:p-6">
-          <div className="flex items-center gap-2">
+        {/* ── Top Control HUD Bar (Mobile-First, Clean) ── */}
+        <div className="absolute top-0 left-0 right-0 z-30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 sm:p-4">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <motion.div
               key={`badge-${zone.id}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: -10 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
             >
               <Badge
-                className="border-0 px-4 py-1.5 text-xs font-extrabold text-white shadow-2xl tracking-wide"
-                style={{ backgroundColor: zone.themeColor }}
+                className="border-0 px-3 py-1 text-xs font-extrabold text-white shadow-2xl tracking-wide bg-primary"
               >
                 Fasa {zone.num} : {zone.shortLabel}
               </Badge>
             </motion.div>
-            <Badge
-              variant="outline"
-              className="hidden border-primary/40 bg-black/60 text-xs font-medium text-primary backdrop-blur-xl sm:inline-flex"
-            >
-              <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
-              SOP Pengurusan Asnaf Terkawal
-            </Badge>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/70 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-xl shadow-lg">
-              <Compass className="h-3.5 w-3.5 text-primary animate-spin" style={{ animationDuration: '8s' }} />
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">
+            <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/70 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur-xl shadow-lg">
+              <Compass className="h-3 w-3 text-primary animate-spin" style={{ animationDuration: '8s' }} />
               <span className="hidden sm:inline">Skrol untuk Terbang Meneroka</span>
               <span className="sm:hidden">Skrol Terbang</span>
             </span>
@@ -753,8 +743,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
             >
               <div className="space-y-2">
                 <span
-                  className="inline-block text-xs font-black uppercase tracking-wider"
-                  style={{ color: zone.themeColor }}
+                  className="inline-block text-xs font-black uppercase tracking-wider text-primary"
                 >
                   {zone.subtitle}
                 </span>
@@ -779,8 +768,7 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
                 <Button
                   onClick={onOpenDonate}
                   size="default"
-                  className="h-11 flex-1 gap-2 rounded-full border-0 px-6 text-xs font-bold text-white shadow-lg transition-all duration-200 active:scale-95 hover:brightness-110"
-                  style={{ backgroundColor: zone.themeColor }}
+                  className="h-11 flex-1 gap-2 rounded-full border-0 px-6 text-xs font-bold text-white shadow-lg transition-all duration-200 active:scale-95 hover:brightness-110 bg-primary"
                 >
                   <Heart className="h-4 w-4 fill-white" />
                   Infaq Fasa Ini
@@ -799,57 +787,53 @@ export function PortalInteractiveEcosystem({ onOpenDonate }: Props) {
         </div>
 
         {/* ── Exact Emons Connected Bottom Timeline Scrubber ── */}
-        <div className="absolute right-0 bottom-0 left-0 z-30 border-t border-white/20 bg-black/85 px-4 py-4 backdrop-blur-2xl sm:px-8">
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-4">
-            
-            {/* Timeline navigation items with connected lines */}
-            <div className="flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none py-1">
-              {ZONES.map((z, i) => {
-                const active = i === activeIdx
-                const Icon = z.icon
-                return (
-                  <div key={z.id} className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => scrollToZone(i)}
-                      className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold whitespace-nowrap transition-all duration-300 active:scale-95 ${
-                        active
-                          ? 'scale-105 text-white shadow-2xl ring-2 ring-white/40'
-                          : 'border border-white/10 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white'
-                      }`}
-                      style={
-                        active
-                          ? { backgroundColor: z.themeColor, boxShadow: `0 4px 20px ${z.accentGlow}` }
-                          : undefined
-                      }
+                <div className="absolute right-0 bottom-0 left-0 z-30 border-t border-white/20 bg-black/85 px-4 py-4 backdrop-blur-2xl sm:px-8">
+                  <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-4">
+                    {/* Timeline navigation items with connected lines */}
+                    <div className="flex flex-1 items-center gap-2 overflow-x-auto scrollbar-none py-1">
+                      {ZONES.map((z, i) => {
+                        const active = i === activeIdx
+                        const Icon = z.icon
+                        const activeStyle = { backgroundColor: 'rgb(124, 58, 237)', boxShadow: '0 4px 20px rgba(124, 58, 237, 0.4)' }
+                        return (
+                          <div key={z.id} className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => scrollToZone(i)}
+                              className={`flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold whitespace-nowrap transition-all duration-300 active:scale-95 ${
+                                active
+                                  ? 'scale-105 text-white shadow-2xl ring-2 ring-white/40'
+                                  : 'border border-white/10 bg-white/5 text-white/70 hover:bg-white/15 hover:text-white'
+                              }`}
+                              style={active ? activeStyle : undefined}
+                            >
+                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/30 font-mono text-[10px] font-black">
+                                {z.num}
+                              </span>
+                              <Icon className="h-4 w-4" />
+                              <span className="hidden md:inline">{z.shortLabel}</span>
+                            </button>
+
+                            {/* Connecting line between tabs */}
+                            {i < ZONE_COUNT - 1 && (
+                              <div className="hidden h-[2px] w-6 bg-white/20 sm:block" />
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Right End CTA: "Semua Fasa →" */}
+                    <Button
+                      onClick={onOpenDonate}
+                      size="default"
+                      className="hidden h-10 shrink-0 gap-2 rounded-full bg-primary px-6 text-xs font-extrabold text-white shadow-xl active:scale-95 sm:flex"
                     >
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/30 font-mono text-[10px] font-black">
-                        {z.num}
-                      </span>
-                      <Icon className="h-4 w-4" />
-                      <span className="hidden md:inline">{z.shortLabel}</span>
-                    </button>
-
-                    {/* Connecting line between tabs */}
-                    {i < ZONE_COUNT - 1 && (
-                      <div className="hidden h-[2px] w-6 bg-white/20 sm:block" />
-                    )}
+                      Semua Fasa PUSPA
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
                   </div>
-                )
-              })}
-            </div>
-
-            {/* Right End CTA: "Semua Fasa →" */}
-            <Button
-              onClick={onOpenDonate}
-              size="default"
-              className="hidden h-10 shrink-0 gap-2 rounded-full bg-primary px-6 text-xs font-extrabold text-white shadow-xl active:scale-95 sm:flex"
-            >
-              Semua Fasa PUSPA
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+                </div>
 
       </div>
     </section>

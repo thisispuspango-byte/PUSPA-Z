@@ -22,6 +22,21 @@ export const metadata: Metadata = {
   icons: {
     icon: "/puspa-logo-official.png",
   },
+  openGraph: {
+    title: "PUSPA — Pertubuhan Urus Peduli Asnaf",
+    description: "Pertubuhan kebajikan berdaftar yang menyalurkan bantuan telus, membasmi kemiskinan tegar, dan memperkasa ekonomi asnaf melalui teknologi digital pintar.",
+    type: "website",
+    locale: "ms_MY",
+    url: "https://puspa.org.my",
+    siteName: "PUSPA",
+    images: [{ url: "/puspa-logo-official.png", width: 214, height: 210, alt: "PUSPA Logo" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PUSPA — Pertubuhan Urus Peduli Asnaf",
+    description: "Pertubuhan kebajikan berdaftar yang menyalurkan bantuan telus, membasmi kemiskinan tegar, dan memperkasa ekonomi asnaf.",
+    images: ["/puspa-logo-official.png"],
+  },
 };
 
 export default function RootLayout({
