@@ -1,8 +1,8 @@
 ---
 title: "PUSPA-Z — Maria Puspa AI Agent System Rules & Protocol"
 document_id: "PUSPA-DOC-AGENTS-001"
-version: "5.6.5"
-last_updated: "2026-08-16T09:10:00+08:00"
+version: "5.6.6"
+last_updated: "2026-08-16T09:30:00+08:00"
 maintainer: "HYPER-SOVEREIGN CONDUCTOR & ARCHITECT"
 classification: "INTERNAL AI PROTOCOL"
 lifecycle_status: "ACTIVE"
@@ -19,6 +19,7 @@ lifecycle_status: "ACTIVE"
 
 | Versi | Tarikh & Masa (MYT) | Pengarang / Ejen | Kenapa (Rasional Perubahan) | Bagaimana (Kaedah & Skop Fail) | Status / Pengesahan |
 | :---: | :---: | :---: | :--- | :--- | :---: |
+| `5.6.6` | `2026-08-16 09:30` | `Conductor Agent` | Menggantikan pergerakan kamera statik kepada pergerakan objek dan dinamik cecair tulen bagi semua 5 zon diorama | Menjana video procedural berbilang lapisan (wap mendidih, laser pengimbas, roda berputar, zarah barakah, radar siber) via multi-threaded Python FFmpeg pipeline | `chrome-devtools verified (5/5 live)` |
 | `5.6.5` | `2026-08-16 09:10` | `Conductor Agent` | Mengesahkan kelancaran 5 video diorama (Dapur ke Hab) & membaiki pengecualian media pada middleware | Menambah `mp4` ke matcher `src/middleware.ts`, menyuntik `media-src` di `next.config.ts`, dan mengesahkan status main video via Chrome DevTools | `chrome-devtools verified (5/5 playing)` |
 | `5.6.4` | `2026-08-16 08:45` | `Conductor Agent` | Menggantikan semua foto lama dengan 6 foto dokumentari berkualiti tinggi baharu bagi seksyen Galeri Lapangan | Menjana 6 foto realistik di `public/gallery-agihan-0X.jpg`, memadam foto lama, dan mengemas kini `portal-agihan-gallery.tsx` | `chrome-devtools verified` |
 | `5.6.3` | `2026-08-16 08:15` | `Conductor Agent` | Mengubah semua 5 imej diorama statik kepada video animasi bergerak 2.5D sinusoidal loop | Menjana 5 fail video H.264 di `public/videos/diorama-0X.mp4` via FFmpeg & mengemas kini `portal-interactive-ecosystem.tsx` | `chrome-devtools verified` |
