@@ -15,13 +15,6 @@ test.describe('PUSPA V5 DevTools & Debug Audit', () => {
     await client.send('Network.enable');
     await client.send('Runtime.enable');
 
-    // Pantau panggilan API untuk memastikan tool calling berlaku
-    client.on('Network.requestWillBeSent', (params) => {
-      if (params.request.url.includes('/api/v1/ai')) {
-        console.log(`[CDP Network] Menghantar permintaan ke AI: ${params.request.url}`);
-      }
-    });
-
     // 2. Suntik tetapan "Debug Mode: true" ke dalam localStorage
     await page.goto('/');
     await page.evaluate(() => {
@@ -46,7 +39,5 @@ test.describe('PUSPA V5 DevTools & Debug Audit', () => {
     // Kita cari elemen header "Hermes v5 Debug Logs" yang hanya muncul jika debugMode === true
     const debugHeader = page.locator('text=Hermes v5 Debug Logs');
     await expect(debugHeader).toBeVisible({ timeout: 10000 });
-
-    console.log('Ujian Chrome DevTools selesai: Debug Mode berfungsi dengan betul.');
   });
 });
